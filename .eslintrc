@@ -1,14 +1,22 @@
 {
-  "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint"
-  ],
-  "extends": [
-    "plugin:@shopify/esnext"
-  ],
+  "extends": ["plugin:@typescript-eslint/recommended"],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
   "rules": {
-    "no-console": 2
-    
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"],
+    "no-trailing-spaces": 2,
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-explicit-any": 2,
+    "@typescript-eslint/member-delimiter-style": "off",
+    "@typescript-eslint/no-inferrable-types": [
+      "warn", {
+        "ignoreParameters": true
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": "warn"
   }
 }
