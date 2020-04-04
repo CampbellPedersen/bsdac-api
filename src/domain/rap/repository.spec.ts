@@ -1,4 +1,4 @@
-import { RapRepository, inMemoryRapRepository } from './repository';
+import { RapRepository, inMemoryRapository } from './repository';
 
 const theFirstRap = {
   id: 'rap-001',
@@ -64,5 +64,5 @@ const baseTests = (repository: RapRepository) => () => {
   });
 };
 
-const inMemory = inMemoryRapRepository();
+const inMemory = inMemoryRapository();
 describe('in-memory-rap-repository', baseTests(inMemory));

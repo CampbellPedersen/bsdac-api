@@ -17,7 +17,7 @@ export interface RapRepository {
   save(rap: Rap): Promise<void>
 }
 
-export const inMemoryRapRepository = (): RapRepository => {
+export const inMemoryRapository = (): RapRepository => {
   const store: { [id: string]: PersistedRap } = {};
   return {
     loadAll: async () => Object.keys(store).map(id => ({ id, ...store[id] })),
