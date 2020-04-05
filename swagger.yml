@@ -1,0 +1,81 @@
+openapi: 3.0.0
+info:
+  description: An API for retrieving resources related to Big Smash Day and Cube.
+  version: "0.1.0"
+  title: BSDAC API
+  contact:
+    email: campbelljip@gmail.com
+paths:
+  /rap:
+    get:
+      summary: Retrieves all raps
+      description: |
+        Retrieves all existing raps
+      responses:
+        '200':
+          description: All the raps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rap'
+  /rap/{id}:
+    get:
+      summary: Retrieves a rap
+      description: |
+        Retrieves some basic details about a rap, identified by an id
+      parameters:
+        - in: path
+          name: id
+          description: The id of the requested rap
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rap is found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rap'
+        '404':
+          description: Rap not found
+components:
+  schemas:
+    Rap:
+      type: object
+      required:
+        - id
+        - title
+        - rapper
+        - imageUrl
+        - appearedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        title:
+          type: string
+          example: I Get Money
+        rapper:
+          type: string
+          example: Campbell Pedersen
+        imageUrl:
+          type: string
+          example: https://imgur.com/a/DRQDZe8
+        appearedAt:
+          $ref: '#/components/schemas/Appearance'
+    Appearance:
+      required:
+        - event
+        - series
+      properties:
+        event:
+          type: string
+          example: 'Big Smash Day and Cube'
+        series:
+          type: integer
+          example: 11
+      type: object

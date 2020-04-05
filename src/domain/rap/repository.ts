@@ -5,7 +5,8 @@ interface Appearance {
 
 interface PersistedRap {
   title: string
-  artist: string
+  rapper: string
+  imageUrl: string
   appearedAt: Appearance
 }
 
@@ -24,9 +25,10 @@ export const inMemoryRapository = (): RapRepository => {
     load: async (id: string) => store[id] ? { id, ...store[id]} : undefined,
     save: async (rap: Rap) => {
       store[rap.id] = {
-        appearedAt: rap.appearedAt,
         title: rap.title,
-        artist: rap.artist
+        rapper: rap.rapper,
+        imageUrl: rap.imageUrl,
+        appearedAt: rap.appearedAt,
       };
     },
   };
