@@ -6,7 +6,7 @@ info:
   contact:
     email: campbelljip@gmail.com
 paths:
-  /rap:
+  /raps:
     get:
       summary: Retrieves all raps
       description: |
@@ -20,7 +20,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Rap'
-  /rap/{id}:
+  /raps/{id}:
     get:
       summary: Retrieves a rap
       description: |

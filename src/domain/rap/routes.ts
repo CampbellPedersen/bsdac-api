@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
-import { asyncRoute } from '../../util/express';
-import { RapRepository, Rap } from './repository';
+import { asyncRoute, errorHandler } from '../../util/express';
+import { RapRepository } from './repository';
 import { json } from 'body-parser';
 
 export const rapRouter = (repository: RapRepository) => {
@@ -24,6 +24,7 @@ export const rapRouter = (repository: RapRepository) => {
 
   return Router()
     .use(json())
+    .get('/:id', asyncRoute(loadRap))
     .get('/', asyncRoute(loadAllRaps))
-    .get('/:id', asyncRoute(loadRap));
+    .use(errorHandler);
 };
