@@ -11,7 +11,7 @@ const rap = {
   appearedAt: { event: 'bsdac', series: 1 },
 };
 
-describe('raps-routes', () => {
+describe('routes', () => {
   const repository = inMemoryRapository();
   const app = express().use('/raps', rapRouter(repository));
 
