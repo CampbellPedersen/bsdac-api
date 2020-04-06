@@ -20,27 +20,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Rap'
-  /raps/{id}:
-    get:
-      summary: Retrieves a rap
-      description: |
-        Retrieves some basic details about a rap, identified by an id
-      parameters:
-        - in: path
-          name: id
-          description: The id of the requested rap
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Rap is found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Rap'
-        '404':
-          description: Rap not found
 components:
   schemas:
     Rap:
