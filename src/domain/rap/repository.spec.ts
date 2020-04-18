@@ -5,7 +5,7 @@ const theFirstRap = {
   title: 'The First Rap',
   rapper: 'Campbell Pedersen',
   imageUrl: 'https://imgur.com/theFirstRap',
-  appearedAt: { event: 'bsdac', series: 1 },
+  appearedAt: { name: 'bsdac', series: 1 },
 };
 
 const theSecondRap = {
@@ -13,7 +13,7 @@ const theSecondRap = {
   title: 'The Second Rap',
   rapper: 'Dennis Nguyen',
   imageUrl: 'https://imgur.com/theSecondRap',
-  appearedAt: { event: 'bsdac', series: 3 },
+  appearedAt: { name: 'bsdac', series: 3 },
 };
 
 const baseTests = (repository: RapRepository) => () => {

@@ -1,5 +1,5 @@
-interface Appearance {
-  event: string
+interface Event {
+  name: string
   series: number
 }
 
@@ -7,7 +7,7 @@ interface PersistedRap {
   title: string
   rapper: string
   imageUrl: string
-  appearedAt: Appearance
+  appearedAt: Event
 }
 
 export type Rap = PersistedRap & { id: string }

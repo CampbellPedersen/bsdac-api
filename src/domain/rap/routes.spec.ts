@@ -8,7 +8,7 @@ const rap = {
   title: 'The First Rap',
   rapper: 'Campbell Pedersen',
   imageUrl: 'https://imgur.com/theFirstRap',
-  appearedAt: { event: 'bsdac', series: 1 },
+  appearedAt: { name: 'Big Smash Day and Cube', series: 1 },
 };
 
 const audioUrl = 'https://vgmdownloads.com/soundtracks/super-mario-64-soundtrack/zfvgdumr/18%20File%20Select.mp3';
