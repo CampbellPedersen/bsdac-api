@@ -1,7 +1,9 @@
 import { inMemoryRapository } from './repository';
 import { rapRouter } from './routes';
+import { inMemoryRapAudioUrlService } from './audio-url-service';
 
 export default () => {
   const repository = inMemoryRapository();
-  return rapRouter(repository);
+  const streamUrlBuilder = inMemoryRapAudioUrlService();
+  return rapRouter(repository, streamUrlBuilder);
 };

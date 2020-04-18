@@ -1,11 +1,11 @@
 import { Request, Response, Router } from 'express';
 import { asyncRoute, errorHandler } from '../../util/express';
 import { RapRepository } from './repository';
-import { StreamUrlBuilder } from './stream-url-builder';
+import { RapAudioUrlService } from './audio-url-service';
 
 export const rapRouter = (
   repository: RapRepository,
-  getStreamUrl: StreamUrlBuilder
+  getAudioUrl: RapAudioUrlService
 ) => {
 
   const loadRaps = async (_: Request, response: Response) => {
@@ -18,7 +18,7 @@ export const rapRouter = (
     const rap = await repository.load(id);
 
     rap ?
-      response.status(200).send(await getStreamUrl(rap))
+      response.status(200).send(await getAudioUrl(rap))
       : response.send(404);
   };
 
