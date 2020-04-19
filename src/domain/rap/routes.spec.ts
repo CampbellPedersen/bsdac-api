@@ -6,6 +6,7 @@ import { inMemoryRapository, Rap } from './repository';
 const rap = {
   id: 'rap-001',
   title: 'The First Rap',
+  bonus: false,
   rapper: 'Campbell Pedersen',
   imageUrl: 'https://imgur.com/theFirstRap',
   appearedAt: { name: 'Big Smash Day and Cube', series: 1 },

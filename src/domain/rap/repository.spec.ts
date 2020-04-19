@@ -3,6 +3,7 @@ import { RapRepository, inMemoryRapository } from './repository';
 const theFirstRap = {
   id: 'rap-001',
   title: 'The First Rap',
+  bonus: false,
   rapper: 'Campbell Pedersen',
   imageUrl: 'https://imgur.com/theFirstRap',
   appearedAt: { name: 'bsdac', series: 1 },
@@ -11,6 +12,7 @@ const theFirstRap = {
 const theSecondRap = {
   id: 'rap-002',
   title: 'The Second Rap',
+  bonus: false,
   rapper: 'Dennis Nguyen',
   imageUrl: 'https://imgur.com/theSecondRap',
   appearedAt: { name: 'bsdac', series: 3 },

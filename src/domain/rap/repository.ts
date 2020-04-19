@@ -6,6 +6,7 @@ interface Event {
 interface PersistedRap {
   title: string
   rapper: string
+  bonus: boolean
   imageUrl: string
   appearedAt: Event
 }
@@ -27,6 +28,7 @@ export const inMemoryRapository = (): RapRepository => {
       store[rap.id] = {
         title: rap.title,
         rapper: rap.rapper,
+        bonus: rap.bonus,
         imageUrl: rap.imageUrl,
         appearedAt: rap.appearedAt,
       };

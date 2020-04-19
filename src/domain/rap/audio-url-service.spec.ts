@@ -3,6 +3,7 @@ import { inMemoryRapAudioUrlService, RapAudioUrlService } from './audio-url-serv
 const rap = {
   id: 'rap-001',
   title: 'The First Rap',
+  bonus: false,
   rapper: 'Campbell Pedersen',
   imageUrl: 'https://imgur.com/theFirstRap',
   appearedAt: { name: 'bsdac', series: 1 },
