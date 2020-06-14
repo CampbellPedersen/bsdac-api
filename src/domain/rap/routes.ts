@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { asyncRoute, errorHandler } from '../../util/express';
+import { asyncRoute, errorHandler } from '../../utils/express';
 import { RapRepository } from './repository';
 import { RapAudioUrlService } from './audio-url-service';
 

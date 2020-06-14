@@ -2,7 +2,7 @@
   "name": "bsdac-api",
   "version": "1.0.0",
   "description": "An API built in Typescript for retrieving resources dedicated to Big Smash Day and Cube.",
-  "main": "index.ts",
+  "main": "server.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CampbellPedersen/bsdac-api.git"
@@ -19,6 +19,7 @@
     "@types/express": "4.17.4",
     "@types/jest": "25.2.1",
     "@types/node": "13.11.0",
+    "@types/pg": "7.14.3",
     "@types/supertest": "2.0.6",
     "@typescript-eslint/eslint-plugin": "2.26.0",
     "@typescript-eslint/parser": "2.26.0",
@@ -32,29 +33,24 @@
     "typescript": "3.8.3"
   },
   "dependencies": {
-    "express": "4.17.1"
+    "express": "4.17.1",
+    "pg": "8.2.1"
   },
   "scripts": {
     "lint": "eslint . --ext .ts --fix",
     "test": "jest",
     "build": "rimraf ./build && tsc",
     "start:dev": "nodemon",
-    "start:prod": "npm run build && node build/index.js"
+    "start:prod": "npm run build && node build/server.js"
   },
   "jest": {
+    "verbose": true,
     "rootDir": "./",
-    "testMatch": [
-      "<rootDir>/src/**/*.spec.ts"
-    ],
-    "transform": {
-      "^.+\\.ts?$": "<rootDir>/node_modules/ts-jest"
-    },
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ],
+    "globalSetup": "<rootDir>/src/jest-setup.ts",
+    "globalTeardown": "<rootDir>/src/jest-teardown.ts",
+    "testMatch": [ "<rootDir>/src/**/*.spec.ts" ],
+    "transform": { "^.+\\.ts?$": "<rootDir>/node_modules/ts-jest" },
+    "moduleFileExtensions": [ "ts", "tsx", "js", "json" ],
     "testEnvironment": "node"
   }
 }

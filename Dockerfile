@@ -23,4 +23,4 @@ FROM node:12.16.0-alpine
 COPY --from=packages /app/node_modules /node_modules
 COPY --from=builder /app/build /build
 
-CMD ["node", "./build/index.js"]
+CMD ["node", "./build/server.js"]
