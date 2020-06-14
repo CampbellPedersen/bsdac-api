@@ -47,6 +47,7 @@ components:
     Rap:
       type: object
       required:
+        - id
         - title
         - bonus
         - rapper

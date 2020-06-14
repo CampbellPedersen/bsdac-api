@@ -1,11 +1,13 @@
 import { Request, Response, Router } from 'express';
+import { v4 as uuid } from 'uuid';
 import { asyncRoute, errorHandler } from '../../utils/express';
 import { RapRepository } from './repository';
 import { RapAudioUrlService } from './audio-url-service';
 
 export default (
   repository: RapRepository,
-  getAudioUrl: RapAudioUrlService
+  getAudioUrl: RapAudioUrlService,
+  generateId: () => string = uuid,
 ) => {
 
   const loadRaps = async (_: Request, response: Response) => {
