@@ -1,4 +1,5 @@
-import { RapRepository, inMemoryRapository, EventName } from './repository';
+import { RapRepository, inMemoryRapository, EventName, postgresqlRapository } from './repository';
+import { getTestDbConnection } from '../../utils/db';
 
 const theFirstRap = {
   id: 'rap-001',
@@ -18,7 +19,7 @@ const theSecondRap = {
   appearedAt: { name: EventName.BSDAC, series: 3 },
 };
 
-const baseTests = (repository: RapRepository) => () => {
+const tests = (repository: RapRepository) => () => {
   it('loads undefined when rap does not exist', async () => {
     await expect(repository.load('1')).resolves.toBeUndefined();
   });
@@ -69,4 +70,6 @@ const baseTests = (repository: RapRepository) => () => {
 };
 
 const inMemory = inMemoryRapository();
-describe('in-memory-rap-repository', baseTests(inMemory));
+const postgresql = postgresqlRapository(getTestDbConnection());
+describe('in-memory-rap-repository', tests(inMemory));
+describe('postgresql-rap-repository', tests(postgresql));

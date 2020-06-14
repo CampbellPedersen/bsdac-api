@@ -1,9 +1,11 @@
-import { inMemoryRapository } from './repository';
-import rapRoutes from './routes';
+import { Pool } from 'pg';
 import { inMemoryRapAudioUrlService } from './audio-url-service';
+import { postgresqlRapository } from './repository';
+import rapRoutes from './routes';
 
-export default () => {
-  const repository = inMemoryRapository();
+
+export default (pool: Pool) => {
+  const repository = postgresqlRapository(pool);
   const streamUrlBuilder = inMemoryRapAudioUrlService();
   return rapRoutes(repository, streamUrlBuilder);
 };

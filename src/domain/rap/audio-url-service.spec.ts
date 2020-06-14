@@ -10,7 +10,7 @@ const rap = {
   appearedAt: { name: EventName.BSDAC, series: 1 },
 };
 
-const baseTests = (getRapAudioUrl: RapAudioUrlService) => () => {
+const tests = (getRapAudioUrl: RapAudioUrlService) => () => {
   it('generates rap url', async () => {
     const url = await getRapAudioUrl(rap);
     expect(url).toBeTruthy();
@@ -18,4 +18,4 @@ const baseTests = (getRapAudioUrl: RapAudioUrlService) => () => {
 };
 
 const inMemory = inMemoryRapAudioUrlService();
-describe('in-memory-rap-audio-url-service', baseTests(inMemory));
+describe('in-memory-rap-audio-url-service', tests(inMemory));
