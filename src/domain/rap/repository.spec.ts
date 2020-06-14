@@ -1,4 +1,4 @@
-import { RapRepository, inMemoryRapository } from './repository';
+import { RapRepository, inMemoryRapository, EventName } from './repository';
 
 const theFirstRap = {
   id: 'rap-001',
@@ -6,7 +6,7 @@ const theFirstRap = {
   bonus: false,
   rapper: 'Campbell Pedersen',
   imageUrl: 'https://imgur.com/theFirstRap',
-  appearedAt: { name: 'bsdac', series: 1 },
+  appearedAt: { name: EventName.BSDAC, series: 1 },
 };
 
 const theSecondRap = {
@@ -15,7 +15,7 @@ const theSecondRap = {
   bonus: false,
   rapper: 'Dennis Nguyen',
   imageUrl: 'https://imgur.com/theSecondRap',
-  appearedAt: { name: 'bsdac', series: 3 },
+  appearedAt: { name: EventName.BSDAC, series: 3 },
 };
 
 const baseTests = (repository: RapRepository) => () => {

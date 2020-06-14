@@ -23,7 +23,7 @@ export const rapRouter = (
   };
 
   return Router()
-    .get('/', asyncRoute(loadRaps))
+    .get('/get-all', asyncRoute(loadRaps))
     .get('/stream/:id', asyncRoute(loadStream))
     .use(errorHandler);
 };

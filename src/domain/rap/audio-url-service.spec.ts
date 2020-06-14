@@ -1,4 +1,5 @@
 import { inMemoryRapAudioUrlService, RapAudioUrlService } from './audio-url-service';
+import { EventName } from './repository';
 
 const rap = {
   id: 'rap-001',
@@ -6,7 +7,7 @@ const rap = {
   bonus: false,
   rapper: 'Campbell Pedersen',
   imageUrl: 'https://imgur.com/theFirstRap',
-  appearedAt: { name: 'bsdac', series: 1 },
+  appearedAt: { name: EventName.BSDAC, series: 1 },
 };
 
 const baseTests = (getRapAudioUrl: RapAudioUrlService) => () => {

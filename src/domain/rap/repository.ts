@@ -1,14 +1,18 @@
-interface Event {
-  name: string
-  series: number
-}
-
 interface PersistedRap {
   title: string
   rapper: string
   bonus: boolean
   imageUrl: string
   appearedAt: Event
+}
+
+interface Event {
+  name: EventName
+  series: number
+}
+
+export enum EventName {
+  BSDAC = 'BSDAC'
 }
 
 export type Rap = PersistedRap & { id: string }
