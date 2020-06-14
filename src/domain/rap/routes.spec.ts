@@ -1,6 +1,6 @@
 import express from 'express';
 import request from 'supertest';
-import { rapRouter } from './routes';
+import rapRoutes from './routes';
 import { inMemoryRapository, Rap, EventName } from './repository';
 
 const rap = {
@@ -21,7 +21,7 @@ const urlBuilder = (onReceiveParams?: (params: Rap) => void) =>
 
 describe('routes > /get-all', () => {
   const repository = inMemoryRapository();
-  const app = express().use('/raps', rapRouter(repository, urlBuilder()));
+  const app = express().use('/raps', rapRoutes(repository, urlBuilder()));
 
   it('given no raps > then returns empty array of raps and http 200', async () => {
     await request(app)
@@ -41,7 +41,7 @@ describe('routes > /get-all', () => {
 describe('routes > /stream/:id', () => {
   let urlBuilderParams: Rap | undefined;
   const repository = inMemoryRapository();
-  const app = express().use('/raps', rapRouter(repository, urlBuilder(params => urlBuilderParams = params)));
+  const app = express().use('/raps', rapRoutes(repository, urlBuilder(params => urlBuilderParams = params)));
 
   beforeEach(() => urlBuilderParams = undefined);
 

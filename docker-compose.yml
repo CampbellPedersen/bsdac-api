@@ -1,6 +1,6 @@
 version: '3'
 services:
-  lnd_web_api:
+  backend:
     build: .
     ports:
       - "8080:80"
@@ -9,7 +9,7 @@ services:
     restart: on-failure
     command: -url=jdbc:postgresql://db:5432/postgres -schemas=bsdac_api -user=postgres -password=postgres migrate
     volumes:
-      - ./flyway/lnd_web_api:/flyway/sql
+      - ./flyway/bsdac_api:/flyway/sql
     depends_on:
       - db
   db:
