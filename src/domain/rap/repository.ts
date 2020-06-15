@@ -1,6 +1,7 @@
 import { Pool } from 'pg';
 
-interface PersistedRap {
+export interface Rap {
+  id: string
   title: string
   rapper: string
   bonus: boolean
@@ -16,8 +17,6 @@ interface Event {
 export enum EventName {
   BSDAC = 'BSDAC'
 }
-
-export type Rap = PersistedRap & { id: string }
 
 export interface RapRepository {
   loadAll(): Promise<Rap[]>
@@ -72,12 +71,13 @@ export const postgresqlRapository = (
 };
 
 export const inMemoryRapository = (): RapRepository => {
-  const store: { [id: string]: PersistedRap } = {};
+  const store: { [id: string]: Rap } = {};
   return {
     loadAll: async () => Object.keys(store).map(id => ({ id, ...store[id] })),
-    load: async (id: string) => store[id] ? { id, ...store[id]} : undefined,
+    load: async (id: string) => store[id],
     save: async (rap: Rap) => {
       store[rap.id] = {
+        id: rap.id,
         title: rap.title,
         rapper: rap.rapper,
         bonus: rap.bonus,

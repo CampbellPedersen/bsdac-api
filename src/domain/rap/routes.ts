@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { asyncRoute, errorHandler } from '../../utils/express';
 import { RapRepository } from './repository';
 import { RapAudioUrlService } from './audio-url-service';
+import { json } from 'body-parser';
 
 export default (
   repository: RapRepository,
@@ -12,7 +13,20 @@ export default (
 
   const loadRaps = async (_: Request, response: Response) => {
     const raps = await repository.loadAll();
-    response.status(200).send(raps);
+    response.send(raps);
+  };
+
+  const saveRap = async (request: Request, response: Response) => {
+    const rap = request.body;
+    await repository.save({
+      id: rap.id || generateId(),
+      title: rap.title,
+      rapper: rap.rapper,
+      bonus: rap.bonus,
+      imageUrl: rap.imageUrl,
+      appearedAt: rap.appearedAt,
+    });
+    response.send(201);
   };
 
   const loadStream = async (request: Request, response: Response) => {
@@ -20,12 +34,14 @@ export default (
     const rap = await repository.load(id);
 
     rap ?
-      response.status(200).send(await getAudioUrl(rap))
-      : response.status(404).send();
+      response.send(await getAudioUrl(rap))
+      : response.send(404);
   };
 
   return Router()
+    .use(json())
     .get('/get-all', asyncRoute(loadRaps))
+    .post('/save', asyncRoute(saveRap))
     .get('/stream/:id', asyncRoute(loadStream))
     .use(errorHandler);
 };
