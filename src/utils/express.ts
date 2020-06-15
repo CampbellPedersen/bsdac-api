@@ -1,5 +1,8 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 
+export type BsdacApiRequest<T> = Omit<Request, 'body'> & { body: T };
+export type BsdacApiResponse<T> = Omit<Response, 'json'> & { json: (body?: T) => void };
+
 export const asyncRoute = (route: RequestHandler) => async (request: Request, response: Response, next: NextFunction) => {
   try {
     await route(request, response, next);

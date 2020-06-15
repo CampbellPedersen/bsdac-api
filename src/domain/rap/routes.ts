@@ -1,9 +1,22 @@
 import { Request, Response, Router } from 'express';
-import { v4 as uuid } from 'uuid';
-import { asyncRoute, errorHandler } from '../../utils/express';
-import { RapRepository } from './repository';
-import { RapAudioUrlService } from './audio-url-service';
 import { json } from 'body-parser';
+import { v4 as uuid } from 'uuid';
+import { BsdacApiRequest, BsdacApiResponse, asyncRoute, errorHandler } from '../../utils/express';
+import { isValidString, isValidBoolean } from '../../utils/validation';
+import { Rap, RapRepository } from './repository';
+import { RapAudioUrlService } from './audio-url-service';
+
+const rapRequestFailsValidation = (body: any): boolean => {
+  let fails = false;
+
+  if (!isValidString(body.title)) fails = true;
+  if (!isValidString(body.rapper)) fails = true;
+  if (!isValidBoolean(body.bonus)) fails = true;
+  if (!isValidString(body.imageUrl)) fails = true;
+  if (!body.appearedAt) fails = true;
+
+  return fails;
+};
 
 export default (
   repository: RapRepository,
@@ -11,20 +24,21 @@ export default (
   generateId: () => string = uuid,
 ) => {
 
-  const loadRaps = async (_: Request, response: Response) => {
+  const loadRaps = async (_: Request, response: BsdacApiResponse<Rap[]>) => {
     const raps = await repository.loadAll();
-    response.send(raps);
+    response.json(raps);
   };
 
-  const saveRap = async (request: Request, response: Response) => {
-    const rap = request.body;
+  const saveRap = async (request: BsdacApiRequest<Omit<Rap, 'id'>>, response: Response) => {
+    const body = request.body;
+    if (rapRequestFailsValidation(request.body)) response.send(400);
     await repository.save({
-      id: rap.id || generateId(),
-      title: rap.title,
-      rapper: rap.rapper,
-      bonus: rap.bonus,
-      imageUrl: rap.imageUrl,
-      appearedAt: rap.appearedAt,
+      id: generateId(),
+      title: body.title,
+      rapper: body.rapper,
+      bonus: body.bonus,
+      imageUrl: body.imageUrl,
+      appearedAt: body.appearedAt,
     });
     response.send(201);
   };

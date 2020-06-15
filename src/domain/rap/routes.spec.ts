@@ -44,17 +44,17 @@ describe('routes', () => {
     const repository = inMemoryRapository();
     const app = express().use('/raps', rapRoutes(repository, urlBuilder(), () => generatedRapId));
 
-    it('when request > then saves rap and returns http 201', async () => {
+    test.each(['title', 'rapper', 'bonus', 'imageUrl', 'appearedAt'])
+    ('when request is missing %s > then returns 400', async (missingProperty) => {
+      const body: any = { ...rap };
+      delete(body[missingProperty]);
       await request(app)
         .post('/raps/save')
-        .send(rap)
-        .expect(201);
-
-      const savedRap = await repository.load(rap.id);
-      expect(savedRap).toEqual(rap);
+        .send(body)
+        .expect(400);
     });
 
-    it('when request has no id > then saves rap and returns http 201', async () => {
+    it('when request > then saves rap and returns http 201', async () => {
       await request(app)
         .post('/raps/save')
         .send({ ...rap, id: undefined })
