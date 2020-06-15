@@ -13,7 +13,6 @@ const env = {
   },
 };
 
-console.log(process.env.SERVICE_PORT);
 const dbConnection = getDbConnection(env.db);
 
 console.log(`Listening on port: ${env.port}`);

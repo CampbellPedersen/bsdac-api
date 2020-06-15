@@ -31,7 +31,7 @@ export default (
 
   const saveRap = async (request: BsdacApiRequest<Omit<Rap, 'id'>>, response: Response) => {
     const body = request.body;
-    if (rapRequestFailsValidation(request.body)) response.send(400);
+    if (rapRequestFailsValidation(request.body)) response.sendStatus(400);
     await repository.save({
       id: generateId(),
       title: body.title,
@@ -40,7 +40,7 @@ export default (
       imageUrl: body.imageUrl,
       appearedAt: body.appearedAt,
     });
-    response.send(201);
+    response.sendStatus(201);
   };
 
   const loadStream = async (request: Request, response: Response) => {
@@ -49,7 +49,7 @@ export default (
 
     rap ?
       response.send(await getAudioUrl(rap))
-      : response.send(404);
+      : response.sendStatus(404);
   };
 
   return Router()
