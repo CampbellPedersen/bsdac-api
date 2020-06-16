@@ -9,22 +9,31 @@ paths:
   /raps/get-all:
     get:
       summary: Retrieves all raps
-      description: |
-        Retrieves all existing raps
+      description: Retrieves all existing raps
       responses:
         '200':
-          description: All the raps
+          description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Rap'
+                  $ref: '#/components/schemas/GetRapResponse'
+  /raps/save:
+    post:
+      summary: Saves a rap
+      description: Saves a rap
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveRapRequest'
   /raps/stream/{id}:
     get:
       summary: Retrieves URL to stream rap audio
-      description: |
-        Retrieves a signed URL to stream rap audio from
+      description: Retrieves a signed URL to stream rap audio from
       parameters:
         - in: path
           name: id
@@ -34,7 +43,7 @@ paths:
             type: string
       responses:
         '200':
-          description: A signed URL to the rap audio
+          description: OK
           content:
             text/plain:
               schema:
@@ -44,7 +53,30 @@ paths:
           description: Rap not found
 components:
   schemas:
-    Rap:
+    SaveRapRequest:
+      type: object
+      required:
+        - title
+        - bonus
+        - rapper
+        - imageUrl
+        - appearedAt
+      properties:
+        title:
+          type: string
+          example: I Get Money
+        bonus:
+          type: boolean
+          example: false
+        rapper:
+          type: string
+          example: Campbell Pedersen
+        imageUrl:
+          type: string
+          example: https://imgur.com/a/DRQDZe8
+        appearedAt:
+          $ref: '#/components/schemas/Event'
+    GetRapResponse:
       type: object
       required:
         - id
