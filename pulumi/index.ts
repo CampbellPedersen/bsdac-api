@@ -1,42 +1,50 @@
 import * as pulumi from '@pulumi/pulumi';
-import * as aws from '@pulumi/aws';
 import * as awsx from '@pulumi/awsx';
 
-const config = new pulumi.Config();
-// Step 1: Create an ECS Fargate cluster.
-const cluster = new awsx.ecs.Cluster('bsdac-api-cluster');
+const makeAlb = (cluster: awsx.ecs.Cluster) =>
+  new awsx.elasticloadbalancingv2.ApplicationLoadBalancer('bsdac-alb', {
+    external: true,
+    securityGroups: cluster.securityGroups
+  });
 
-// Step 2: Define the Networking for our service.
-const alb = new awsx.elasticloadbalancingv2.ApplicationLoadBalancer('bsdac-alb', {
-  external: true,
-  securityGroups: cluster.securityGroups
-});
+const makeWebListener = (alb: awsx.elasticloadbalancingv2.ApplicationLoadBalancer) =>
+  alb.createListener('web', {
+    port: 80,
+    external: true
+  });
 
-const web = alb.createListener('web', {
-  port: 80,
-  external: true
-});
+const buildDockerImage = (path: string) =>
+  awsx.ecs.Image.fromPath('bsdac-api-img', path);
 
-// Step 3: Build and publish a Docker image to a private ECR registry.
-const img = awsx.ecs.Image.fromPath('bsdac-api-img', './..');
-
-// Step 4: Create a Fargate service task that can scale out.
-const appService = new awsx.ecs.FargateService('bsdac-api-svc', {
+const makeService = (
+  cluster: awsx.ecs.Cluster,
+  web: awsx.elasticloadbalancingv2.ApplicationListener,
+  image: awsx.ecs.Image,
+  config: pulumi.Config,
+) =>
+  new awsx.ecs.FargateService('bsdac-api-svc', {
     cluster,
     taskDefinitionArgs: {
         container: {
-            image: img,
-            cpu: 102 /*10% of 1024*/,
-            memory: 50 /*MB*/,
+            image,
+            cpu: 102,
+            memory: 50/*MB*/,
             portMappings: [ web ],
             environment: [{
               name: 'SERVICE_PORT',
-              value: config.get('api:servicePort')
+              value: config.require('servicePort'),
             }]
         },
     },
     desiredCount: 3,
-});
+  });
+
+const config = new pulumi.Config();
+const cluster = new awsx.ecs.Cluster('bsdac-api-cluster');
+const alb = makeAlb(cluster);
+const web = makeWebListener(alb);
+const image = buildDockerImage('./..');
+makeService(cluster, web, image, config);
 
 // Step 5: Export the Internet address for the service.
 export const url = web.endpoint.hostname;
