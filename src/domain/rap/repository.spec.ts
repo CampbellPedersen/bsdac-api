@@ -1,16 +1,17 @@
-import { RapRepository, inMemoryRapository, EventName, postgresqlRapository } from './repository';
+import { RapRepository, inMemoryRapository, EventName, postgresqlRapository, Rap } from './repository';
 import { getTestDbConnection } from '../../utils/db';
 
-const theFirstRap = {
+const theFirstRap: Rap = {
   id: 'rap-001',
   title: 'The First Rap',
+  lyrics: 'Words mun',
   bonus: false,
   rapper: 'Campbell Pedersen',
   imageUrl: 'https://imgur.com/theFirstRap',
   appearedAt: { name: EventName.BSDAC, series: 1 },
 };
 
-const theSecondRap = {
+const theSecondRap: Rap = {
   id: 'rap-002',
   title: 'The Second Rap',
   bonus: false,
@@ -33,12 +34,12 @@ const tests = (repository: RapRepository) => () => {
     await repository.save(theFirstRap);
 
     await expect(repository.load('rap-001'))
-      .resolves.toStrictEqual(theFirstRap);
+      .resolves.toEqual(theFirstRap);
   });
 
   it('loads an array of one when one rap exists', async () => {
     await expect(repository.loadAll())
-      .resolves.toStrictEqual([ theFirstRap ]);
+      .resolves.toEqual([ theFirstRap ]);
   });
 
   it('overwrites one rap', async () => {
@@ -46,26 +47,26 @@ const tests = (repository: RapRepository) => () => {
     await repository.save(editedRap);
 
     await expect(repository.load('rap-001'))
-      .resolves.toStrictEqual(editedRap);
+      .resolves.toEqual(editedRap);
 
     await repository.save(theFirstRap);
 
     await expect(repository.load('rap-001'))
-      .resolves.toStrictEqual(theFirstRap);
+      .resolves.toEqual(theFirstRap);
   });
 
   it('saves and loads individual raps', async () => {
     await repository.save(theSecondRap);
 
     await expect(repository.load('rap-001'))
-      .resolves.toStrictEqual(theFirstRap);
+      .resolves.toEqual(theFirstRap);
     await expect(repository.load('rap-002'))
-      .resolves.toStrictEqual(theSecondRap);
+      .resolves.toEqual({ ...theSecondRap });
   });
 
   it('loads all raps', async () => {
     await expect(repository.loadAll())
-      .resolves.toStrictEqual([ theFirstRap, theSecondRap ]);
+      .resolves.toEqual([ theFirstRap, { ...theSecondRap } ]);
   });
 };
 

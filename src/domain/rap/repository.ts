@@ -3,6 +3,7 @@ import { Pool } from 'pg';
 export interface Rap {
   id: string
   title: string
+  lyrics?: string
   rapper: string
   bonus: boolean
   imageUrl: string
@@ -30,6 +31,7 @@ export const postgresqlRapository = (
   const toRap = (row: any) => ({
     id: row.id,
     title: row.title,
+    lyrics: row.lyrics ? row.lyrics : undefined,
     rapper: row.rapper,
     bonus: row.bonus,
     imageUrl: row.image_url,
@@ -42,14 +44,14 @@ export const postgresqlRapository = (
   return {
     loadAll: async () => {
       const result = await pool.query(`
-        SELECT id, title, rapper, bonus, image_url, event_name, event_series
+        SELECT id, title, lyrics, rapper, bonus, image_url, event_name, event_series
         FROM bsdac_api.raps`
       );
       return result.rows.map(toRap);
     },
     load: async (id: string) => {
       const result = await pool.query(`
-        SELECT id, title, rapper, bonus, image_url, event_name, event_series
+        SELECT id, title, lyrics, rapper, bonus, image_url, event_name, event_series
         FROM bsdac_api.raps
         WHERE id = $1`,
         [id]
@@ -60,12 +62,12 @@ export const postgresqlRapository = (
     },
     save: async (rap: Rap) => {
       await pool.query(`
-        INSERT INTO bsdac_api.raps (id, title, rapper, bonus, image_url, event_name, event_series)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        INSERT INTO bsdac_api.raps (id, title, lyrics, rapper, bonus, image_url, event_name, event_series)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         ON CONFLICT (id)
         DO UPDATE
-        SET title = $2, rapper = $3, bonus = $4, image_url = $5, event_name = $6, event_series = $7`,
-        [rap.id, rap.title, rap.rapper, rap.bonus, rap.imageUrl, rap.appearedAt.name, rap.appearedAt.series]);
+        SET title = $2, lyrics = $3, rapper = $4, bonus = $5, image_url = $6, event_name = $7, event_series = $8`,
+        [rap.id, rap.title, rap.lyrics, rap.rapper, rap.bonus, rap.imageUrl, rap.appearedAt.name, rap.appearedAt.series]);
     }
   };
 };
@@ -79,6 +81,7 @@ export const inMemoryRapository = (): RapRepository => {
       store[rap.id] = {
         id: rap.id,
         title: rap.title,
+        lyrics: rap.lyrics,
         rapper: rap.rapper,
         bonus: rap.bonus,
         imageUrl: rap.imageUrl,

@@ -1,4 +1,5 @@
 import * as pulumi from '@pulumi/pulumi';
+import * as aws from '@pulumi/aws';
 import * as awsx from '@pulumi/awsx';
 
 const makeAlb = (cluster: awsx.ecs.Cluster) =>
@@ -8,13 +9,32 @@ const makeAlb = (cluster: awsx.ecs.Cluster) =>
   });
 
 const makeWebListener = (alb: awsx.elasticloadbalancingv2.ApplicationLoadBalancer) =>
-  alb.createListener('web', {
+  alb.createListener('bscap-api-listener', {
     port: 80,
     external: true
   });
 
 const buildDockerImage = (path: string) =>
   awsx.ecs.Image.fromPath('bsdac-api-img', path);
+
+const buildRoute53Record = async (
+  domain: string,
+  alb: awsx.elasticloadbalancingv2.ApplicationLoadBalancer,
+) =>
+  new aws.route53.Record(
+    domain,
+    {
+        name: domain,
+        zoneId: (await aws.route53.getZone({ name: domain })).zoneId,
+        type: 'A',
+        aliases: [
+            {
+                name: alb.loadBalancer.dnsName,
+                zoneId: alb.loadBalancer.zoneId,
+                evaluateTargetHealth: true,
+            },
+        ],
+    });
 
 const makeService = (
   cluster: awsx.ecs.Cluster,
@@ -39,12 +59,14 @@ const makeService = (
     desiredCount: 3,
   });
 
+// Steps
 const config = new pulumi.Config();
+const domainName = config.require('domainName');
 const cluster = new awsx.ecs.Cluster('bsdac-api-cluster');
 const alb = makeAlb(cluster);
 const web = makeWebListener(alb);
+buildRoute53Record(domainName, alb);
 const image = buildDockerImage('./..');
 makeService(cluster, web, image, config);
 
-// Step 5: Export the Internet address for the service.
 export const url = web.endpoint.hostname;

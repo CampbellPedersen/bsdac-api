@@ -10,6 +10,7 @@ const rapRequestFailsValidation = (body: any): boolean => {
   let fails = false;
 
   if (!isValidString(body.title)) fails = true;
+  if (body.lyrics && !isValidString(body.lyrics)) fails = true;
   if (!isValidString(body.rapper)) fails = true;
   if (!isValidBoolean(body.bonus)) fails = true;
   if (!isValidString(body.imageUrl)) fails = true;
