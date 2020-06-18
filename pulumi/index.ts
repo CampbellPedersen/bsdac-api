@@ -14,18 +14,19 @@ const makeWebListener = (alb: awsx.elasticloadbalancingv2.ApplicationLoadBalance
     external: true
   });
 
-const buildDockerImage = (path: string) =>
-  awsx.ecs.Image.fromPath('bsdac-api-img', path);
+const buildDockerImage = (name: string, path: string) =>
+  awsx.ecs.Image.fromPath(name, path);
 
 const buildRoute53Record = async (
   domain: string,
   alb: awsx.elasticloadbalancingv2.ApplicationLoadBalancer,
-) =>
-  new aws.route53.Record(
+) => {
+  const hostedZone = await aws.route53.getZone({ name: domain });
+  return new aws.route53.Record(
     domain,
     {
         name: domain,
-        zoneId: (await aws.route53.getZone({ name: domain })).zoneId,
+        zoneId: hostedZone.zoneId,
         type: 'A',
         aliases: [
             {
@@ -35,10 +36,11 @@ const buildRoute53Record = async (
             },
         ],
     });
+};
 
 const makeService = (
   cluster: awsx.ecs.Cluster,
-  web: awsx.elasticloadbalancingv2.ApplicationListener,
+  webListener: awsx.elasticloadbalancingv2.ApplicationListener,
   image: awsx.ecs.Image,
   config: pulumi.Config,
 ) =>
@@ -49,7 +51,7 @@ const makeService = (
             image,
             cpu: 102,
             memory: 50/*MB*/,
-            portMappings: [ web ],
+            portMappings: [ webListener ],
             environment: [{
               name: 'SERVICE_PORT',
               value: config.require('servicePort'),
@@ -59,14 +61,14 @@ const makeService = (
     desiredCount: 3,
   });
 
-// Steps
+// Deploy that stack, homie.
 const config = new pulumi.Config();
 const domainName = config.require('domainName');
 const cluster = new awsx.ecs.Cluster('bsdac-api-cluster');
 const alb = makeAlb(cluster);
-const web = makeWebListener(alb);
-buildRoute53Record(domainName, alb);
-const image = buildDockerImage('./..');
-makeService(cluster, web, image, config);
+const webListener = makeWebListener(alb);
+const aliasRecord = buildRoute53Record(domainName, alb);
+const image = buildDockerImage('bsdac-api-img', './..');
+const fargateService = makeService(cluster, webListener, image, config);
 
-export const url = web.endpoint.hostname;
+export const url = webListener.endpoint.hostname;
