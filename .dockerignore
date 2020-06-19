@@ -4,7 +4,7 @@
 # Allow files and directories
 !/package.json
 !/package-lock.json
-!/tslint.json
+!/.eslintrc
 !/tsconfig.json
 !/src/**
 

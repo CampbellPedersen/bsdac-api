@@ -1,8 +1,3 @@
 name: bsdac-api
 description: An API built in Typescript for retrieving resources dedicated to Big Smash Day and Cube.
 runtime: nodejs
-template:
-  config:
-    aws:region:
-      description: The AWS region to deploy into
-      aws:region: ap-southeast-2

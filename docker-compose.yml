@@ -8,7 +8,7 @@ services:
       - SERVICE_PORT=80
       - DB_HOST=db
       - DB_PORT=5432
-      - DB_NAME=postgres
+      - DB_NAME=bsdac
       - DB_USER=postgres
       - DB_PASSWORD=postgres
     depends_on:
@@ -16,7 +16,7 @@ services:
   flyway:
     image: flyway/flyway:6.2.0-alpine
     restart: on-failure
-    command: -url=jdbc:postgresql://db:5432/postgres -schemas=bsdac_api -user=postgres -password=postgres migrate
+    command: -url=jdbc:postgresql://db:5432/bsdac -schemas=bsdac_api -user=postgres -password=postgres migrate
     volumes:
       - ./flyway/bsdac_api:/flyway/sql
     depends_on:
@@ -26,6 +26,6 @@ services:
     ports:
       - '5432:5432'
     environment:
-      POSTGRES_DB: postgres
+      POSTGRES_DB: bsdac
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
