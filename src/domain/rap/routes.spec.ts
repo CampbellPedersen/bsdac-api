@@ -7,6 +7,7 @@ describe('routes', () => {
   const rap = {
     id: 'rap-001',
     title: 'The Rap',
+    lyrics: 'Words words words',
     bonus: false,
     rapper: 'Campbell Pedersen',
     imageUrl: 'https://imgur.com/theRap',

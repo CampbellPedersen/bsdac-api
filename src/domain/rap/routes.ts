@@ -35,6 +35,7 @@ export default (
     if (rapRequestFailsValidation(request.body)) response.sendStatus(400);
     await repository.save({
       id: generateId(),
+      lyrics: body.lyrics,
       title: body.title,
       rapper: body.rapper,
       bonus: body.bonus,
