@@ -1,5 +1,4 @@
-import { RapRepository, inMemoryRapository, EventName, postgresqlRapository, Rap } from './repository';
-import { getTestDbConnection } from '../../utils/db';
+import { RapRepository, inMemoryRapository, EventName, Rap } from './repository';
 
 const theFirstRap: Rap = {
   id: 'rap-001',
@@ -71,6 +70,4 @@ const tests = (repository: RapRepository) => () => {
 };
 
 const inMemory = inMemoryRapository();
-const postgresql = postgresqlRapository(getTestDbConnection());
 describe('in-memory-rap-repository', tests(inMemory));
-describe('postgresql-rap-repository', tests(postgresql));

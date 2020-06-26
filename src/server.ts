@@ -1,21 +1,22 @@
 import express from 'express';
-import rapApi from './domain/rap/api';
-import { getDbConnection } from './utils/db';
+import rapApi from './domain/rap/routes';
+import { inMemoryRapository } from './domain/rap/repository';
+import { inMemoryRapAudioUrlService } from './domain/rap/audio-url-service';
 
 const env = {
-  port: process.env.SERVICE_PORT as string || '8080',
-  db: {
-    host: process.env.DB_HOST as string,
-    port: process.env.DB_PORT as string,
-    name: process.env.DB_NAME as string,
-    user: process.env.DB_USER as string,
-    password: process.env.DB_PASSWORD as string,
-  },
+  port: process.env.SERVICE_PORT || '8080',
+  aws: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
+  }
 };
 
-const dbConnection = getDbConnection(env.db);
+const rapRepository = inMemoryRapository();
+const rapAudioUrlService = inMemoryRapAudioUrlService();
 
 console.log(`Listening on port: ${env.port}`);
+
 express()
-  .use('/raps', rapApi(dbConnection))
+  .use('/raps', rapApi(rapRepository, rapAudioUrlService))
   .listen(80);
