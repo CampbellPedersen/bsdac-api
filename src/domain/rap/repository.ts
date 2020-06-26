@@ -1,3 +1,5 @@
+import { DynamoDB } from 'aws-sdk';
+
 export interface Rap {
   id: string
   title: string
@@ -22,6 +24,27 @@ export interface RapRepository {
   load(id: string): Promise<Rap | undefined>
   save(rap: Rap): Promise<void>
 }
+
+export const dynamodbRapository = (db: DynamoDB.DocumentClient): RapRepository => {
+  const TableName = 'Raps';
+  return {
+    loadAll: async () =>
+      db.scan({ TableName })
+        .promise()
+        .then(res => res.Items)
+        .catch(err => err),
+    load: async (id: string) =>
+      db.get({ TableName, Key: { id } })
+        .promise()
+        .then(res => res.Item)
+        .catch(err => err),
+    save: async (rap: Rap) =>
+      db.put({ TableName, Item: rap })
+        .promise()
+        .then(res => res)
+        .catch(err => err),
+  };
+};
 
 export const inMemoryRapository = (): RapRepository => {
   const store: { [id: string]: Rap } = {};

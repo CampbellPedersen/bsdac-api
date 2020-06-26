@@ -1,4 +1,5 @@
-import { RapRepository, inMemoryRapository, EventName, Rap } from './repository';
+import { RapRepository, inMemoryRapository, EventName, Rap, dynamodbRapository } from './repository';
+import { DynamoDB } from 'aws-sdk';
 
 const theFirstRap: Rap = {
   id: 'rap-001',
@@ -20,8 +21,9 @@ const theSecondRap: Rap = {
 };
 
 const tests = (repository: RapRepository) => () => {
+
   it('loads undefined when rap does not exist', async () => {
-    await expect(repository.load('1')).resolves.toBeUndefined();
+    await expect(repository.load('rap-001')).resolves.toBeUndefined();
   });
 
   it('loads empty array when no raps are saved', async () => {
@@ -31,6 +33,7 @@ const tests = (repository: RapRepository) => () => {
 
   it('saves and loads one rap', async () => {
     await repository.save(theFirstRap);
+    const raps = await repository.loadAll();
 
     await expect(repository.load('rap-001'))
       .resolves.toEqual(theFirstRap);
@@ -60,14 +63,18 @@ const tests = (repository: RapRepository) => () => {
     await expect(repository.load('rap-001'))
       .resolves.toEqual(theFirstRap);
     await expect(repository.load('rap-002'))
-      .resolves.toEqual({ ...theSecondRap });
+      .resolves.toEqual(theSecondRap);
   });
 
   it('loads all raps', async () => {
     await expect(repository.loadAll())
-      .resolves.toEqual([ theFirstRap, { ...theSecondRap } ]);
+      .resolves.toEqual(jasmine.arrayContaining([ theFirstRap, theSecondRap ]));
   });
 };
 
 const inMemory = inMemoryRapository();
 describe('in-memory-rap-repository', tests(inMemory));
+
+const client = new DynamoDB.DocumentClient({ region: 'eu-west-1', endpoint: 'http://localhost:8000' });
+const dynamodb = dynamodbRapository(client);
+describe('dynamodb-rap-repository', tests(dynamodb));
