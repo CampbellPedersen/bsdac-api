@@ -1,4 +1,4 @@
-import { DynamoDB } from 'aws-sdk';
+import AWS, { DynamoDB } from 'aws-sdk';
 import express from 'express';
 import { inMemoryRapAudioUrlService } from './domain/rap/audio-url-service';
 import { dynamodbRapository } from './domain/rap/repository';
@@ -20,7 +20,8 @@ const env = {
   }
 };
 
-const dynamodb = new DynamoDB.DocumentClient({ region: env.aws.region, endpoint: env.dynamodb.endpoint });
+AWS.config.update(env.aws);
+const dynamodb = new DynamoDB.DocumentClient({ endpoint: env.dynamodb.endpoint });
 const repository = dynamodbRapository(dynamodb);
 const uploadService = inMemoryFileUploadService();
 const audioUrlService = inMemoryRapAudioUrlService();
