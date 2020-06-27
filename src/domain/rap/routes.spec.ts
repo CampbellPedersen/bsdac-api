@@ -2,95 +2,91 @@ import express from 'express';
 import request from 'supertest';
 import rapRoutes from './routes';
 import { inMemoryRapository, Rap, EventName } from './repository';
+import { inMemoryFileUploadService } from '../../utils/file';
 
-describe('routes', () => {
-  const rap = {
-    id: 'rap-001',
-    title: 'The Rap',
-    lyrics: 'Words words words',
-    bonus: false,
-    rapper: 'Campbell Pedersen',
-    imageUrl: 'https://imgur.com/theRap',
-    appearedAt: { name: EventName.BSDAC, series: 1 },
-  };
+const details = { title: 'The Rap', lyrics: 'Words words words', bonus: false, rapper: 'Campbell Pedersen', imageUrl: 'https://imgur.com/theRap', appearedAt: { name: EventName.BSDAC, series: 1 } };
+const audioUrl = 'https://vgmdownloads.com/soundtracks/super-mario-64-soundtrack/zfvgdumr/18%20File%20Select.mp3';
+const urlBuilder = (onReceiveParams?: (params: Rap) => void) => async (rap: Rap) => { if (onReceiveParams) onReceiveParams(rap); return audioUrl; };
 
-  const audioUrl = 'https://vgmdownloads.com/soundtracks/super-mario-64-soundtrack/zfvgdumr/18%20File%20Select.mp3';
-  const urlBuilder = (onReceiveParams?: (params: Rap) => void) =>
-    async (rap: Rap) => {
-      if (onReceiveParams) onReceiveParams(rap);
-      return audioUrl;
-    };
+describe('/get-all', () => {
+  const repository = inMemoryRapository();
+  const upload = inMemoryFileUploadService();
+  const app = express()
+    .use('/raps', rapRoutes(repository, upload, urlBuilder()));
 
-  describe('/get-all', () => {
-    const repository = inMemoryRapository();
-    const app = express().use('/raps', rapRoutes(repository, urlBuilder()));
-
-    it('given no raps > then returns empty array of raps and http 200', async () => {
-      await request(app)
-        .get('/raps/get-all')
-        .expect(200, []);
-    });
-
-    it('given rap > returns array of raps and http 200', async () => {
-      await repository.save(rap);
-
-      await request(app)
-        .get('/raps/get-all')
-        .expect(200, [ rap ]);
-    });
+  it('given no raps > then returns empty array of raps and http 200', async () => {
+    await request(app)
+      .get('/raps/get-all')
+      .expect(200, []);
   });
 
-  describe('/save', () => {
-    const generatedRapId = 'rap-002';
-    const repository = inMemoryRapository();
-    const app = express().use('/raps', rapRoutes(repository, urlBuilder(), () => generatedRapId));
+  it('given rap > returns array of raps and http 200', async () => {
+    const rap = { ...details, id: 'rap-001' };
+    await repository.save(rap);
 
-    test.each(['title', 'rapper', 'bonus', 'imageUrl', 'appearedAt'])
-    ('when request is missing %s > then returns 400', async (missingProperty) => {
-      const body: any = { ...rap };
-      delete(body[missingProperty]);
-      await request(app)
-        .post('/raps/save')
-        .send(body)
-        .expect(400);
-    });
+    await request(app)
+      .get('/raps/get-all')
+      .expect(200, [ rap ]);
+  });
+});
 
-    it('when request > then saves rap and returns http 201', async () => {
-      await request(app)
-        .post('/raps/save')
-        .send({ ...rap, id: undefined })
-        .expect(201);
+describe('/save', () => {
+  const generatedRapId = 'rap-002';
+  const repository = inMemoryRapository();
+  const upload = inMemoryFileUploadService();
+  const app = express()
+    .use('/raps', rapRoutes(repository, upload, urlBuilder(), () => generatedRapId));
 
-      const savedRap = await repository.load(generatedRapId);
-      expect(savedRap).toEqual({ ...rap, id: generatedRapId });
-    });
+  test.each(['title', 'rapper', 'bonus', 'imageUrl', 'appearedAt'])
+  ('when request is missing %s > then returns 400', async (missingProperty) => {
+    const body: any = { ...details };
+    delete(body[missingProperty]);
+    await request(app)
+      .post('/raps/save')
+      .attach('file', './swagger.yml')
+      .field('details', JSON.stringify(body))
+      .expect(400);
   });
 
-  describe('/stream/:id', () => {
-    let urlBuilderParams: Rap | undefined;
-    const repository = inMemoryRapository();
-    const app = express().use('/raps', rapRoutes(repository, urlBuilder(params => urlBuilderParams = params)));
+  it('when request > then saves rap and returns http 201', async () => {
+    await request(app)
+      .post('/raps/save')
+      .attach('file', './swagger.yml')
+      .field('details', JSON.stringify(details))
+      .expect(201);
 
-    beforeEach(() => urlBuilderParams = undefined);
+    const savedRap = await repository.load(generatedRapId);
+    expect(savedRap).toEqual({ ...details, id: generatedRapId });
+  });
+});
 
-    it('given no rap > then http 404', async () => {
-      await request(app)
-        .get(`/raps/stream/${rap.id}`)
-        .expect(404)
-        .then(() => {
-          expect(urlBuilderParams).toBeUndefined();
-        });
-    });
+describe('/stream/:id', () => {
+  let urlBuilderParams: Rap | undefined;
+  const repository = inMemoryRapository();
+  const upload = inMemoryFileUploadService();
+  const app = express()
+    .use('/raps', rapRoutes(repository, upload, urlBuilder(params => urlBuilderParams = params)));
 
-    it('given rap > then returns rap url and http 200', async () => {
-      await repository.save(rap);
+  beforeEach(() => urlBuilderParams = undefined);
 
-      await request(app)
-        .get(`/raps/stream/${rap.id}`)
-        .expect(200, audioUrl)
-        .then(() => {
-          expect(urlBuilderParams).toEqual(rap);
-        });
-    });
+  it('given no rap > then http 404', async () => {
+    await request(app)
+      .get('/raps/stream/rap-001')
+      .expect(404)
+      .then(() => {
+        expect(urlBuilderParams).toBeUndefined();
+      });
+  });
+
+  it('given rap > then returns rap url and http 200', async () => {
+    const rap = { ...details, id: 'rap-001' };
+    await repository.save(rap);
+
+    await request(app)
+      .get('/raps/stream/rap-001')
+      .expect(200, audioUrl)
+      .then(() => {
+        expect(urlBuilderParams).toEqual(rap);
+      });
   });
 });

@@ -1,10 +1,11 @@
 import { Request, Response, Router } from 'express';
-import { json } from 'body-parser';
+import multer from 'multer';
 import { v4 as uuid } from 'uuid';
-import { BsdacApiRequest, BsdacApiResponse, asyncRoute, errorHandler } from '../../utils/express';
-import { isValidString, isValidBoolean } from '../../utils/validation';
-import { Rap, RapRepository } from './repository';
 import { RapAudioUrlService } from './audio-url-service';
+import { Rap, RapRepository } from './repository';
+import { BsdacApiResponse, asyncRoute, errorHandler } from '../../utils/express';
+import { FileUploadService } from '../../utils/file';
+import { isValidString, isValidBoolean } from '../../utils/validation';
 
 const rapRequestFailsValidation = (body: any): boolean => {
   let fails = false;
@@ -21,6 +22,7 @@ const rapRequestFailsValidation = (body: any): boolean => {
 
 export default (
   repository: RapRepository,
+  upload: FileUploadService,
   getAudioUrl: RapAudioUrlService,
   generateId: () => string = uuid,
 ) => {
@@ -30,11 +32,15 @@ export default (
     response.json(raps);
   };
 
-  const saveRap = async (request: BsdacApiRequest<Omit<Rap, 'id'>>, response: Response) => {
-    const body = request.body;
-    if (rapRequestFailsValidation(request.body)) response.sendStatus(400);
+  const saveRap = async (request: Request, response: Response) => {
+    const body = JSON.parse(request.body.details) as Omit<Rap, 'id'>;
+    if (!request.file) response.sendStatus(400);
+    if (rapRequestFailsValidation(body)) response.sendStatus(400);
+
+    const id = generateId();
+    await upload(id, request.file);
     await repository.save({
-      id: generateId(),
+      id,
       lyrics: body.lyrics,
       title: body.title,
       rapper: body.rapper,
@@ -55,9 +61,8 @@ export default (
   };
 
   return Router()
-    .use(json())
     .get('/get-all', asyncRoute(loadRaps))
-    .post('/save', asyncRoute(saveRap))
+    .post('/save', multer({ dest: 'temp/' }).single('file'), asyncRoute(saveRap))
     .get('/stream/:id', asyncRoute(loadStream))
     .use(errorHandler);
 };

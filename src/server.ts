@@ -1,8 +1,9 @@
 import { DynamoDB } from 'aws-sdk';
 import express from 'express';
-import rapApi from './domain/rap/routes';
-import { dynamodbRapository } from './domain/rap/repository';
 import { inMemoryRapAudioUrlService } from './domain/rap/audio-url-service';
+import { dynamodbRapository } from './domain/rap/repository';
+import rapApi from './domain/rap/routes';
+import { inMemoryFileUploadService } from './utils/file';
 
 const env = {
   port: process.env.SERVICE_PORT || '8080',
@@ -13,15 +14,19 @@ const env = {
   },
   dynamodb: {
     endpoint: process.env.DYNAMODB_ENDPOINT
+  },
+  s3: {
+    bucketName: process.env.S3_BUCKET_NAME,
   }
 };
 
 const dynamodb = new DynamoDB.DocumentClient({ region: env.aws.region, endpoint: env.dynamodb.endpoint });
-const rapRepository = dynamodbRapository(dynamodb);
-const rapAudioUrlService = inMemoryRapAudioUrlService();
+const repository = dynamodbRapository(dynamodb);
+const uploadService = inMemoryFileUploadService();
+const audioUrlService = inMemoryRapAudioUrlService();
 
 console.log(`Listening on port: ${env.port}`);
 
 express()
-  .use('/raps', rapApi(rapRepository, rapAudioUrlService))
-  .listen(80);
+  .use('/raps', rapApi(repository, uploadService, audioUrlService))
+  .listen(env.port);
