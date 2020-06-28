@@ -25,21 +25,21 @@ export interface RapRepository {
   save(rap: Rap): Promise<void>
 }
 
-export const dynamodbRapository = (db: DynamoDB.DocumentClient): RapRepository => {
+export const dynamodbRapository = (client: DynamoDB.DocumentClient): RapRepository => {
   const TableName = 'Raps';
   return {
     loadAll: async () =>
-      db.scan({ TableName })
+      client.scan({ TableName })
         .promise()
         .then(res => res.Items)
         .catch(err => err),
     load: async (id: string) =>
-      db.get({ TableName, Key: { id } })
+      client.get({ TableName, Key: { id } })
         .promise()
         .then(res => res.Item)
         .catch(err => err),
     save: async (rap: Rap) =>
-      db.put({ TableName, Item: rap })
+      client.put({ TableName, Item: rap })
         .promise()
         .then(res => res)
         .catch(err => err),

@@ -34,11 +34,11 @@ export default (
 
   const saveRap = async (request: Request, response: Response) => {
     const body = JSON.parse(request.body.details) as Omit<Rap, 'id'>;
-    if (!request.file) response.sendStatus(400);
-    if (rapRequestFailsValidation(body)) response.sendStatus(400);
+    if (!request.file) return response.sendStatus(400);
+    if (rapRequestFailsValidation(body)) return response.sendStatus(400);
 
     const id = generateId();
-    await upload(id, request.file);
+    await upload(id, request.file.mimetype, request.file.buffer);
     await repository.save({
       id,
       lyrics: body.lyrics,
@@ -62,7 +62,7 @@ export default (
 
   return Router()
     .get('/get-all', asyncRoute(loadRaps))
-    .post('/save', multer({ dest: 'temp/' }).single('file'), asyncRoute(saveRap))
+    .post('/save', multer({ storage: multer.memoryStorage() }).single('file'), asyncRoute(saveRap))
     .get('/stream/:id', asyncRoute(loadStream))
     .use(errorHandler);
 };
