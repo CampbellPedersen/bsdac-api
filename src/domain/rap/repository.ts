@@ -31,18 +31,18 @@ export const dynamodbRapository = (client: DynamoDB.DocumentClient): RapReposito
     loadAll: async () =>
       client.scan({ TableName })
         .promise()
-        .then(res => res.Items)
-        .catch(err => err),
+        .then(res => res.Items as Rap[])
+        .catch(err => { throw err; }),
     load: async (id: string) =>
       client.get({ TableName, Key: { id } })
         .promise()
-        .then(res => res.Item)
-        .catch(err => err),
+        .then(res => res.Item as Rap)
+        .catch(err => { throw err; }),
     save: async (rap: Rap) =>
       client.put({ TableName, Item: rap })
         .promise()
-        .then(res => res)
-        .catch(err => err),
+        .then((res) => { console.log(res); })
+        .catch(err => { throw err; }),
   };
 };
 

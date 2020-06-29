@@ -42,7 +42,7 @@
     "lint": "eslint . --ext .ts --fix",
     "test": "jest",
     "build": "rimraf ./build && tsc",
-    "start": "docker-compose up -d && ./scripts/create-raps-table.sh",
+    "start": "docker-compose up -d",
     "stop": "docker-compose down"
   },
   "jest": {

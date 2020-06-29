@@ -1,7 +1,7 @@
 *.log
 npm-debug.log*
 node_modules/
-temp/
+.localstack/
 build/
 *.tsbuildinfo
 .npm
