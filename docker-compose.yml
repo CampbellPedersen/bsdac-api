@@ -11,7 +11,7 @@ services:
       - AWS_REGION=eu-west-1
       - DYNAMODB_ENDPOINT=http://localstack:4566
       - S3_BUCKET_NAME=bsdapp-rap-audio
-      - S3_ENDPOINT=http://localstack:4572
+      - S3_ENDPOINT=http://localstack:4566
     depends_on:
       - localstack
     links:
