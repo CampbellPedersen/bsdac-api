@@ -5,7 +5,7 @@ import { RapAudioUrlService } from './audio-url-service';
 import { Rap, RapRepository } from './repository';
 import { BsdacApiResponse, asyncRoute, errorHandler } from '../../utils/express';
 import { FileUploadService } from '../../utils/file';
-import { isValidString, isValidBoolean } from '../../utils/validation';
+import { isValidString, isValidBoolean, isValidPositiveNumber as isPositiveNumber } from '../../utils/validation';
 
 const rapRequestFailsValidation = (body: any): boolean => {
   let fails = false;
@@ -16,6 +16,10 @@ const rapRequestFailsValidation = (body: any): boolean => {
   if (!isValidBoolean(body.bonus)) fails = true;
   if (!isValidString(body.imageUrl)) fails = true;
   if (!body.appearedAt) fails = true;
+  if (body.appearedAt) {
+    if (!isValidString(body.appearedAt.name)) fails = true;
+    if (!isPositiveNumber(body.appearedAt.series)) fails = true;
+  }
 
   return fails;
 };

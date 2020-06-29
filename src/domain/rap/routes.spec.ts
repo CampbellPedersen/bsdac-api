@@ -48,6 +48,18 @@ describe('/save', () => {
       .expect(400);
   });
 
+  test.each(['name', 'series'])
+  ('when request is missing event %s > then returns 400', async (missingProperty: 'name' | 'series') => {
+    const appearedAt = { ...details.appearedAt };
+    delete(appearedAt[missingProperty]);
+    const body: any = { ...details, appearedAt };
+    await request(app)
+      .post('/raps/save')
+      .attach('file', './swagger.yml')
+      .field('details', JSON.stringify(body))
+      .expect(400);
+  });
+
   it('when request > then saves rap and returns http 201', async () => {
     await request(app)
       .post('/raps/save')
