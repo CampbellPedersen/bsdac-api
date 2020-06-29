@@ -1,6 +1,6 @@
 import AWS, { DynamoDB, S3 } from 'aws-sdk';
 import express from 'express';
-import { inMemoryRapAudioUrlService } from './domain/rap/audio-url-service';
+import { s3RapAudioUrlService } from './domain/rap/audio-url-service';
 import { dynamodbRapository } from './domain/rap/repository';
 import rapApi from './domain/rap/routes';
 import { s3FileUploadService } from './utils/file';
@@ -26,7 +26,7 @@ const dynamodb = new DynamoDB.DocumentClient(env.dynamodb);
 const repository = dynamodbRapository(dynamodb);
 const s3 = new S3({ ...env.s3, s3ForcePathStyle: true });
 const uploadService = s3FileUploadService(s3, env.s3.bucketName);
-const audioUrlService = inMemoryRapAudioUrlService();
+const audioUrlService = s3RapAudioUrlService(s3, env.s3.bucketName);
 
 console.log(`Listening on port: ${env.port}`);
 
