@@ -17,20 +17,21 @@ An API built in Typescript for retrieving resources dedicated to Big Smash Day a
 
 # Developer Quickstart
 Requirements:
-- Node 12.x.x
 - Docker
 - Docker Compose
 
-To run tests:
-```console
-npm run test
-```
 To spin up the stack in Docker:
 ```console
-npm run start
+docker-compose up -d
+```
+
+To create local aws resources:
+```console
+./server/scripts/create-dynamodb-tables.sh
+./server/scripts/create-s3-bucket.sh
 ```
 
 To tear down the local Docker stack:
 ```console
-npm run stop
+docker-compose down
 ```
