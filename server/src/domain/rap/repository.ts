@@ -41,7 +41,7 @@ export const dynamodbRapository = (client: DynamoDB.DocumentClient): RapReposito
     save: async (rap: Rap) =>
       client.put({ TableName, Item: rap })
         .promise()
-        .then((res) => { console.log(res); })
+        .then(() => undefined)
         .catch(err => { throw err; }),
   };
 };

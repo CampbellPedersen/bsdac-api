@@ -19,4 +19,4 @@ RUN npm i http-server -g
 
 COPY --from=builder /app/build ./public
 
-CMD http-server -p 8930
+CMD http-server -p 80

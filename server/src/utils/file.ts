@@ -18,5 +18,5 @@ export const s3FileUploadService = (
   async (key: string, mimetype: string, contents: any) =>
     s3.upload({ Bucket: bucketName, Key: key, Body: contents, ContentType: mimetype, ACL: 'public-read'})
       .promise()
-      .then(data => console.log(data))
+      .then(() => undefined)
       .catch(e => { throw e; });
