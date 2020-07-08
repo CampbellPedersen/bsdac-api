@@ -1,0 +1,13 @@
+.loading-screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.loading-screen .spinner-border {
+  height: 4rem;
+  width: 4rem;
+}
