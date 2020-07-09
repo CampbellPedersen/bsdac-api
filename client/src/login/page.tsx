@@ -18,7 +18,7 @@ export const LoginPage: React.FC = () => {
         <label htmlFor="password" className="sr-only">Password</label>
         <input type="password" id="password" className="form-control" placeholder="Password" />
         <button id='login-button' type='button' className='btn btn-primary btn-lg btn-block' onClick={() => loggedIn()} >Login</button>
-        <p className="mt-3 mb-3 text-muted">Made with ❤️ by Campbell Pedersen</p>
+        <p className="mt-3 mb-3 text-muted">Made with <span role='img' aria-label='love'>❤️</span> by Campbell Pedersen</p>
       </form>
     </div>
   );

@@ -1,14 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { LoadingScreen } from '../components';
 import { AppContext } from '../context';
 import { useLoadRaps } from './load-raps';
 
 export const RapsPage: React.FC = () => {
-  const { raps: { loaded }} = useContext(AppContext);
+  const { raps: { isLoading, loaded }} = useContext(AppContext);
   const loadRaps = useLoadRaps();
 
-  if (!loaded) {
-    loadRaps();
+  useEffect(() => {
+    if(!loaded) loadRaps();
+  }, [loaded, loadRaps]);
+
+  if (isLoading) {
     return <LoadingScreen />;
   };
 

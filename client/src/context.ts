@@ -24,7 +24,7 @@ const reducer: Reducer<AppState, Action> = (state, action) => {
 export const useAppContext = () => {
   const initialState = {
     login: { loggedIn: false },
-    raps: {}
+    raps: { isLoading: false }
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
