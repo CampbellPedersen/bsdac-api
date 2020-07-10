@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { AppContext } from '../context';
 import { Rap } from './types';
 
-const loadRaps = (
+export const loadRaps = (
   isLoading: boolean,
   requested: () => void,
   received: (raps: Rap[]) => void
