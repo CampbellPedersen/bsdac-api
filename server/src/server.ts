@@ -31,5 +31,5 @@ const audioUrlService = s3RapAudioUrlService(s3, env.s3.bucketName);
 console.log(`Listening on port: ${env.port}`);
 
 express()
-  .use('/raps', rapApi(repository, uploadService, audioUrlService))
+  .use('/api/raps', rapApi(repository, uploadService, audioUrlService))
   .listen(env.port);

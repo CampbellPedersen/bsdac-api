@@ -8,7 +8,7 @@ const loadRaps = (
   requested: () => void,
   received: (raps: Rap[]) => void
 ) => {
-  const requestRaps = async (): Promise<Rap[]> => axios.get('/api/raps/get-all');
+  const requestRaps = async (): Promise<Rap[]> => axios.get('/api/raps/get-all').then(resp => resp.data);
 
   return async () => {
     if (isLoading) return;

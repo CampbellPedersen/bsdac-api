@@ -3,11 +3,21 @@ services:
   frontend:
     build: ./client
     ports:
-      - 3000:80
+      - 9001:80
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend.priority=1"
   backend:
     build: ./server
     ports:
-      - 8080:80
+      - 9002:80
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api/`)"
+      - "traefik.http.routers.backend.priority=2"
     depends_on:
       - backend
     links:
@@ -24,6 +34,21 @@ services:
       - localstack
     links:
       - localstack
+  # Infra simulators
+  traefik:
+    image: "traefik:v2.2"
+    container_name: "traefik"
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
   localstack:
     image: localstack/localstack:latest
     container_name: localstack
@@ -32,7 +57,6 @@ services:
       - '8055:8080'
     environment:
       - SERVICES=s3,dynamodb
-      - DEBUG=1
       - DATA_DIR=/tmp/localstack/data
     volumes:
       - './server/.localstack:/tmp/localstack'
