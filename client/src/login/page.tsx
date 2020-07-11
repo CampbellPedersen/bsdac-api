@@ -1,12 +1,12 @@
 import React, { useContext, FormEvent, useState } from 'react';
+import { useLogin } from './login';
 import { AppContext } from '../context';
 import logo from '../images/logo.svg';
 import './page.css';
-import { useLogin } from './login';
 
 export const LoginPage: React.FC = () => {
   const {
-    login: { isLoading },
+    login: { isLoading, failedMessage },
   } = useContext(AppContext);
   const login = useLogin();
 
@@ -27,6 +27,7 @@ export const LoginPage: React.FC = () => {
         <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" id="email" className="form-control" placeholder="Email address" autoFocus required/>
         <label htmlFor="password" className="sr-only">Password</label>
         <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" id="password" className="form-control" placeholder="Password" required/>
+        { failedMessage && <p className='text-danger'>{failedMessage}</p> }
         <button disabled={isLoading} id='login-button' type='submit' className='btn btn-primary btn-lg btn-block'>
           {isLoading && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
           {isLoading ? ' Logging in...' : 'Login'}
