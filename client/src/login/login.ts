@@ -17,7 +17,9 @@ export const login = (
     requested();
     try {
       await requestLogin(email, password);
-    } catch (e) { return failed('Incorrect email or password'); }
+    } catch (e) {
+      return failed('Incorrect email or password');
+    }
     loggedIn();
   };
 };
