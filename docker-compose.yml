@@ -18,12 +18,10 @@ services:
       - "traefik.http.routers.backend.entrypoints=web"
       - "traefik.http.routers.backend.rule=PathPrefix(`/api/`)"
       - "traefik.http.routers.backend.priority=2"
-    depends_on:
-      - backend
-    links:
-      - backend
     environment:
       - SERVICE_PORT=80
+      - LOGIN_EMAIL=test@bsdac.com
+      - LOGIN_PASSWORD_SHA256=9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08
       - AWS_ACCESS_KEY_ID=DUMMYIDEXAMPLE
       - AWS_SECRET_ACCESS_KEY=DUMMYEXAMPLEKEY
       - AWS_REGION=eu-west-1
@@ -39,7 +37,6 @@ services:
     image: "traefik:v2.2"
     container_name: "traefik"
     command:
-      - "--log.level=DEBUG"
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"

@@ -1,12 +1,19 @@
 import AWS, { DynamoDB, S3 } from 'aws-sdk';
 import express from 'express';
+
 import { s3RapAudioUrlService } from './domain/rap/audio-url-service';
 import { dynamodbRapository } from './domain/rap/repository';
-import rapApi from './domain/rap/routes';
 import { s3FileUploadService } from './utils/file';
+
+import loginApi from './domain/login/routes';
+import rapApi from './domain/rap/routes';
 
 const env = {
   port: process.env.SERVICE_PORT || '8080',
+  login: {
+    email: process.env.LOGIN_EMAIL,
+    passwordSha256: process.env.LOGIN_PASSWORD_SHA256
+  },
   aws: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -31,5 +38,6 @@ const audioUrlService = s3RapAudioUrlService(s3, env.s3.bucketName);
 console.log(`Listening on port: ${env.port}`);
 
 express()
+  .use('/api/login', loginApi(env.login))
   .use('/api/raps', rapApi(repository, uploadService, audioUrlService))
   .listen(env.port);

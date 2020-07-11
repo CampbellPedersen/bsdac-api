@@ -7,6 +7,7 @@ const loadingPhrases = [
   'Placing speaker in the center',
   'Cracking open a beer',
   'First-picking armored bee',
+  'Stealing RedFalco\'s name',
 ];
 const randomPhrase = () => loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
 

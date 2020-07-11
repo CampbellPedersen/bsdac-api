@@ -1,11 +1,16 @@
 import { Rap } from './raps/types';
 
+export class LoginRequested {
+  readonly type = 'LoginRequested';
+}
+
 export class LoggedIn {
   readonly type = 'LoggedIn';
 }
 
-export class LoggedOut {
-  readonly type = 'LoggedOut';
+export class LoginFailed {
+  readonly type = 'LoginFailed';
+  constructor(readonly reason: string) {}
 }
 
 export class RapsRequested {
@@ -17,11 +22,12 @@ export class RapsLoaded {
   constructor(readonly raps: Rap[]) {}
 }
 
-export type Action = LoggedIn | LoggedOut | RapsRequested | RapsLoaded
+export type Action = LoginRequested | LoggedIn  | LoginFailed | RapsRequested | RapsLoaded
 
 export class Actions {
+  loginRequested = this.dispatcher(LoginRequested);
   loggedIn = this.dispatcher(LoggedIn);
-  loggedOut = this.dispatcher(LoggedOut);
+  loginFailed = this.dispatcher(LoginFailed);
   rapsRequested = this.dispatcher(RapsRequested);
   rapsLoaded = this.dispatcher(RapsLoaded);
 
