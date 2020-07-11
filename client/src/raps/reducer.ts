@@ -3,7 +3,7 @@ import { Action } from '../actions';
 
 export interface RapsState {
   isLoading: boolean,
-  loaded?: Rap[]
+  raps?: Rap[]
 }
 
 export const rapsReducer: React.Reducer<RapsState, Action> = (state, action) => {
@@ -17,7 +17,7 @@ export const rapsReducer: React.Reducer<RapsState, Action> = (state, action) => 
       return {
         ...state,
         isLoading: false,
-        loaded: action.raps
+        raps: action.raps
       };
     default:
       return state;

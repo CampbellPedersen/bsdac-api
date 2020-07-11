@@ -8,7 +8,6 @@ const Layout: React.FC = ({ children }) =>
     {children}
   </div>;
 
-
 const Content = () => {
   const {
     login: { loggedIn }

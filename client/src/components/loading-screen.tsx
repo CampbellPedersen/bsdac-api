@@ -11,6 +11,7 @@ const loadingPhrases = [
   'Checking Dennis\' weight',
   'Four stocking Fish, Phang and Simon',
   'Debating semantics with Piers',
+  'Getting snacks for Harry',
   'Having sex with the women',
 ];
 const randomPhrase = () => loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
