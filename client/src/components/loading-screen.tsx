@@ -8,6 +8,9 @@ const loadingPhrases = [
   'Cracking open a beer',
   'First-picking armored bee',
   'Stealing RedFalco\'s name',
+  'Checking Dennis\' weight',
+  'Four stocking Fish, Phang and Simon',
+  'Debating semantics with Piers',
 ];
 const randomPhrase = () => loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
 
