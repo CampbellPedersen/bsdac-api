@@ -12,13 +12,19 @@ export const RapList: React.FC<{ raps: Rap[] }> = ({ raps }) =>
   </ul>;
 
 
-const RapListItem: React.FC<{ rap: Rap }> = ({ rap }) =>
-  <div className='row'>
-    <div className="col-3">
-      <div className='thumbnail'><img alt='thumbnail' src={rap.imageUrl} /></div>
+const RapListItem: React.FC<{ rap: Rap }> = ({ rap }) => {
+  const aboveText = `${rap.appearedAt.name} ${rap.appearedAt.series}${rap.bonus && ' (Bonus)'}`;
+  return (
+    <div className='row'>
+      <div className="d-flex align-items-center col-3">
+        <div className='thumbnail'><img alt='thumbnail' src={rap.imageUrl} /></div>
+      </div>
+      <div className='col-9'>
+        <span className='font-weight-lighter text-muted'>{aboveText}</span>
+        <h3 className='font-weight-light'>{rap.title}</h3>
+        <span className='font-weight-lighter text-muted'>by {rap.rapper}</span>
+      </div>
     </div>
-    <div className='col-9'>
-    <small className='text-muted'>{rap.appearedAt.name} {rap.appearedAt.series}{rap.bonus && ' (Bonus)'}</small>
-      <h4 className='font-weight-normal'>{rap.title}</h4>
-    </div>
-  </div>;
+  );
+};
+
