@@ -1,5 +1,5 @@
 import React from 'react';
-import './loading-screen.css';
+import './loading-screen.scss';
 
 const loadingPhrases = [
   'Putting it in the raps',

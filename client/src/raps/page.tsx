@@ -1,9 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import { LoadingScreen } from '../components';
 import { AppContext } from '../context';
-import { useLoadRaps } from './load-raps';
-import { RapList } from './components/rap-list';
-import './page.css';
+import { useLoadRaps } from './load';
+import { RapList } from './components/list';
+import { RapFilters } from './components/filters';
+import './page.scss';
 
 export const RapsPage: React.FC = () => {
   const { raps: { isLoading, raps: loaded }} = useContext(AppContext);
@@ -19,7 +20,14 @@ export const RapsPage: React.FC = () => {
 
   return (
     <div className='raps-page'>
-      <RapList raps={loaded}/>
+      <div className='row'>
+        <div className='col-3'>
+          <RapFilters raps={loaded} />
+        </div>
+        <div className='col-12 col-md-9'>
+          <RapList raps={loaded}/>
+        </div>
+      </div>
     </div>
   );
 };

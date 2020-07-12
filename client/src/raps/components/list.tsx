@@ -1,6 +1,6 @@
 import React from 'react';
 import { Rap } from '../types';
-import './rap-list.css';
+import './list.scss';
 
 export const RapList: React.FC<{ raps: Rap[] }> = ({ raps }) =>
   <ul className="rap-list list-group">
@@ -13,7 +13,7 @@ export const RapList: React.FC<{ raps: Rap[] }> = ({ raps }) =>
 
 
 const RapListItem: React.FC<{ rap: Rap }> = ({ rap }) => {
-  const aboveText = `${rap.appearedAt.name} ${rap.appearedAt.series}${rap.bonus && ' (Bonus)'}`;
+  const aboveText = `${rap.appearedAt.name} ${rap.appearedAt.series}${rap.bonus ? ' (Bonus)' : ''}`;
   return (
     <div className='row'>
       <div className="d-flex align-items-center col-3">
@@ -22,7 +22,7 @@ const RapListItem: React.FC<{ rap: Rap }> = ({ rap }) => {
       <div className='col-9'>
         <span className='font-weight-lighter text-muted'>{aboveText}</span>
         <h3 className='font-weight-light'>{rap.title}</h3>
-        <span className='font-weight-lighter text-muted'>by {rap.rapper}</span>
+        <small className='font-weight-lighter text-muted'>by {rap.rapper}</small>
       </div>
     </div>
   );

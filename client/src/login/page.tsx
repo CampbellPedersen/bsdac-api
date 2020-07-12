@@ -2,7 +2,7 @@ import React, { useContext, FormEvent, useState } from 'react';
 import { useLogin } from './login';
 import { AppContext } from '../context';
 import logo from '../images/logo.svg';
-import './page.css';
+import './page.scss';
 
 export const LoginPage: React.FC = () => {
   const {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { loadRaps } from './load-raps';
+import { loadRaps } from './load';
 import { Rap, EventName } from './types';
 
 describe('load-raps', () => {
