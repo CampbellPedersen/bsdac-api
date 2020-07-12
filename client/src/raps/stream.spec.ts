@@ -17,21 +17,10 @@ describe('stream-rap', () => {
     http.resetHistory();
   });
 
-  it('given loading > when stream > should not make callbacks', async () => {
-    http.onGet('/api/raps/stream/1').reply(200, 'https:/rap.local');
-
-    const doStreamRap = streamRap(true, requested, received);
-    await doStreamRap('1');
-
-    expect(http.history.post.length).toEqual(0);
-    expect(requestedCalled).toBeFalsy();
-    expect(receivedUrl).toBeUndefined();
-  });
-
   it('when stream > should make http request and call callbacks', async () => {
     http.onGet('/api/raps/stream/1').reply(200, 'https:/rap.local');
 
-    const doStreamRap = streamRap(false, requested, received);
+    const doStreamRap = streamRap(requested, received);
     await doStreamRap('1');
 
     expect(requestedCalled).toBeTruthy();
@@ -42,7 +31,7 @@ describe('stream-rap', () => {
   it('given api is broke > when stream > should make http request and call callbacks', async () => {
     http.onGet('/api/raps/stream/1').reply(500);
 
-    const doStreamRap = streamRap(false, requested, received);
+    const doStreamRap = streamRap(requested, received);
     await expect(doStreamRap('1')).rejects.toThrow(new Error('Request failed with status code 500'));
 
     expect(requestedCalled).toBeTruthy();

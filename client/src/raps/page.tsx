@@ -1,13 +1,16 @@
 import React, { useContext, useEffect } from 'react';
-import { LoadingScreen } from '../components';
-import { AppContext } from '../context';
 import { useLoadRaps } from './load';
 import { RapList } from './components/list';
-import { RapFilters } from './components/filters';
+import { LoadingScreen } from '../components';
+import { AppContext } from '../context';
+import { Player } from '../player/components/player';
 import './page.scss';
 
 export const RapsPage: React.FC = () => {
-  const { raps: { isLoading, raps: loaded }} = useContext(AppContext);
+  const {
+    raps: { isLoading, raps: loaded },
+    actions: { rapSelected },
+  } = useContext(AppContext);
   const loadRaps = useLoadRaps();
 
   useEffect(() => {
@@ -20,10 +23,11 @@ export const RapsPage: React.FC = () => {
 
   return (
     <div className='raps-page'>
+      <Player />
       <div className='row'>
         <div className='col'></div>
         <div className='col-12 col-lg-8'>
-          <RapList raps={loaded}/>
+          <RapList raps={loaded} onSelect={rapSelected}/>
         </div>
         <div className='col'></div>
       </div>
