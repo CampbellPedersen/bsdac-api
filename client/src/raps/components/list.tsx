@@ -13,10 +13,10 @@ export const RapList: React.FC<{ raps: Rap[] }> = ({ raps }) =>
 
 
 const RapListItem: React.FC<{ rap: Rap }> = ({ rap }) => {
-  const aboveText = `${rap.appearedAt.name} ${rap.appearedAt.series}${rap.bonus ? ' (Bonus)' : ''}`;
+  const aboveText = `${rap.appearedAt.name} ${rap.appearedAt.series}${rap.bonus ? ' (Bonus Track)' : ''}`;
   return (
     <div className='row'>
-      <div className="d-flex align-items-center col-3">
+      <div className="d-flex align-items-center col-3 px-1 px-sm-3">
         <div className='thumbnail'><img alt='thumbnail' src={rap.imageUrl} /></div>
       </div>
       <div className='col-9'>
