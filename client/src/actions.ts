@@ -22,7 +22,16 @@ export class RapsLoaded {
   constructor(readonly raps: Rap[]) {}
 }
 
-export type Action = LoginRequested | LoggedIn  | LoginFailed | RapsRequested | RapsLoaded
+export class AudioStreamRequested {
+  readonly type = 'AudioStreamRequested'
+}
+
+export class AudioStreamReceived {
+  readonly type = 'AudioStreamReceived'
+  constructor(readonly url: string) {}
+}
+
+export type Action = LoginRequested | LoggedIn  | LoginFailed | RapsRequested | RapsLoaded | AudioStreamRequested | AudioStreamReceived;
 
 export class Actions {
   loginRequested = this.dispatcher(LoginRequested);
@@ -30,6 +39,8 @@ export class Actions {
   loginFailed = this.dispatcher(LoginFailed);
   rapsRequested = this.dispatcher(RapsRequested);
   rapsLoaded = this.dispatcher(RapsLoaded);
+  audioStreamRequested = this.dispatcher(AudioStreamRequested);
+  audioStreamReceived = this.dispatcher(AudioStreamReceived);
 
   constructor(private readonly dispatch: React.Dispatch<Action>) { }
 
