@@ -12,8 +12,9 @@ export const Player: React.FC = () => {
   const stream = useStreamRap();
 
   useEffect(() => {
-    if (rap) stream(rap.id);
-  }, [ rap, stream ]);
+    if (rap && !streamUrl) stream(rap.id);
+  }, [ rap, stream, streamUrl ]);
 
-  return <ReactAudioPlayer src={streamUrl} autoPlay />;
+  if (!streamUrl) return (<span>NO RAP SELECTED</span>);
+  return <ReactAudioPlayer src={streamUrl} autoPlay controls />;
 };

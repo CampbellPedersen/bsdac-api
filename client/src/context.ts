@@ -25,11 +25,11 @@ const reducer: Reducer<AppState, Action> = (state, action) => {
   };
 };
 
-export const useAppContext = () => {
-  const initialState = {
-    login: { loggedIn: false, isLoading: false },
+export const useAppContext = (): AppContextType => {
+  const initialState: AppState = {
+    login: { isLoading: false , loggedIn: false },
     raps: { isLoading: false },
-    player: {},
+    player: { isLoading: false },
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
