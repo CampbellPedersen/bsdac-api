@@ -4,6 +4,7 @@ import express from 'express';
 import { s3RapAudioUrlService } from './domain/rap/audio-url-service';
 import { dynamodbRapository } from './domain/rap/repository';
 import { s3FileUploadService } from './utils/file';
+import { health } from './utils/health';
 
 import loginApi from './domain/login/routes';
 import rapApi from './domain/rap/routes';
@@ -39,6 +40,7 @@ const audioUrlService = s3RapAudioUrlService(s3, env.s3.bucketName);
 console.log(`Listening on port: ${env.port}`);
 
 express()
+  .use('/healthz', health)
   .use('/api/login', loginApi(env.login))
   .use('/api/raps', rapApi(repository, uploadService, audioUrlService))
   .listen(env.port);

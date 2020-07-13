@@ -11,6 +11,7 @@ export const asyncRoute = (route: RequestHandler) => async (request: Request, re
 };
 
 export const errorHandler = (error: Error, request: Request, response: Response, next: NextFunction) => {
+  console.log(error.message);
   switch(error.name) {
     default:
       return response.status(500).send({ error: 'An unhandled error occured' });
