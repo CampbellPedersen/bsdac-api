@@ -1,8 +1,8 @@
-import * as awsx from "@pulumi/awsx";
-import { buildDockerImage, cluster } from "../infra/ecs";
+import * as awsx from '@pulumi/awsx';
+import { buildDockerImage, cluster } from '../infra/ecs';
 
 const makeFrontendService = () => {
-  const image = buildDockerImage('bsdac-frontend-img', './client')
+  const image = buildDockerImage('bsdac-frontend-img', './client');
   const alb = new awsx.elasticloadbalancingv2.ApplicationLoadBalancer('bsdac-frontend-alb', {
     external: true,
     securityGroups: cluster.securityGroups,
@@ -13,7 +13,7 @@ const makeFrontendService = () => {
     taskDefinitionArgs: {
         container: {
             image,
-            cpu: 100,
+            cpu: 64/*0.0625 vCPU*/,
             memory: 50/*MB*/,
             portMappings: [ listener ]
         },
@@ -21,6 +21,6 @@ const makeFrontendService = () => {
     desiredCount: 3,
   });
   return listener;
-}
+};
 
 export const frontend = makeFrontendService();

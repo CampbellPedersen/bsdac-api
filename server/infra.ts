@@ -17,8 +17,8 @@ const makeBackendService = () => {
     taskDefinitionArgs: {
         container: {
             image,
-            cpu: 100,
-            memory: 50/*MB*/,
+            cpu: 64/*0.0625 vCPU*/,
+            memory: 500/*MB*/,
             portMappings: [ targetGroup ],
             environment: [
               { name: 'SERVICE_PORT', value: config.require('servicePort') },
