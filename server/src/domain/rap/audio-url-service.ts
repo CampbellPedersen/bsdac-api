@@ -17,5 +17,5 @@ export const s3RapAudioUrlService = (
   async (rap) => s3.getSignedUrl('getObject', {
     Bucket: bucketName,
     Key: rap.id,
-    Expires: 60 * 60, // One hour
+    Expires: 60 * 60, // 1 hour
   });

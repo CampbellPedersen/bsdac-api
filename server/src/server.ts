@@ -33,7 +33,7 @@ const env = {
 AWS.config.update(env.aws);
 const dynamodb = new DynamoDB.DocumentClient({ endpoint: env.dynamodb.endpoint });
 const repository = dynamodbRapository(dynamodb, env.dynamodb.tableName);
-const s3 = new S3({ ...env.s3, s3ForcePathStyle: true });
+const s3 = new S3({ ...env.s3, signatureVersion: 'v4', s3ForcePathStyle: true });
 const uploadService = s3FileUploadService(s3, env.s3.bucketName);
 const audioUrlService = s3RapAudioUrlService(s3, env.s3.bucketName);
 
