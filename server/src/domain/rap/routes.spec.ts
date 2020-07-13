@@ -43,7 +43,7 @@ describe('/save', () => {
     delete(body[missingProperty]);
     await request(app)
       .post('/raps/save')
-      .attach('file', './swagger.yml')
+      .attach('file', './package.json')
       .field('details', JSON.stringify(body))
       .expect(400);
   });
@@ -55,7 +55,7 @@ describe('/save', () => {
     const body: any = { ...details, appearedAt };
     await request(app)
       .post('/raps/save')
-      .attach('file', './swagger.yml')
+      .attach('file', './package.json')
       .field('details', JSON.stringify(body))
       .expect(400);
   });
@@ -63,7 +63,7 @@ describe('/save', () => {
   it('when request > then saves rap and returns http 201', async () => {
     await request(app)
       .post('/raps/save')
-      .attach('file', './swagger.yml')
+      .attach('file', './package.json')
       .field('details', JSON.stringify(details))
       .expect(201);
 

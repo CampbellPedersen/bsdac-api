@@ -76,5 +76,5 @@ const inMemory = inMemoryRapository();
 describe('in-memory-rap-repository', tests(inMemory));
 
 const client = new DynamoDB.DocumentClient({ region: 'eu-west-1', endpoint: 'http://localhost:8000' });
-const dynamodb = dynamodbRapository(client);
+const dynamodb = dynamodbRapository(client, 'Raps');
 describe('dynamodb-rap-repository', tests(dynamodb));
