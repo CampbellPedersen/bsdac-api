@@ -30,7 +30,7 @@ const makeBackendService = () => {
               { name: 'DYNAMODB_ENDPOINT', value: config.require('dynamodbEndpoint') },
               { name: 'DYNAMODB_TABLE_NAME', value: db.name },
               { name: 'S3_BUCKET_NAME', value: bucket.bucket },
-              { name: 'S3_ENDPOINT', value: bucket.bucketDomainName },
+              { name: 'S3_ENDPOINT', value: bucket.bucketRegionalDomainName },
             ]
         },
     },
