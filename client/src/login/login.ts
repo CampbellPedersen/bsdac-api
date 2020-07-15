@@ -17,10 +17,10 @@ export const login = (
     requested();
     try {
       await requestLogin(email, password);
+      loggedIn();
     } catch (e) {
-      return failed('Incorrect email or password');
+      failed('Incorrect email or password');
     }
-    loggedIn();
   };
 };
 

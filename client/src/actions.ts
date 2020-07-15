@@ -64,6 +64,7 @@ export class Actions {
   audioStreamReceived = this.dispatcher(AudioStreamReceived);
   rapUploadProgressed = this.dispatcher(RapUploadProgressed);
   rapUploaded = this.dispatcher(RapUploaded);
+  rapUploadFailed = this.dispatcher(RapUploadFailed);
 
   constructor(private readonly dispatch: React.Dispatch<Action>) { }
 

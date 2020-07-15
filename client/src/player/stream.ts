@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useContext } from 'react';
 import { AppContext } from '../context';
 
-export const streamRap = (
+export const stream = (
   isLoading: boolean,
   requested: () => void,
   received: (url: string) => void
@@ -18,7 +18,7 @@ export const streamRap = (
   };
 };
 
-export const useStreamRap = () => {
+export const useStream = () => {
   const {
     player: { isLoading },
     actions: { audioStreamRequested, audioStreamReceived }
@@ -26,5 +26,5 @@ export const useStreamRap = () => {
   const requested = () => audioStreamRequested();
   const received = (url: string) => audioStreamReceived(url);
 
-  return streamRap(isLoading, requested, received);
+  return stream(isLoading, requested, received);
 };

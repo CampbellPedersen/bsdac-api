@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { loadRaps } from './load';
 import { Rap, EventName } from './types';
 
-describe('load-raps', () => {
+describe('load', () => {
   const rap: Rap = { id: 'rap-001', title: 'The First Rap', lyrics: 'Words mun', bonus: false, rapper: 'Campbell Pedersen', imageUrl: 'imageUrl', appearedAt: { name: EventName.BSDAC, series: 1 }};
   let requestedCalled = false;
   let receivedRaps: Rap[] | undefined;
@@ -18,7 +18,7 @@ describe('load-raps', () => {
     http.resetHistory();
   });
 
-  it('given loading > when load raps > should not make callbacks', async () => {
+  test('given loading > when load raps > should not make callbacks', async () => {
     http.onGet('/api/raps/get-all').reply(200, [ rap ]);
 
     const load = loadRaps(true, requested, received);
@@ -29,7 +29,7 @@ describe('load-raps', () => {
     expect(receivedRaps).toBeFalsy();
   });
 
-  it('when load raps > should make http request and make callbacks', async () => {
+  test('when load raps > should make http request and make callbacks', async () => {
     http.onGet('/api/raps/get-all').reply(200, [ rap ]);
 
     const load = loadRaps(false, requested, received);
@@ -40,7 +40,7 @@ describe('load-raps', () => {
     expect(receivedRaps).toEqual([ rap ]);
   });
 
-  it('given api is broke > when load raps > should make http request and make requested callback', async () => {
+  test('given api is broke > when load raps > should make http request and make requested callback', async () => {
     http.onGet('/api/raps/get-all').reply(500);
 
     const load = loadRaps(false, requested, received);

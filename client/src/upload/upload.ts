@@ -7,35 +7,41 @@ export const upload = (
   isLoading: boolean,
   requested: () => void,
   progressed: (progress: number) => void,
-  uploaded: (rap: Rap) => void
+  uploaded: (rap: Rap) => void,
+  errored: (message: string) => void
 ) => {
-  const requestUpload = async (details: Omit<Rap, 'id'>, file: Blob): Promise<Rap> => {
+  const requestUpload = async (file: any, details: Omit<Rap, 'id'>): Promise<Rap> => {
     const data = new FormData();
     data.append('file', file);
     data.append('details', JSON.stringify(details));
     const onUploadProgress = (progress: any) => progressed(Math.floor((progress.loaded * 100) / progress.total));
     return axios.post('/api/raps/save', data, { headers: { 'content-type': 'multipart/form-data'}, onUploadProgress })
-      .then(resp => resp.data);
+      .then(resp => resp.data)
   } 
 
-  return async (details: Omit<Rap, 'id'>, file: Blob) => {
+  return async (file: any, details: Omit<Rap, 'id'>) => {
     if (isLoading) return;
 
     requested();
-    const rap = await requestUpload(details, file);
-    await uploaded(rap);
+    try {
+      const rap = await requestUpload(file, details);
+      uploaded(rap);
+    } catch (error) {
+      errored('Upload failed, try again');
+    }
   };
 };
 
 export const useUpload = () => {
   const {
     upload: { progress },
-    actions: { rapUploadProgressed, rapUploaded }
+    actions: { rapUploadProgressed, rapUploaded, rapUploadFailed }
   } = useContext(AppContext);
   const isLoading = progress !== undefined;
   const requested = () => rapUploadProgressed(0);
   const progressed = (p: number) => rapUploadProgressed(p);
   const uploaded = (rap: Rap) => rapUploaded(rap);
+  const failed = (message: string) => rapUploadFailed(message);
 
-  return upload(isLoading, requested, progressed, uploaded);
+  return upload(isLoading, requested, progressed, uploaded, failed);
 };

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { streamRap } from './stream';
+import { stream } from './stream';
 
-describe('stream-rap', () => {
+describe('stream', () => {
   let requestedCalled = false;
   let receivedUrl: string | undefined;
 
@@ -17,33 +17,33 @@ describe('stream-rap', () => {
     http.resetHistory();
   });
 
-  it('given loading > when stream > should not make http request or call callbacks', async () => {
+  test('given loading > when stream > should not make http request or call callbacks', async () => {
     http.onGet('/api/raps/stream/1').reply(200, 'https:/rap.local');
 
-    const doStreamRap = streamRap(true, requested, received);
-    await doStreamRap('1');
+    const streamRap = stream(true, requested, received);
+    await streamRap('1');
 
     expect(requestedCalled).toBeFalsy();
     expect(http.history.get.length).toEqual(0);
     expect(receivedUrl).toBeUndefined();
   });
 
-  it('when stream > should make http request and call callbacks', async () => {
+  test('when stream > should make http request and call callbacks', async () => {
     http.onGet('/api/raps/stream/1').reply(200, 'https:/rap.local');
 
-    const doStreamRap = streamRap(false, requested, received);
-    await doStreamRap('1');
+    const streamRap = stream(false, requested, received);
+    await streamRap('1');
 
     expect(requestedCalled).toBeTruthy();
     expect(http.history.get.length).toEqual(1);
     expect(receivedUrl).toEqual('https:/rap.local');
   });
 
-  it('given api is broke > when stream > should make http request and call callbacks', async () => {
+  test('given api is broke > when stream > should make http request and call callbacks', async () => {
     http.onGet('/api/raps/stream/1').reply(500);
 
-    const doStreamRap = streamRap(false, requested, received);
-    await expect(doStreamRap('1')).rejects.toThrow(new Error('Request failed with status code 500'));
+    const streamRap = stream(false, requested, received);
+    await expect(streamRap('1')).rejects.toThrow(new Error('Request failed with status code 500'));
 
     expect(requestedCalled).toBeTruthy();
     expect(http.history.get.length).toEqual(1);

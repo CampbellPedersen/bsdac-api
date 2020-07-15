@@ -20,7 +20,7 @@ describe('login', () => {
     http.resetHistory();
   });
 
-  it('given loading > when login > should not make callbacks', async () => {
+  test('given loading > when login > should not make callbacks', async () => {
     http.onPost('/api/login', { email: 'test@bsdac.com', password: 'password' }).reply(200);
 
     const doLogin = login(true, requested, loggedIn, failed);
@@ -32,7 +32,7 @@ describe('login', () => {
     expect(failedMessage).toBeUndefined();
   });
 
-  it('when login > should make http request and call callbacks', async () => {
+  test('when login > should make http request and call callbacks', async () => {
     http.onPost('/api/login', { email: 'test@bsdac.com', password: 'password' }).reply(200);
 
     const doLogin = login(false, requested, loggedIn, failed);
@@ -45,7 +45,7 @@ describe('login', () => {
     expect(failedMessage).toBeUndefined();
   });
 
-  it('when login with bad credentials > should make http request and call callbacks', async () => {
+  test('when login with bad credentials > should make http request and call callbacks', async () => {
     http.onPost('/api/login', { email: 'test@bsdac.com', password: 'password' }).reply(401);
 
     const doLogin = login(false, requested, loggedIn, failed);
