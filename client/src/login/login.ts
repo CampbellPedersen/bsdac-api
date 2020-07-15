@@ -17,6 +17,7 @@ export const login = (
     requested();
     try {
       await requestLogin(email, password);
+      localStorage.setItem('loggedIn', 'true');
       loggedIn();
     } catch (e) {
       failed('Incorrect email or password');

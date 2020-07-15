@@ -31,7 +31,7 @@ const reducer: Reducer<AppState, Action> = (state, action) => {
 
 export const useAppContext = (): AppContextType => {
   const initialState: AppState = {
-    login: { isLoading: false , loggedIn: false },
+    login: { isLoading: false , loggedIn: !!localStorage.getItem('loggedIn') },
     raps: { isLoading: false },
     player: { isLoading: false },
     upload: { },

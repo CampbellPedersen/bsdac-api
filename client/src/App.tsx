@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { AppContext, useAppContext } from './context';
 import { LoginPage } from './login/page';
 import { RapsPage } from './raps/page';
 
 const Content = () => {
   const {
-    login: { loggedIn }
+    login: { loggedIn },
   } = useContext(AppContext);
 
   if (!loggedIn) {
@@ -17,7 +17,6 @@ const Content = () => {
 
 const App = () => {
   const appContext = useAppContext();
-
   return (
     <AppContext.Provider value={appContext}>
       <Content/>
