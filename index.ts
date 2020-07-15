@@ -38,7 +38,7 @@ aws.route53.getZone({ name: domain }).then((hostedZone) => {
       type: 'CNAME',
       records: [ domain ],
       zoneId: hostedZone.zoneId,
-      ttl: 5,
+      ttl: 300,
     }
   )
 });
