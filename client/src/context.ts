@@ -4,6 +4,7 @@ import { Action, Actions } from './actions';
 import { loginReducer, LoginState } from './login/reducer';
 import { AudioPlayerState, playerReducer } from './player/reducer';
 import { UploadState, uploadReducer } from './upload/reducer';
+import { OneDay } from './utils/time';
 
 interface AppContextType {
   login: LoginState
@@ -30,8 +31,10 @@ const reducer: Reducer<AppState, Action> = (state, action) => {
 };
 
 export const useAppContext = (): AppContextType => {
+  const loggedInAt = localStorage.getItem('loggedInAt')
+  const loggedIn = loggedInAt ? new Date(loggedInAt).getTime() > new Date().getTime() - OneDay : false
   const initialState: AppState = {
-    login: { isLoading: false , loggedIn: !!localStorage.getItem('loggedIn') },
+    login: { isLoading: false , loggedIn },
     raps: { isLoading: false },
     player: { isLoading: false },
     upload: { },

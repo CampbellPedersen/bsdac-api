@@ -6,7 +6,8 @@ export const login = (
   isLoading: boolean,
   requested: () => void,
   loggedIn: () => void,
-  failed: (reason: string) => void
+  failed: (reason: string) => void,
+  now: () => Date = () => new Date()
 ) => {
   const requestLogin = async (email: string, password: string): Promise<void> =>
     axios.post('/api/login', { email, password });
@@ -17,7 +18,7 @@ export const login = (
     requested();
     try {
       await requestLogin(email, password);
-      localStorage.setItem('loggedIn', 'true');
+      localStorage.setItem('loggedInAt', now().toISOString());
       loggedIn();
     } catch (e) {
       failed('Incorrect email or password');
