@@ -32,9 +32,7 @@ export const RapsPage: React.FC = () => {
           <div className='col'></div>
         </div>
       </div>
-      <div className='raps-player'>
-        <Player />
-      </div>
+      <Player />
     </div>
   );
 };

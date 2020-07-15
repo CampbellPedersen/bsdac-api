@@ -17,8 +17,10 @@ export const Player: React.FC = () => {
   }, [ rap, stream, streamUrl ]);
 
   return (
-    <div className='d-flex align-items-center'>
-      <ReactAudioPlayer src={streamUrl} autoPlay controls />
+    <div className='player'>
+      {streamUrl ?
+        <ReactAudioPlayer src={streamUrl} autoPlay controls />
+        : <ReactAudioPlayer controls />}
       <div className='player-thumbnail'><Thumbnail rap={rap} /></div>
     </div>
   );

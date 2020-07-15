@@ -14,7 +14,7 @@ export const stream = (
 
     requested();
     const url = await requestRapStream(id);
-    received(url.replace('http://localstack:4566', 'http://localhost:4566'));
+    received(url);
   };
 };
 

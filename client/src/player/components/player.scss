@@ -1,7 +1,21 @@
-.react-audio-player {
-  width: 100%;
+.player {
+  display: flex;
+  align-items: center;
+  padding: 1px 10px;
+  position: fixed;
+  bottom: 0;
+  z-index: 1001;
+  height: 54px;
+  width: 100vw;
+  background: rgb(241, 243, 244);
+  border-top: 1px solid #e6e6e6;
 }
 
-.player-thumbnail {
+.player .player-thumbnail {
   width: 54px;
+}
+
+.player .react-audio-player {
+  width: 100%;
+  outline: none;
 }
