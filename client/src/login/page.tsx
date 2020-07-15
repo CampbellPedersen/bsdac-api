@@ -19,7 +19,7 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className='login-page text-center'>
+    <div className='login-page d-flex align-items-center justify-content-center text-center'>
       <form className="form-signin" onSubmit={submit}>
         <img className="mb-4" src={logo} alt="" width="72" height="72" />
         <h1 className="h3 mb-3 font-weight-normal">Welcome to BSDAPP</h1>

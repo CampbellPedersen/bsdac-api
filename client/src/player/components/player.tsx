@@ -3,6 +3,7 @@ import ReactAudioPlayer from 'react-audio-player';
 import { useContext } from 'react';
 import { AppContext } from '../../context';
 import { useStream } from '../stream';
+import { Thumbnail } from '../../raps/components/thumbnail';
 import './player.scss';
 
 export const Player: React.FC = () => {
@@ -15,5 +16,10 @@ export const Player: React.FC = () => {
     if (rap && !streamUrl) stream(rap.id);
   }, [ rap, stream, streamUrl ]);
 
-  return <ReactAudioPlayer src={streamUrl} autoPlay controls />;
+  return (
+    <div className='d-flex align-items-center'>
+      <ReactAudioPlayer src={streamUrl} autoPlay controls />
+      <div className='player-thumbnail'><Thumbnail rap={rap} /></div>
+    </div>
+  );
 };

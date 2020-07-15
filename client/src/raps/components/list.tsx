@@ -1,6 +1,7 @@
 import React from 'react';
 import { Rap } from '../types';
 import './list.scss';
+import { Thumbnail } from './thumbnail';
 
 export const RapList: React.FC<{ raps: Rap[], onSelect: (rap: Rap) => void }> =
   ({ raps, onSelect }) =>
@@ -17,8 +18,8 @@ const RapItem: React.FC<{rap: Rap, clickable?: boolean }> =
     const aboveText = `${rap.appearedAt.name} ${rap.appearedAt.series}${rap.bonus ? ' (Bonus Track)' : ''}`;
     return <>
       <div className={`row${ clickable && ' clickable'}`}>
-        <div className="d-flex align-items-center col-3 px-0 px-sm-2">
-          <div className='thumbnail'><img alt='thumbnail' src={rap.imageUrl} /></div>
+        <div className="col-3 px-0 px-sm-2">
+          <Thumbnail rap={rap} />
         </div>
         <div className='col'>
           <span className='font-weight-lighter text-muted'>{aboveText}</span>

@@ -17,7 +17,7 @@ const loadingPhrases = [
 const randomPhrase = () => loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
 
 export const LoadingScreen = () =>
-  <div className='loading-screen'>
+  <div className='loading-screen d-flex flex-column align-items-center justify-content-center'>
     <div className="spinner-border spinner-border-lg" role="status">
       <span className="sr-only">Loading...</span>
     </div>
