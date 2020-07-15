@@ -23,13 +23,17 @@ export const RapsPage: React.FC = () => {
 
   return (
     <div className='raps-page'>
-      <Player />
-      <div className='row'>
-        <div className='col'></div>
-        <div className='col-12 col-lg-8'>
-          <RapList raps={loaded} onSelect={rapSelected}/>
+      <div className='raps-list container'>
+        <div className='row'>
+          <div className='col'></div>
+          <div className='col-12 col-lg-8'>
+            <RapList raps={loaded} onSelect={rapSelected}/>
+          </div>
+          <div className='col'></div>
         </div>
-        <div className='col'></div>
+      </div>
+      <div className='raps-player'>
+        <Player />
       </div>
     </div>
   );

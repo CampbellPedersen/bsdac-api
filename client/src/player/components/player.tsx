@@ -3,7 +3,7 @@ import ReactAudioPlayer from 'react-audio-player';
 import { useContext } from 'react';
 import { AppContext } from '../../context';
 import { useStream } from '../stream';
-
+import './player.scss';
 
 export const Player: React.FC = () => {
   const {

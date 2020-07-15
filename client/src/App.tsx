@@ -3,11 +3,6 @@ import { AppContext, useAppContext } from './context';
 import { LoginPage } from './login/page';
 import { RapsPage } from './raps/page';
 
-const Layout: React.FC = ({ children }) =>
-  <div className='container'>
-    {children}
-  </div>;
-
 const Content = () => {
   const {
     login: { loggedIn }
@@ -25,9 +20,7 @@ const App = () => {
 
   return (
     <AppContext.Provider value={appContext}>
-      <Layout>
-        <Content/>
-      </Layout>
+      <Content/>
     </AppContext.Provider>
   );
 };

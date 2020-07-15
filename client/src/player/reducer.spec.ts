@@ -12,6 +12,13 @@ describe('reducer', () => {
     expect(newState).toEqual({ isLoading: false, rap });
   });
 
+  test('given rap selected > when same rap selected > should return same state', () => {
+    const state: AudioPlayerState = { isLoading: false, rap, streamUrl: 'https://rap.local' };
+    const newState = playerReducer(state, { type: 'RapSelected', rap });
+
+    expect(newState).toEqual({ isLoading: false, rap, streamUrl: 'https://rap.local' });
+  });
+
   test('when audio stream requested > should return loading state', () => {
     const state: AudioPlayerState = { isLoading: false, streamUrl: 'https://rap.local' };
     const newState = playerReducer(state, { type: 'AudioStreamRequested' });

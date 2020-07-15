@@ -10,6 +10,7 @@ export interface AudioPlayerState {
 export const playerReducer: React.Reducer<AudioPlayerState, Action> = (state, action) => {
   switch(action.type) {
     case 'RapSelected':
+      if (state.rap?.id === action.rap.id) return state;
       return {
         ...state,
         rap: action.rap,
