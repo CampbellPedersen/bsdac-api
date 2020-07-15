@@ -24,4 +24,11 @@ describe('reducer', () => {
 
     expect(newState).toEqual({ raps: [ rap, rap ], isLoading: false });
   });
+
+  it('given raps > when rap uploaded > should return state with new rap', () => {
+    const state: RapsState = { raps: [ ], isLoading: false };
+    const newState = rapsReducer(state, { type: 'RapUploaded', rap });
+
+    expect(newState).toEqual({ raps: [ rap ], isLoading: false });
+  })
 });

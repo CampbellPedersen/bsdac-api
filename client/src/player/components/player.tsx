@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 import { useContext } from 'react';
 import { AppContext } from '../../context';
-import { useStreamRap } from '../../raps/stream';
+import { useStreamRap } from '../stream';
 
 
 export const Player: React.FC = () => {

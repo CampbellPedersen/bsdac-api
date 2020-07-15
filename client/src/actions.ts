@@ -28,15 +28,30 @@ export class RapSelected {
 }
 
 export class AudioStreamRequested {
-  readonly type = 'AudioStreamRequested'
+  readonly type = 'AudioStreamRequested';
 }
 
 export class AudioStreamReceived {
-  readonly type = 'AudioStreamReceived'
+  readonly type = 'AudioStreamReceived';
   constructor(readonly url: string) {}
 }
 
-export type Action = LoginRequested | LoggedIn  | LoginFailed | RapsRequested | RapsLoaded | RapSelected | AudioStreamRequested | AudioStreamReceived;
+export class RapUploadProgressed {
+  readonly type = 'RapUploadProgressed';
+  constructor(readonly progress: number) {}
+}
+
+export class RapUploadFailed {
+  readonly type = 'RapUploadFailed';
+  constructor(readonly reason: string) {}
+}
+
+export class RapUploaded {
+  readonly type = 'RapUploaded';
+  constructor(readonly rap: Rap) {}
+}
+
+export type Action = LoginRequested | LoggedIn  | LoginFailed | RapsRequested | RapsLoaded | RapSelected | AudioStreamRequested | AudioStreamReceived | RapUploadProgressed | RapUploadFailed | RapUploaded;
 
 export class Actions {
   loginRequested = this.dispatcher(LoginRequested);
@@ -47,6 +62,8 @@ export class Actions {
   rapSelected = this.dispatcher(RapSelected);
   audioStreamRequested = this.dispatcher(AudioStreamRequested);
   audioStreamReceived = this.dispatcher(AudioStreamReceived);
+  rapUploadProgressed = this.dispatcher(RapUploadProgressed);
+  rapUploaded = this.dispatcher(RapUploaded);
 
   constructor(private readonly dispatch: React.Dispatch<Action>) { }
 

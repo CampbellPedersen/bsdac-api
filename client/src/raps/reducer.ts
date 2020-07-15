@@ -19,6 +19,12 @@ export const rapsReducer: React.Reducer<RapsState, Action> = (state, action) => 
         isLoading: false,
         raps: action.raps
       };
+    case 'RapUploaded':
+      const raps = state.raps || [];
+      return {
+        ...state,
+        raps: [...raps, action.rap ]
+      }
     default:
       return state;
   }
