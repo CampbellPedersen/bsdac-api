@@ -31,6 +31,16 @@ aws.route53.getZone({ name: domain }).then((hostedZone) => {
             },
         ],
     });
+  new aws.route53.Record(
+    `www.${domain}`,
+    {
+      name: 'www',
+      type: 'CNAME',
+      records: [ domain ],
+      zoneId: hostedZone.zoneId,
+      ttl: 5,
+    }
+  )
 });
 
 export default {
