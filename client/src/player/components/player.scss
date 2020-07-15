@@ -1,7 +1,7 @@
 .player {
   display: flex;
   align-items: center;
-  padding: 1px 10px;
+  padding: 0 10px;
   position: fixed;
   bottom: 0;
   z-index: 1001;
@@ -12,10 +12,16 @@
 }
 
 .player .player-thumbnail {
+  position: relative;
   width: 54px;
+}
+
+.player .player-thumbnail .loading {
+  z-index: 1;
 }
 
 .player .react-audio-player {
   width: 100%;
   outline: none;
+  margin-right: 10px;
 }

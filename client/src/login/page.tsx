@@ -3,6 +3,7 @@ import { useLogin } from './login';
 import { AppContext } from '../context';
 import logo from '../images/logo.svg';
 import './page.scss';
+import { Spinner } from '../components/spinner';
 
 export const LoginPage: React.FC = () => {
   const {
@@ -29,7 +30,7 @@ export const LoginPage: React.FC = () => {
         <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" id="password" className="form-control" placeholder="Password" required/>
         { failedMessage && <p className='text-danger'>{failedMessage}</p> }
         <button disabled={isLoading} id='login-button' type='submit' className='btn btn-primary btn-lg btn-block'>
-          {isLoading && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
+          {isLoading && <Spinner small />}
           {isLoading ? ' Logging in...' : 'Login'}
         </button>
         <p className="mt-3 mb-3 text-muted">Made with <span role='img' aria-label='love'>❤️</span> by Campbell Pedersen</p>

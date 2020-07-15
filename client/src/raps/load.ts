@@ -21,6 +21,7 @@ export const loadRaps = (
     requested();
     const raps = await requestRaps();
     await delay(() => received(raps), 1000);
+
   };
 };
 

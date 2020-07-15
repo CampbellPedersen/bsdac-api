@@ -7,18 +7,18 @@ export const RapList: React.FC<{ raps: Rap[], onSelect: (rap: Rap) => void }> =
   ({ raps, onSelect }) =>
     <ul className="rap-list list-group">
       {raps.map(rap =>
-        <li key={rap.id} onClick={() => onSelect(rap)} className="list-group-item container">
-          <RapItem rap={rap} clickable />
+        <li key={rap.id} onClick={() => onSelect(rap)} className="list-group-item container clickable">
+          <RapItem rap={rap} />
         </li>
       )}
     </ul>;
 
-const RapItem: React.FC<{rap: Rap, clickable?: boolean }> =
-  ({ rap, clickable }) => {
+const RapItem: React.FC<{rap: Rap}> =
+  ({ rap }) => {
     const aboveText = `${rap.appearedAt.name} ${rap.appearedAt.series}${rap.bonus ? ' (Bonus Track)' : ''}`;
     return <>
-      <div className={`row${ clickable && ' clickable'}`}>
-        <div className="col-3 px-0 px-sm-2">
+      <div className='row'>
+        <div className="col-3 px-0 px-sm-2 d-flex align-items-center">
           <Thumbnail rap={rap} />
         </div>
         <div className='col'>

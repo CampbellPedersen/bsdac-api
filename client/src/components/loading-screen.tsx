@@ -1,5 +1,6 @@
 import React from 'react';
 import './loading-screen.scss';
+import { Spinner } from './spinner';
 
 const loadingPhrases = [
   'Putting it in the raps',
@@ -18,8 +19,6 @@ const randomPhrase = () => loadingPhrases[Math.floor(Math.random() * loadingPhra
 
 export const LoadingScreen = () =>
   <div className='loading-screen d-flex flex-column align-items-center justify-content-center'>
-    <div className="spinner-border spinner-border-lg" role="status">
-      <span className="sr-only">Loading...</span>
-    </div>
+    <Spinner />
     <h4 className='font-weight-light mt-3'>{randomPhrase()}...</h4>
   </div>;
