@@ -4,16 +4,12 @@ An API built in Typescript for retrieving resources dedicated to Big Smash Day a
 # Roadmap
 
 ## Now
-- Raps
-  - Basic details (Title, artist, BSDAC number)
-  - Audio streaming
+- Rap Upload
+- Rap Playback
 
 ## Later
-- Results
-  - Leaderboards
-  - PRs
-- Information
-  - Side Event List
+- Results, Leaderboards
+- Rap PRs
 
 # Developer Quickstart
 Requirements:
@@ -27,8 +23,8 @@ docker-compose up -d
 
 To create local aws resources:
 ```console
-./server/scripts/create-dynamodb-tables.sh
-./server/scripts/create-s3-bucket.sh
+./scripts/create-dynamodb-tables.sh
+./scripts/create-s3-bucket.sh
 ```
 
 To tear down the local Docker stack:
