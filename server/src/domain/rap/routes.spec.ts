@@ -65,10 +65,11 @@ describe('/save', () => {
       .post('/raps/save')
       .attach('file', './package.json')
       .field('details', JSON.stringify(details))
-      .expect(201);
+      .expect(201)
+      .expect({ id: generatedRapId, ...details});
 
     const savedRap = await repository.load(generatedRapId);
-    expect(savedRap).toEqual({ ...details, id: generatedRapId });
+    expect(savedRap).toEqual({ id: generatedRapId, ...details });
   });
 });
 

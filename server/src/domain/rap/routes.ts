@@ -43,7 +43,7 @@ export default (
 
     const id = generateId();
     await upload(id, request.file.mimetype, request.file.buffer);
-    await repository.save({
+    const rap: Rap = {
       id,
       lyrics: body.lyrics,
       title: body.title,
@@ -51,8 +51,9 @@ export default (
       bonus: body.bonus,
       imageUrl: body.imageUrl,
       appearedAt: body.appearedAt,
-    });
-    response.sendStatus(201);
+    }
+    await repository.save(rap);
+    response.status(201).send(rap);
   };
 
   const loadStream = async (request: Request, response: Response) => {
