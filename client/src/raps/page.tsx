@@ -4,6 +4,7 @@ import { RapList } from './components/list';
 import { LoadingScreen } from '../components';
 import { AppContext } from '../context';
 import { Player } from '../player/components/player';
+import logo from '../images/logo.svg'
 import './page.scss';
 
 export const RapsPage: React.FC = () => {
@@ -23,6 +24,7 @@ export const RapsPage: React.FC = () => {
 
   return (
     <div className='raps-page'>
+      <RapsNav />
       <div className='raps-list container'>
         <div className='row'>
           <div className='col'></div>
@@ -36,3 +38,11 @@ export const RapsPage: React.FC = () => {
     </div>
   );
 };
+
+const RapsNav: React.FC = () =>
+  <nav className="navbar navbar-dark bg-dark sticky-top">
+    <a className="navbar-brand" href="#">
+      <img src={logo} className='d-inline-block align-top' width="30" height="30" alt="" loading="lazy" /> BSDAPP
+    </a>
+    <button className='btn btn-primary' type='button'>↑ Upload</button>
+  </nav>
