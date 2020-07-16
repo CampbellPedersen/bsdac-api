@@ -8,8 +8,9 @@
     "node-sass": "4.14.1",
     "react": "16.13.1",
     "react-audio-player": "0.13.0",
+    "react-bootstrap": "1.2.2",
     "react-dom": "16.13.1",
-    "typescript": "3.7.5"
+    "typescript": "3.9.6"
   },
   "devDependencies": {
     "@types/axios": "0.14.0",

@@ -19,15 +19,17 @@ export const upload = (
       .then(resp => resp.data)
   } 
 
-  return async (file: any, details: Omit<Rap, 'id'>) => {
+  return async (file: any, details: Omit<Rap, 'id'>): Promise<boolean | undefined> => {
     if (isLoading) return;
 
     requested();
     try {
       const rap = await requestUpload(file, details);
       uploaded(rap);
+      return true;
     } catch (error) {
-      errored('Upload failed, try again');
+      errored('Upload failed, please try again later');
+      return false;
     }
   };
 };

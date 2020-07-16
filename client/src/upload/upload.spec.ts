@@ -34,7 +34,9 @@ describe('upload', () => {
     http.onPost('/api/raps/save').reply(201, rap);
 
     const uploadRap = upload(true, requested, progressed, uploaded, errored);
-    await uploadRap(file, details);
+    const success = await uploadRap(file, details);
+
+    expect(success).toBeUndefined();
 
     expect(requestedCalled).toBeFalsy();
     expect(http.history.post.length).toEqual(0);
@@ -46,7 +48,9 @@ describe('upload', () => {
     http.onPost('/api/raps/save').reply(201, rap);
 
     const uploadRap = upload(false, requested, progressed, uploaded, errored);
-    await uploadRap(file, details)
+    const success = await uploadRap(file, details)
+
+    expect(success).toEqual(true);
 
     expect(requestedCalled).toBeTruthy();
     expect(http.history.post.length).toEqual(1);
@@ -59,11 +63,13 @@ describe('upload', () => {
     http.onPost('/api/raps/save').reply(500);
 
     const uploadRap = upload(false, requested, progressed, uploaded, errored);
-    await uploadRap(file, details)
+    const success = await uploadRap(file, details)
+
+    expect(success).toEqual(false);
 
     expect(requestedCalled).toBeTruthy();
     expect(http.history.post.length).toEqual(1);
-    expect(failedMessage).toEqual('Upload failed, try again');
+    expect(failedMessage).toEqual('Upload failed, please try again later');
 
     expect(uploadedRap).toBeUndefined();
   });

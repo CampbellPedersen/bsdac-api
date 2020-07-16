@@ -6,6 +6,7 @@ import { AppContext } from '../context';
 import { Player } from '../player/components/player';
 import logo from '../images/logo.svg'
 import './page.scss';
+import { UploadModal } from '../upload/components/modal';
 
 export const RapsPage: React.FC = () => {
   const {
@@ -44,5 +45,5 @@ const RapsNav: React.FC = () =>
     <a className="navbar-brand" href="#">
       <img src={logo} className='d-inline-block align-top' width="30" height="30" alt="" loading="lazy" /> BSDAPP
     </a>
-    <button className='btn btn-primary' type='button'>↑ Upload</button>
+    <UploadModal />
   </nav>
