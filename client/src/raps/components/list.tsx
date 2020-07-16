@@ -4,14 +4,24 @@ import './list.scss';
 import { Thumbnail } from './thumbnail';
 
 export const RapList: React.FC<{ raps: Rap[], onSelect: (rap: Rap) => void }> =
-  ({ raps, onSelect }) =>
-    <ul className="rap-list list-group">
-      {raps.map(rap =>
-        <li key={rap.id} onClick={() => onSelect(rap)} className="list-group-item container clickable">
-          <RapItem rap={rap} />
-        </li>
-      )}
-    </ul>;
+  ({ raps, onSelect }) => {
+    if (!raps.length) return (
+      <h2 className='text-center'>
+        Oh my goodness I forgot to make a rap, mun!
+        <small><p>(No raps uploaded)</p></small>
+      </h2>
+    );
+
+    return (
+      <ul className="rap-list list-group">
+        {raps.map(rap =>
+          <li key={rap.id} onClick={() => onSelect(rap)} className="list-group-item container clickable">
+            <RapItem rap={rap} />
+          </li>
+        )}
+      </ul>
+    )
+  };
 
 const RapItem: React.FC<{rap: Rap}> =
   ({ rap }) => {
