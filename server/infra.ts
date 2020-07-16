@@ -34,7 +34,7 @@ const makeBackendService = () => {
             ]
         },
     },
-    desiredCount: 1,
+    desiredCount: 3,
   });
   return targetGroup;
 };
