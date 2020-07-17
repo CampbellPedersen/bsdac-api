@@ -18,6 +18,7 @@ const rappers = [
   'James Summerton',
   'Leonard Dunne',
   'Lucas Sukadana',
+  'Nathan Kosc',
   'Piers Sinclair',
   'Rachel Neumann',
   'Simon Warman',
