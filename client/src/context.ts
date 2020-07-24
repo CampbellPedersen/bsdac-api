@@ -36,7 +36,7 @@ export const useAppContext = (): AppContextType => {
   const initialState: AppState = {
     login: { isLoading: false , loggedIn },
     raps: { isLoading: false },
-    player: { isLoading: false },
+    player: { isLoading: false, isShuffling: false },
     upload: { },
   };
 

@@ -3,6 +3,7 @@ import { Rap } from '../raps/types';
 
 export interface AudioPlayerState {
   isLoading: boolean
+  isShuffling: boolean
   rap?: Rap,
   streamUrl?: string,
 }
@@ -28,6 +29,11 @@ export const playerReducer: React.Reducer<AudioPlayerState, Action> = (state, ac
         isLoading: false,
         streamUrl: action.url,
       };
+    case 'ShuffleToggled':
+      return {
+        ...state,
+        isShuffling: action.enabled
+      }
     default:
       return state;
   }

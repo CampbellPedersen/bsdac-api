@@ -10,6 +10,7 @@ import { LoadingOverlay } from '../../components/loading-overlay';
 export const Player: React.FC = () => {
   const {
     player: { rap, streamUrl },
+    actions: { shuffleToggled }
   } = useContext(AppContext);
   const stream = useStream();
 
@@ -24,7 +25,12 @@ export const Player: React.FC = () => {
 
   return (
     <div className='player'>
-      <ReactAudioPlayer autoPlay controls src={streamUrl} onCanPlay={() => setLoading(false)} />
+      <ReactAudioPlayer
+        autoPlay
+        controls
+        src={streamUrl}
+        onCanPlay={() => setLoading(false)}
+        onEnded={() => {}}/>
       <div className='player-thumbnail'>
         <LoadingOverlay loading={loading}><Thumbnail rap={rap} /></LoadingOverlay>
       </div>
