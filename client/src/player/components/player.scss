@@ -11,6 +11,10 @@
   border-top: 1px solid #e6e6e6;
 }
 
+.player .shuffle {
+  padding-right: 10px;
+}
+
 .player .player-thumbnail {
   position: relative;
   width: 54px;
@@ -23,5 +27,4 @@
 .player .react-audio-player {
   width: 100%;
   outline: none;
-  margin-right: 10px;
 }

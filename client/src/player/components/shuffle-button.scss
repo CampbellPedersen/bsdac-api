@@ -1,0 +1,23 @@
+.shuffle-button {
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background: none;
+  transition: background-color 0.5s ease;
+}
+
+.shuffle-button:focus {
+  outline: none;
+}
+
+.shuffle-button:hover {
+  background-color: #E5E7E8;
+}
+
+.shuffle-button svg {
+  height: 14px;
+}
