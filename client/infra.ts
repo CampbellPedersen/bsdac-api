@@ -7,7 +7,7 @@ const makeFrontendService = () => {
     external: true,
     securityGroups: cluster.securityGroups,
   });
-  const listener = alb.createListener('bsdac-frontend-listener', { external: true, port: 80 });
+  const targetGroup = alb.createTargetGroup('bsdac-frontend-target', { protocol: 'HTTP', healthCheck: { path: '/' }  });
   new awsx.ecs.FargateService('bsdac-frontend-svc', {
     cluster,
     taskDefinitionArgs: {
@@ -15,12 +15,12 @@ const makeFrontendService = () => {
             image,
             cpu: 64/*0.0625 vCPU*/,
             memory: 50/*MB*/,
-            portMappings: [ listener ]
+            portMappings: [ targetGroup ],
         },
     },
-    desiredCount: 3,
+    desiredCount: 1,
   });
-  return listener;
+  return { targetGroup, alb };
 };
 
 export const frontend = makeFrontendService();

@@ -11,7 +11,7 @@ const makeBackendService = () => {
     external: true,
     securityGroups: cluster.securityGroups,
   });
-  const targetGroup = alb.createTargetGroup('bsdac-backend-target', { port: 80, healthCheck: { path: '/healthz' }  });
+  const targetGroup = alb.createTargetGroup('bsdac-backend-target', { protocol: 'HTTP', healthCheck: { path: '/healthz' }  });
   new awsx.ecs.FargateService('bsdac-backend-svc', {
     cluster,
     taskDefinitionArgs: {
@@ -34,9 +34,9 @@ const makeBackendService = () => {
             ]
         },
     },
-    desiredCount: 3,
+    desiredCount: 1,
   });
-  return targetGroup;
+  return { targetGroup };
 };
 
 export const backend = makeBackendService();
