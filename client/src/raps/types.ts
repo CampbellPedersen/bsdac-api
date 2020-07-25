@@ -8,7 +8,7 @@ export interface Rap {
   appearedAt: Event
 }
 
-interface Event {
+export interface Event {
   name: EventName
   series: number
 }

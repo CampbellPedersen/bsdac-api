@@ -1,29 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { Checkbox, Select, TextField, Form, FileUpload } from '../../components/forms';
-import { Rap, EventName } from '../../raps/types';
+import { Rap, Event, EventName } from '../../raps/types';
 import './modal.scss';
 import { useUpload } from '../upload';
 import { AppContext } from '../../context';
 import { ProgressBar } from '../../raps/components/progress-bar';
-
-const rappers = [
-  'Andrew Phang',
-  'Andrew Summerton',
-  'Campbell Pedersen',
-  'Candice Vickers',
-  'Christopher Li',
-  'Dennis Nguyen',
-  'Harry Bird',
-  'James Summerton',
-  'Leonard Dunne',
-  'Lucas Sukadana',
-  'Nathan Kosc',
-  'Piers Sinclair',
-  'Rachel Neumann',
-  'Simon Warman',
-  'Tristan Hessell'
-];
+import { events, rappers } from '../../raps/constants';
 
 export const UploadModal: React.FC = () => {
   const {
@@ -35,7 +18,7 @@ export const UploadModal: React.FC = () => {
     rapper: '',
     bonus: false,
     imageUrl: '',
-    appearedAt: { name: EventName.BSDAC, series: 13 }
+    appearedAt: { name: EventName.BSDAC, series: -1 },
   });
   const [show, setShow] = useState(false);
   const close = () => setShow(false);
@@ -59,7 +42,8 @@ export const UploadModal: React.FC = () => {
             {failedMessage && <div className="alert alert-danger" role="alert">{failedMessage}</div>}
             <FileUpload id='rap-file' label='Audio File' accept='audio/*' onChange={file => setFile(file)} required />
             <TextField id='title' label='Title' type='text' required value={details.title} onChange={title => setDetails({ ...details, title })} />
-            <Select id='rapper' label='Artist' required options={rappers} value={details.rapper} onChange={rapper => setDetails({ ...details, rapper })} />
+            <Select<string> id='rapper' label='Artist' required options={rappers} getKey={o => o} getLabel={o => o} value={details.rapper} onChange={rapper => setDetails({ ...details, rapper })} />
+            <Select<Event> id='event' label='Event' required options={events} getKey={e => `${e.name} ${e.series}`} getLabel={e => `${e.name} ${e.series}`} value={details.appearedAt} onChange={appearedAt => setDetails({ ...details, appearedAt })} />
             <TextField id='image-url' label='Image URL' type='text' required value={details.imageUrl} onChange={imageUrl => setDetails({ ...details, imageUrl })}/>
             <Checkbox id='bonus' label='Bonus Track' value={details.bonus} onChange={bonus => setDetails({ ...details, bonus })}/>
           </Modal.Body>

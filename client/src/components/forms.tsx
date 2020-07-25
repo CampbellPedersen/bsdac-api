@@ -47,30 +47,38 @@ export const Checkbox: React.FC<{
     <label className='form-check-label' htmlFor={id}>{label}</label>
   </div>
 
-export const Select: React.FC<{
+interface SelectProps<T> {
   id: string
   label: string
-  options: string[]
-  value?: string
+  options: T[]
+  getKey: (option: T) => string
+  getLabel: (option: T) => string
+  value?: T
   required?: boolean
   disabled?: boolean
-  onChange: (value: string) => void
-}> = ({ id, label, options, value, required, disabled, onChange }) =>
-  <FormGroup>
-    <label htmlFor={id}>{label}</label>
-      <select
-        className='custom-select'
-        id={id}
-        value={value}
-        required={required}
-        disabled={disabled}
-        onChange={event => onChange(event.target.value)}>
-        <option></option>
-        {options.map(option => 
-          <option key={option} value={option}>{option}</option>
-        )}
-    </select>
-  </FormGroup>
+  onChange: (value: T) => void
+}
+
+export function Select<T>(props: React.PropsWithChildren<SelectProps<T>>): JSX.Element {
+  const { id, label, options, getKey, getLabel, value, required, disabled, onChange } = props;
+  return (
+    <FormGroup>
+      <label htmlFor={id}>{label}</label>
+        <select
+          className='custom-select'
+          id={id}
+          value={value ? options.findIndex(option => getKey(option) === getKey(value)) : undefined}
+          required={required}
+          disabled={disabled}
+          onChange={event => onChange(options[Number(event.target.value)])}>
+          <option></option>
+          {options.map((option, index) =>
+            <option key={getKey(option)} value={index}>{getLabel(option)}</option>
+          )}
+      </select>
+    </FormGroup>
+  )
+}
 
 export const FileUpload: React.FC<{
   id: string
@@ -106,4 +114,3 @@ export const FileUpload: React.FC<{
     </FormGroup>
   )
 }
-  
