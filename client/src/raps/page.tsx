@@ -1,12 +1,13 @@
 import React, { useContext, useEffect } from 'react';
-import { useLoadRaps } from './load';
 import { RapList } from './components/list';
 import { LoadingScreen } from '../components';
 import { AppContext } from '../context';
 import { Player } from '../player/components/player';
+import { UploadModal } from '../upload/components/modal';
+import { FilterMenu } from '../filter/components/filter-menu';
+import { useLoadRaps } from './load';
 import logo from '../images/logo.svg'
 import './page.scss';
-import { UploadModal } from '../upload/components/modal';
 
 export const RapsPage: React.FC = () => {
   const {
@@ -35,6 +36,7 @@ export const RapsPage: React.FC = () => {
           <div className='col'></div>
         </div>
       </div>
+      <FilterMenu />
       <Player />
     </div>
   );

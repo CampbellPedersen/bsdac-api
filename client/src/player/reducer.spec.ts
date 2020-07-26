@@ -32,4 +32,18 @@ describe('reducer', () => {
 
     expect(newState).toEqual({ isLoading: false, streamUrl: url });
   });
+
+  test('when filter menu toggled > should return state with filter active', () => {
+    const state: AudioPlayerState = { isLoading: false };
+    const newState = playerReducer(state, { type: 'FilterMenuToggled' });
+
+    expect(newState).toEqual({ isLoading: false, isFilterActive: true });
+  });
+
+  test('given filter is active > when filter menu toggled > should return state with filter inactive', () => {
+    const state: AudioPlayerState = { isLoading: false };
+    const newState = playerReducer(state, { type: 'FilterMenuToggled' });
+
+    expect(newState).toEqual({ isLoading: false, isFilterActive: true });
+  });
 });

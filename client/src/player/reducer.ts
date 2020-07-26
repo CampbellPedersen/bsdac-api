@@ -5,6 +5,7 @@ export interface AudioPlayerState {
   isLoading: boolean
   rap?: Rap,
   streamUrl?: string,
+  isFilterActive?: boolean,
 }
 
 export const playerReducer: React.Reducer<AudioPlayerState, Action> = (state, action) => {
@@ -28,6 +29,11 @@ export const playerReducer: React.Reducer<AudioPlayerState, Action> = (state, ac
         isLoading: false,
         streamUrl: action.url,
       };
+    case 'FilterMenuToggled':
+      return {
+        ...state,
+        isFilterActive: !state.isFilterActive
+      }
     default:
       return state;
   }
