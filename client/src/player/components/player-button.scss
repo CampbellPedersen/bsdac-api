@@ -1,4 +1,4 @@
-.shuffle-button {
+.player-button {
   border: none;
   display: flex;
   align-items: center;
@@ -10,14 +10,14 @@
   transition: background-color 0.5s ease;
 }
 
-.shuffle-button:focus {
+.player-button:focus {
   outline: none;
 }
 
-.shuffle-button:hover {
+.player-button:hover {
   background-color: #E5E7E8;
 }
 
-.shuffle-button svg {
-  height: 14px;
+.player-button svg {
+  height: 12px;
 }

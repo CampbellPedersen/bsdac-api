@@ -1,8 +1,6 @@
-import axios from 'axios';
 import { useContext } from 'react';
 import { AppContext } from '../context';
 import { Rap } from '../raps/types';
-import { randomElement } from '../utils/array';
 
 export const playNext = (
   current: Rap,
@@ -16,7 +14,6 @@ export const playNext = (
     if (selection) selectRap(selection);
   };
 }
-
 
 export const usePlayNext = () => {
   const {

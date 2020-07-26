@@ -51,12 +51,12 @@ export class RapUploaded {
   constructor(readonly rap: Rap) {}
 }
 
-export class ShuffleToggled {
-  readonly type = 'ShuffleToggled';
-  constructor(readonly enabled: boolean) {}
+export class FilterMenuToggled {
+  readonly type = 'FilterMenuToggled';
+  constructor() {}
 }
 
-export type Action = LoginRequested | LoggedIn  | LoginFailed | RapsRequested | RapsLoaded | RapSelected | AudioStreamRequested | AudioStreamReceived | RapUploadProgressed | RapUploadFailed | RapUploaded | ShuffleToggled;
+export type Action = LoginRequested | LoggedIn  | LoginFailed | RapsRequested | RapsLoaded | RapSelected | AudioStreamRequested | AudioStreamReceived | RapUploadProgressed | RapUploadFailed | RapUploaded | FilterMenuToggled;
 
 export class Actions {
   loginRequested = this.dispatcher(LoginRequested);
@@ -70,7 +70,7 @@ export class Actions {
   rapUploadProgressed = this.dispatcher(RapUploadProgressed);
   rapUploaded = this.dispatcher(RapUploaded);
   rapUploadFailed = this.dispatcher(RapUploadFailed);
-  shuffleToggled = this.dispatcher(ShuffleToggled);
+  filterMenuToggled = this.dispatcher(FilterMenuToggled);
 
   constructor(private readonly dispatch: React.Dispatch<Action>) { }
 
