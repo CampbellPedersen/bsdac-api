@@ -15,20 +15,20 @@ describe('reducer', () => {
     const state: RapsState = { raps: [], isLoading: true };
     const newState = rapsReducer(state, { type: 'RapsLoaded', raps: [ rap ] });
 
-    expect(newState).toEqual({ raps: [ rap ], isLoading: false });
+    expect(newState).toEqual({ raps: [ rap ], queue: [ rap.id ], isLoading: false });
   });
 
   test('given raps > when raps loaded > should return state with newly loaded raps', () => {
     const state: RapsState = { raps: [ rap ], isLoading: true };
     const newState = rapsReducer(state, { type: 'RapsLoaded', raps: [ rap, rap ] });
 
-    expect(newState).toEqual({ raps: [ rap, rap ], isLoading: false });
+    expect(newState).toEqual({ raps: [ rap, rap ], queue: [ rap.id, rap.id ], isLoading: false });
   });
 
   test('given raps > when rap uploaded > should return state with new rap', () => {
     const state: RapsState = { raps: [ ], isLoading: false };
     const newState = rapsReducer(state, { type: 'RapUploaded', rap });
 
-    expect(newState).toEqual({ raps: [ rap ], isLoading: false });
-  })
+    expect(newState).toEqual({ raps: [ rap ], queue: [ rap.id ], isLoading: false });
+  });
 });

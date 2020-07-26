@@ -56,7 +56,12 @@ export class FilterMenuToggled {
   constructor() {}
 }
 
-export type Action = LoginRequested | LoggedIn  | LoginFailed | RapsRequested | RapsLoaded | RapSelected | AudioStreamRequested | AudioStreamReceived | RapUploadProgressed | RapUploadFailed | RapUploaded | FilterMenuToggled;
+export class FiltersApplied {
+  readonly type = 'FiltersApplied';
+  constructor(readonly ids: string[]) {}
+}
+
+export type Action = LoginRequested | LoggedIn  | LoginFailed | RapsRequested | RapsLoaded | RapSelected | AudioStreamRequested | AudioStreamReceived | RapUploadProgressed | RapUploadFailed | RapUploaded | FilterMenuToggled | FiltersApplied;
 
 export class Actions {
   loginRequested = this.dispatcher(LoginRequested);
@@ -71,6 +76,7 @@ export class Actions {
   rapUploaded = this.dispatcher(RapUploaded);
   rapUploadFailed = this.dispatcher(RapUploadFailed);
   filterMenuToggled = this.dispatcher(FilterMenuToggled);
+  filtersApplied = this.dispatcher(FiltersApplied);
 
   constructor(private readonly dispatch: React.Dispatch<Action>) { }
 

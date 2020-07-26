@@ -7,8 +7,8 @@ export const RapList: React.FC<{ raps: Rap[], onSelect: (rap: Rap) => void }> =
   ({ raps, onSelect }) => {
     if (!raps.length) return (
       <h2 className='text-center'>
-        Oh my goodness I forgot to make a rap, mun!
-        <small><p>(No raps uploaded)</p></small>
+        Oh my goodness! I forgot to make a rap, mun!
+        <small><p>(No raps match your filters)</p></small>
       </h2>
     );
 

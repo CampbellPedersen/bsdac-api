@@ -11,7 +11,7 @@ import './page.scss';
 
 export const RapsPage: React.FC = () => {
   const {
-    raps: { isLoading, raps: loaded },
+    raps: { isLoading, raps: loaded, queue },
     actions: { rapSelected },
   } = useContext(AppContext);
   const loadRaps = useLoadRaps();
@@ -31,7 +31,7 @@ export const RapsPage: React.FC = () => {
         <div className='row'>
           <div className='col'></div>
           <div className='col-12 col-lg-8'>
-            <RapList raps={loaded} onSelect={rapSelected}/>
+            <RapList raps={loaded.filter(rap => queue?.includes(rap.id))} onSelect={rapSelected}/>
           </div>
           <div className='col'></div>
         </div>
