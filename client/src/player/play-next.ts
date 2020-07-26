@@ -17,10 +17,11 @@ export const playNext = (
 
 export const usePlayNext = () => {
   const {
-    raps: { raps },
+    raps: { raps, queue },
     player: { rap },
     actions: { rapSelected }
   } = useContext(AppContext);
-  if (!rap || !raps) return () => {};
-  return playNext(rap, raps, rapSelected);
+  if (!rap || !raps || !queue) return () => {};
+  const options = raps.filter((rap) => queue.includes(rap.id))
+  return playNext(rap, options, rapSelected);
 };
