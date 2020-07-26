@@ -11,7 +11,8 @@ import './player.scss';
 
 export const Player: React.FC = () => {
   const {
-    player: { rap, streamUrl, isFilterActive },
+    player: { rap, streamUrl },
+    filter: { showMenu },
     actions: { filterMenuToggled }
   } = useContext(AppContext);
   const stream = useStream();
@@ -35,7 +36,7 @@ export const Player: React.FC = () => {
         onCanPlay={() => setLoading(false)}
         onEnded={playNext}/>
       <div className='button'>
-        <PlayerButton onClick={filterMenuToggled}>{filterIcon(isFilterActive)}</PlayerButton>
+        <PlayerButton onClick={filterMenuToggled}>{filterIcon(showMenu)}</PlayerButton>
       </div>
       <div className='player-thumbnail'>
         <LoadingOverlay loading={loading}><Thumbnail rap={rap} /></LoadingOverlay>
