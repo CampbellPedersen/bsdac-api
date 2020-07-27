@@ -9,12 +9,13 @@
   background: none;
   transition: background-color 0.5s ease;
   &:focus {
+    background-color: none;
     outline: none;
   }
 }
 
-.player-button:hover {
-  background-color: #E5E7E8;
+.player-button:hover, .player-button.focus {
+  background-color: #dadada;
 }
 
 .player-button svg {

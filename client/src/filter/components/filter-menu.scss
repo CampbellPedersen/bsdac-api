@@ -1,7 +1,7 @@
 .filter-menu {
   height: 660px;
   width: 350px;
-  max-height: 50vh;
+  max-height: 60vh;
   max-width: calc(100vw - 20px);
   position: fixed;
   right: 10px;
@@ -20,14 +20,9 @@
 
 .filter-menu .card {
   height: 100%;
-  overflow: scroll;
 }
 
 .filter-menu button.close {
-  position: fixed;
-  top: 5px;
-  right: 8px;
-  z-index: 9000;
   &:focus {
     outline: none;
   }
@@ -35,6 +30,7 @@
 
 .filter-menu .card ul {
   border-top: none;
+  overflow: scroll;
   li {
     background: none;
   }

@@ -14,3 +14,6 @@ export const CardBody: React.FC = ({ children }) =>
   <div className='card-body'>
     {children}
   </div>
+
+export const CardTitle: React.FC = ({ children }) =>
+  <h5 className="card-title">{children}</h5>

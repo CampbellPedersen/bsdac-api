@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../context';
-import { Card } from '../../components/card';
+import { Card, CardHeader } from '../../components/card';
 import { CloseButton } from '../../components/close-button';
 import { useFilters, useApplyFilters } from '../filters';
 import { Checkbox } from '../../components/forms';
@@ -26,10 +26,12 @@ export const FilterMenu: React.FC = () => {
 
   return <div className={`filter-menu ${ showMenu ? 'show' : '' }`}>
     <Card>
-      <CloseButton onClick={filterMenuToggled} />
+      <CardHeader>
+        <CloseButton onClick={filterMenuToggled} />
+        <strong>Filters</strong>
+      </CardHeader>
       <ul className='list-group list-group-flush'>
         <li className='list-group-item'>
-          <h5>Events</h5>
           {options.events.map(event =>
             eventCheckbox(event, checked => {
               const temp = { ...filters };
@@ -39,7 +41,6 @@ export const FilterMenu: React.FC = () => {
             }))}
         </li>
         <li className='list-group-item'>
-          <h5>Artists</h5>
           {options.rappers.map(rapper => 
             rapperCheckbox(rapper, checked => {
               const temp = { ...filters };
@@ -49,7 +50,6 @@ export const FilterMenu: React.FC = () => {
             }))}
         </li>
         <li className='list-group-item'>
-          <h5>Bonus Tracks</h5>
           <Checkbox id='hide-bonus'
             label='Hide Bonus Tracks'
             onChange={hideBonus => setFilters({ ...filters, hideBonus })} />
