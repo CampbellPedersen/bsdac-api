@@ -1,22 +1,31 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
+import * as awsx from '@pulumi/awsx';
+import { cluster } from './infra/ecs';
 import { frontend } from './client/infra';
 import { backend } from './server/infra';
 
 const config = new pulumi.Config();
 
 const certificateArn = config.get('sslCertificateArn');
-const { listener } = frontend.alb.createListener('bsdac-web-listener', {
+const alb = new awsx.elasticloadbalancingv2.ApplicationLoadBalancer('bsdac-alb', {
+  external: true,
+  securityGroups: cluster.securityGroups,
+});
+const client = frontend(alb);
+const server = backend(alb);
+
+const { listener } = alb.createListener('bsdac-web-listener', {
   external: true,
   protocol: certificateArn ? 'HTTPS' : 'HTTP',
   certificateArn,
   defaultAction: {
-    targetGroupArn: frontend.targetGroup.targetGroup.arn,
+    targetGroupArn: client.targetGroup.arn,
     type: 'forward',
   }
 });
 
-frontend.alb.createListener('bsdac-redirect-listener', {
+alb.createListener('bsdac-redirect-listener', {
   external: true,
   protocol: 'HTTP',
   defaultAction: {
@@ -31,7 +40,7 @@ frontend.alb.createListener('bsdac-redirect-listener', {
 
 new aws.lb.ListenerRule('bsdac-backend-rule', {
   actions: [{
-      targetGroupArn: backend.targetGroup.targetGroup.arn,
+      targetGroupArn: server.targetGroup.arn,
       type: 'forward',
   }],
   conditions: [{ pathPattern: { values: ['/api/*'] }}],
@@ -49,8 +58,8 @@ aws.route53.getZone({ name: domain }).then((hostedZone) => {
         type: 'A',
         aliases: [
             {
-                name: frontend.alb.loadBalancer.dnsName,
-                zoneId: frontend.alb.loadBalancer.zoneId,
+                name: alb.loadBalancer.dnsName,
+                zoneId: alb.loadBalancer.zoneId,
                 evaluateTargetHealth: true,
             },
         ],

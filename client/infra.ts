@@ -1,12 +1,10 @@
 import * as awsx from '@pulumi/awsx';
 import { buildDockerImage, cluster } from '../infra/ecs';
 
-const makeFrontendService = () => {
+const makeFrontendService = (
+  alb: awsx.elasticloadbalancingv2.ApplicationLoadBalancer
+) => {
   const image = buildDockerImage('bsdac-frontend-img', './client');
-  const alb = new awsx.elasticloadbalancingv2.ApplicationLoadBalancer('bsdac-frontend-alb', {
-    external: true,
-    securityGroups: cluster.securityGroups,
-  });
   const targetGroup = alb.createTargetGroup('bsdac-frontend-target', { protocol: 'HTTP', healthCheck: { path: '/' }  });
   new awsx.ecs.FargateService('bsdac-frontend-svc', {
     cluster,
@@ -20,7 +18,7 @@ const makeFrontendService = () => {
     },
     desiredCount: 1,
   });
-  return { targetGroup, alb };
+  return targetGroup;
 };
 
-export const frontend = makeFrontendService();
+export const frontend = makeFrontendService;

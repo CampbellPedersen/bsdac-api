@@ -4,13 +4,11 @@ import { db } from '../infra/dynamodb';
 import { buildDockerImage, cluster } from '../infra/ecs';
 import { bucket } from '../infra/s3';
 
-const makeBackendService = () => {
+const makeBackendService = (
+  alb: awsx.elasticloadbalancingv2.ApplicationLoadBalancer
+) => {
   const config = new pulumi.Config();
   const image = buildDockerImage('bsdac-backend-img', './server');
-  const alb = new awsx.elasticloadbalancingv2.ApplicationLoadBalancer('bsdac-backend-alb', {
-    external: true,
-    securityGroups: cluster.securityGroups,
-  });
   const targetGroup = alb.createTargetGroup('bsdac-backend-target', { protocol: 'HTTP', healthCheck: { path: '/healthz' }  });
   new awsx.ecs.FargateService('bsdac-backend-svc', {
     cluster,
@@ -36,7 +34,7 @@ const makeBackendService = () => {
     },
     desiredCount: 1,
   });
-  return { targetGroup };
+  return targetGroup;
 };
 
-export const backend = makeBackendService();
+export const backend = makeBackendService;

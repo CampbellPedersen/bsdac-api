@@ -33,7 +33,8 @@ export default (
 
   const loadRaps = async (_: Request, response: BsdacApiResponse<Rap[]>) => {
     const raps = await repository.loadAll();
-    response.json(raps);
+    const sorted = raps.sort((a, b) => b.appearedAt.series - a.appearedAt.series);
+    response.json(sorted);
   };
 
   const saveRap = async (request: Request, response: Response) => {
