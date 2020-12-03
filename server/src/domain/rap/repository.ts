@@ -16,7 +16,8 @@ interface Event {
 }
 
 export enum EventName {
-  BSDAC = 'BSDAC'
+  BSDAC = 'BSDAC',
+  BEATS = 'BEATS',
 }
 
 export interface RapRepository {
