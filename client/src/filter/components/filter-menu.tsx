@@ -23,7 +23,7 @@ export const FilterMenu: React.FC = () => {
   const [filters, setFilters] = useState<FilterState>({ events: [], rappers: [], hideBonus: false });
 
   const apply = useApplyFilters();
-  useEffect(() => apply(filters), [ apply, filters ])
+  useEffect(() => apply(filters), [ filters ])
 
   return <div className={`filter-menu ${ showMenu ? 'show' : '' }`}>
     <Card>

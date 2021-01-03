@@ -2,29 +2,20 @@
   display: flex;
   align-items: center;
   padding: 0 10px;
-  position: fixed;
-  bottom: 0;
-  z-index: 1001;
-  height: 54px;
-  width: 100%;
   background: rgb(241, 243, 244);
   border-top: 1px solid #e6e6e6;
-}
-
-.player .button {
-  padding-right: 10px;
-}
-
-.player .player-thumbnail {
-  position: relative;
-  width: 54px;
-}
-
-.player .player-thumbnail .loading {
-  z-index: 1;
-}
-
-.player .react-audio-player {
-  width: 100%;
-  outline: none;
+  .button {
+    padding-right: 10px;
+  }
+  .player-thumbnail {
+    position: relative;
+    width: 54px;
+    .loading {
+      z-index: 1;
+    }
+  }
+  .react-audio-player {
+    width: 100%;
+    outline: none;
+  }
 }

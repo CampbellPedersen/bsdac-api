@@ -1,12 +1,15 @@
-.rap-list .list-group-item {
-  margin-bottom: 10px;
-  border-radius: 3px;
-}
-
-.rap-list .list-group-item + .list-group-item {
-  border-top-width: 1px;
-}
-
-.rap-list li h5 {
-  margin: 0;
+.rap-list {
+  display: flex;
+  align-items: center;
+  .list-group-item {
+    margin: 5px 0;
+    border-radius: 3px;
+    border-width: 1px;
+    + .list-group-item {
+      border-top-width: 1px;
+    }
+  }
+  li h5 {
+    margin: 0;
+  }
 }

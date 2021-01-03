@@ -8,6 +8,7 @@ import { FilterMenu } from '../filter/components/filter-menu';
 import { useLoadRaps } from './load';
 import logo from '../images/logo.svg'
 import './page.scss';
+import { Column, Row } from '../components/grid';
 
 export const RapsPage: React.FC = () => {
   const {
@@ -27,23 +28,25 @@ export const RapsPage: React.FC = () => {
   return (
     <div className='raps-page'>
       <RapsNav />
-      <div className='raps-list container'>
-        <div className='row'>
-          <div className='col'></div>
-          <div className='col-12 col-lg-8'>
+      <div className='raps-list'>
+        <Row>
+          <Column/>
+          <Column xs={12} lg={8}>
             <RapList raps={loaded.filter(rap => queue?.includes(rap.id))} onSelect={rapSelected}/>
-          </div>
-          <div className='col'></div>
-        </div>
+          </Column>
+          <Column/>
+        </Row>
       </div>
       <FilterMenu />
-      <Player />
+      <div className='raps-player'>
+        <Player />
+      </div>
     </div>
   );
 };
 
 const RapsNav: React.FC = () =>
-  <nav className="navbar navbar-dark bg-dark sticky-top">
+  <nav className="navbar navbar-dark bg-dark">
     <a className="navbar-brand" href="#">
       <img src={logo} className='d-inline-block align-top' width="30" height="30" alt="" loading="lazy" /> BSDAPP
     </a>
