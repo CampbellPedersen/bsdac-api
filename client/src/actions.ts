@@ -53,7 +53,6 @@ export class RapUploaded {
 
 export class FilterMenuToggled {
   readonly type = 'FilterMenuToggled';
-  constructor() {}
 }
 
 export class FiltersApplied {

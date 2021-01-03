@@ -20,9 +20,10 @@ export const FilterMenu: React.FC = () => {
   } = useContext(AppContext);
 
   const options = useFilters();
-  const apply = useApplyFilters();
   const [filters, setFilters] = useState<FilterState>({ events: [], rappers: [], hideBonus: false });
-  useEffect(() => apply(filters), [ filters ])
+
+  const apply = useApplyFilters();
+  useEffect(() => apply(filters), [ apply, filters ])
 
   return <div className={`filter-menu ${ showMenu ? 'show' : '' }`}>
     <Card>

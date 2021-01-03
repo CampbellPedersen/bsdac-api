@@ -8,7 +8,7 @@ const filters = (raps: Rap[]) => {
   const events: Event[] = [];
   const rappers: string[] = [];
 
-  raps.map(rap => {
+  raps.forEach(rap => {
     if (!events.some(eventIsEqual(rap.appearedAt))) events.push(rap.appearedAt);
     if (!rappers.includes(rap.rapper)) rappers.push(rap.rapper);
   });
