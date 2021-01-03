@@ -33,7 +33,11 @@ export default (
 
   const loadRaps = async (_: Request, response: BsdacApiResponse<Rap[]>) => {
     const raps = await repository.loadAll();
-    const sorted = raps.sort((a, b) => b.appearedAt.series - a.appearedAt.series);
+    const sorted = raps.sort((a, b) => {
+      const comparedEventNameValue = a.appearedAt.name.localeCompare(b.appearedAt.name);
+      if (comparedEventNameValue !== 0) return comparedEventNameValue;
+      return b.appearedAt.series - a.appearedAt.series;
+    });
     response.json(sorted);
   };
 
@@ -52,7 +56,7 @@ export default (
       bonus: body.bonus,
       imageUrl: body.imageUrl,
       appearedAt: body.appearedAt,
-    }
+    };
     await repository.save(rap);
     response.status(201).send(rap);
   };

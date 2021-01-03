@@ -6,6 +6,7 @@ import { inMemoryFileUploadService } from '../../utils/file';
 
 const details = { title: 'The Rap', lyrics: 'Words words words', bonus: false, rapper: 'Campbell Pedersen', imageUrl: 'https://imgur.com/theRap', appearedAt: { name: EventName.BSDAC, series: 1 } };
 const details2 = { title: 'The Rap', lyrics: 'Words words words', bonus: false, rapper: 'Campbell Pedersen', imageUrl: 'https://imgur.com/theRap', appearedAt: { name: EventName.BSDAC, series: 2 } };
+const details3 = { title: 'The Rap', lyrics: 'Words words words', bonus: false, rapper: 'Campbell Pedersen', imageUrl: 'https://imgur.com/theRap', appearedAt: { name: EventName.BEATS, series: 1 } };
 const audioUrl = 'https://vgmdownloads.com/soundtracks/super-mario-64-soundtrack/zfvgdumr/18%20File%20Select.mp3';
 const urlBuilder = (onReceiveParams?: (params: Rap) => void) => async (rap: Rap) => { if (onReceiveParams) onReceiveParams(rap); return audioUrl; };
 
@@ -24,12 +25,14 @@ describe('/get-all', () => {
   it('given rap > returns array of raps and http 200', async () => {
     const rap = { ...details, id: 'rap-001' };
     const rap2 = { ...details2, id: 'rap-002' };
+    const rap3 = { ...details3, id: 'rap-003' };
     await repository.save(rap);
     await repository.save(rap2);
+    await repository.save(rap3);
 
     await request(app)
       .get('/raps/get-all')
-      .expect(200, [ rap2, rap ]);
+      .expect(200, [ rap3, rap2, rap ]);
   });
 });
 
