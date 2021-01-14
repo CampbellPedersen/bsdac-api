@@ -1,31 +1,44 @@
-import React, { useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 
-export const Form: React.FC<{ onSubmit: () => void }> = ({ children, onSubmit }) =>
-  <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>{children}</form>
+export const Form: React.FC<{
+  className?: string
+  onSubmit: () => void
+}> = ({ className, onSubmit, children }) =>
+  <form className={className} onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>{children}</form>
 
 const FormGroup: React.FC = ({ children }) =>
   <div className='form-group'>{children}</div>
 
 export const TextField: React.FC<{
   id: string
-  label: string
-  type: 'text' | 'email'
+  type: 'text' | 'email' | 'password'
+  label?: string
   value?: string
+  placeholder?: string
+  autoFocus?: boolean
   required?: boolean
   disabled?: boolean
   onChange: (value: string) => void
-}> = ({ id, label, type, value, required, disabled, onChange }) =>
-  <FormGroup>
-    <label htmlFor={id}>{label}</label>
-    <input
-      type={type}
-      className='form-control'
-      id={id}
-      value={value}
-      required={required}
-      disabled={disabled}
-      onChange={event => onChange(event.target.value)}/>
-  </FormGroup>
+}> = ({ id, label, type, value, placeholder, autoFocus, required, disabled, onChange }) => {
+  const inputElement = <input
+    type={type}
+    className='form-control'
+    id={id}
+    value={value}
+    placeholder={placeholder}
+    autoFocus={autoFocus}
+    required={required}
+    disabled={disabled}
+    onChange={event => onChange(event.target.value)}
+  />;
+
+  return label ?
+    <FormGroup>
+      <label htmlFor={id}>{label}</label>
+      {inputElement}
+    </FormGroup>
+    : inputElement
+}
 
 export const Checkbox: React.FC<{
   id: string

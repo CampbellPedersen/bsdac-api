@@ -6,9 +6,9 @@ import { Player } from '../player/components/player';
 import { UploadModal } from '../upload/components/modal';
 import { FilterMenu } from '../filter/components/filter-menu';
 import { useLoadRaps } from './load';
+import { Column, Row } from '../components/grid';
 import logo from '../images/logo.svg'
 import './page.scss';
-import { Column, Row } from '../components/grid';
 
 export const RapsPage: React.FC = () => {
   const {
