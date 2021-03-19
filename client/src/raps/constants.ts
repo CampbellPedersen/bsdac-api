@@ -33,4 +33,5 @@ export const events: Event[] = [
   { name: EventName.BSDAC, series: 12 },
   { name: EventName.BSDAC, series: 13 },
   { name: EventName.BEATS, series: 1 },
+  { name: EventName.BEATS, series: 2 },
 ];
