@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { Checkbox, Select, TextField, Form, FileUpload } from '../../components/forms';
-import { Rap, Event, EventName } from '../../raps/types';
-import './modal.scss';
-import { useUpload } from '../upload';
+import { Rap, Event, EventName } from '../../api/raps/types';
+import { useUpload } from '../../api/raps/upload';
 import { AppContext } from '../../context';
 import { ProgressBar } from '../../raps/components/progress-bar';
 import { events, rappers } from '../../raps/constants';
+import './modal.scss';
 
 export const UploadModal: React.FC = () => {
   const {

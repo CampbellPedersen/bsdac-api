@@ -1,29 +1,27 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { RapList } from './components/list';
 import { LoadingScreen } from '../components';
 import { AppContext } from '../context';
 import { Player } from '../player/components/player';
 import { UploadModal } from '../upload/components/modal';
 import { FilterMenu } from '../filter/components/filter-menu';
-import { useLoadRaps } from './load';
+import { useRaps } from '../api/raps/load';
 import { Column, Row } from '../components/grid';
 import logo from '../images/logo.svg'
 import './page.scss';
 
 export const RapsPage: React.FC = () => {
   const {
-    raps: { isLoading, raps: loaded, queue },
+    raps: { queue },
     actions: { rapSelected },
   } = useContext(AppContext);
-  const loadRaps = useLoadRaps();
+  const rapData = useRaps();
 
-  useEffect(() => {
-    if(!loaded) loadRaps();
-  }, [loaded, loadRaps]);
-
-  if (isLoading || !loaded) {
+  if (rapData.state === 'loading') {
     return <LoadingScreen />;
   };
+
+  const { data: loaded } = rapData;
 
   return (
     <div className='raps-page'>

@@ -5,49 +5,36 @@ import { Rap, EventName } from './types';
 
 describe('load', () => {
   const rap: Rap = { id: 'rap-001', title: 'The First Rap', lyrics: 'Words mun', bonus: false, rapper: 'Campbell Pedersen', imageUrl: 'imageUrl', appearedAt: { name: EventName.BSDAC, series: 1 }};
-  let requestedCalled = false;
-  let receivedRaps: Rap[] | undefined;
-  const requested = () => requestedCalled = true;
-  const received = (raps: Rap[]) => receivedRaps = raps;
+  const requested = jest.fn<void, []>();
+  const received = jest.fn<void, [Rap[]]>();
   const http = new MockAdapter(axios);
 
   beforeEach(() => {
-    requestedCalled = false;
-    receivedRaps = undefined;
+    requested.mockReset();
+    received.mockReset();
     http.reset();
     http.resetHistory();
-  });
-
-  test('given loading > when load raps > should not make callbacks', async () => {
-    http.onGet('/api/raps/get-all').reply(200, [ rap ]);
-
-    const load = loadRaps(true, requested, received);
-    await load();
-
-    expect(requestedCalled).toBeFalsy();
-    expect(http.history.get.length).toEqual(0);
-    expect(receivedRaps).toBeFalsy();
   });
 
   test('when load raps > should make http request and make callbacks', async () => {
     http.onGet('/api/raps/get-all').reply(200, [ rap ]);
 
-    const load = loadRaps(false, requested, received);
+    const load = loadRaps(requested, received);
     await load();
 
-    expect(requestedCalled).toBeTruthy();
+    expect(requested).toBeCalled();
     expect(http.history.get.length).toEqual(1);
-    expect(receivedRaps).toEqual([ rap ]);
+    expect(received).toBeCalledWith([ rap ]);
   });
 
   test('given api is broke > when load raps > should make http request and make requested callback', async () => {
     http.onGet('/api/raps/get-all').reply(500);
 
-    const load = loadRaps(false, requested, received);
+    const load = loadRaps(requested, received);
     await expect(load()).rejects.toThrow(new Error('Request failed with status code 500'));
 
-    expect(requestedCalled).toBeTruthy();
+    expect(requested).toBeCalled();
     expect(http.history.get.length).toEqual(1);
-    expect(receivedRaps).toBeFalsy();
+    expect(received).not.toBeCalled();
   });
 });

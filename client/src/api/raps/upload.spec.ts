@@ -1,7 +1,7 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { upload } from './upload';
-import { Rap, EventName } from '../raps/types';
+import { Rap, EventName } from './types';
 
 ((global as unknown) as { FormData: unknown }).FormData = class FormData {
   data = [];

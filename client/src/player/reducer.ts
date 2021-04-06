@@ -1,10 +1,10 @@
 import { Action } from '../actions';
-import { Rap } from '../raps/types';
+import { Rap } from '../api/raps/types';
 
 export interface AudioPlayerState {
   isLoading: boolean
   rap?: Rap,
-  streamUrl?: string,
+  streamUrl: string | null,
 }
 
 export const playerReducer: React.Reducer<AudioPlayerState, Action> = (state, action) => {
@@ -14,13 +14,12 @@ export const playerReducer: React.Reducer<AudioPlayerState, Action> = (state, ac
       return {
         ...state,
         rap: action.rap,
-        streamUrl: undefined,
       };
     case 'AudioStreamRequested':
       return {
         ...state,
         isLoading: true,
-        streamUrl: undefined,
+        streamUrl: null,
       };
     case 'AudioStreamReceived':
       return {

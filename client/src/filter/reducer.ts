@@ -1,7 +1,7 @@
 import { Action } from '../actions';
 
 export interface FilterState {
-  showMenu?: boolean
+  showMenu: boolean
 }
 
 export const filterReducer: React.Reducer<FilterState, Action> = (state, action) => {

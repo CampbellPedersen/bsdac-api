@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useContext } from 'react';
-import { AppContext } from '../context';
-import { Rap } from '../raps/types';
+import { AppContext } from '../../context';
+import { Rap } from './types';
 
 export const upload = (
   isLoading: boolean,

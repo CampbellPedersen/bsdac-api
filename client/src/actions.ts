@@ -1,4 +1,4 @@
-import { Rap } from './raps/types';
+import { Rap } from './api/raps/types';
 
 export class LoginRequested {
   readonly type = 'LoginRequested';

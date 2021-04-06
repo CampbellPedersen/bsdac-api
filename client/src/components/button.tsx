@@ -4,16 +4,25 @@ type ButtonStyle = 'primary' | 'secondary';
 type ButtonSize = 'sm' | 'lg';
 type ButtonType = 'button' | 'submit';
 
-export const Button: React.FC<{
-  style: ButtonStyle
+interface Props {
+  btn: ButtonStyle
   size: ButtonSize
   className?: string
   type?: ButtonType
   disabled?: boolean
-}> = ({style, size, className, type, disabled, children}) => {
+}
+
+export const Button: React.FC<Props> = ({
+  btn,
+  size,
+  className,
+  type,
+  disabled,
+  children
+}) => {
   return (
     <button
-      className={`btn ${styleClass(style)} ${sizeClass(size)} ${className}`}
+      className={`btn ${styleClass(btn)} ${sizeClass(size)} ${className}`}
       type={type ?? 'button'}
       disabled={disabled}
     >

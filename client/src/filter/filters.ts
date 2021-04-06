@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { AppContext } from '../context';
-import { Rap, Event } from '../raps/types';
+import { Rap, Event } from '../api/raps/types';
 
 const eventIsEqual = (a: Event) => (b: Event) => a.name === b.name && a.series === b.series;
 
@@ -18,7 +18,7 @@ const filters = (raps: Rap[]) => {
 
 export const useFilters = () => {
   const {
-    raps: { raps }
+    raps: { data: raps }
   } = useContext(AppContext);
 
   if (!raps) throw new Error('Why ya showing filters if ya havent even loaded raps???')
@@ -39,7 +39,7 @@ const applyFilters = (
 
 export const useApplyFilters = () => {
   const {
-    raps: { raps },
+    raps: { data: raps },
     actions: { filtersApplied }
   } = useContext(AppContext);
 

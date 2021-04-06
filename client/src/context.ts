@@ -39,9 +39,9 @@ export const useAppContext = (): AppContextType => {
   const loggedIn = loggedInAt ? new Date(loggedInAt).getTime() > new Date().getTime() - OneDay : false
   const initialState: AppState = {
     login: { isLoading: false , loggedIn },
-    raps: { isLoading: false },
-    player: { isLoading: false },
-    filter: { },
+    raps: { isLoading: false, data: null },
+    player: { isLoading: false, streamUrl: null },
+    filter: { showMenu: false },
     upload: { },
   };
 

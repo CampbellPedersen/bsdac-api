@@ -1,4 +1,4 @@
-import { Event, EventName } from './types';
+import { Event, EventName } from '../api/raps/types';
 
 export const rappers: string[] = [
   'Andrew Phang',

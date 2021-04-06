@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useLogin } from './login';
+import { useLogin } from '../api/login/login';
 import { AppContext } from '../context';
 import { Spinner } from '../components/spinner';
 import { Credits } from './credits';
@@ -29,7 +29,7 @@ export const LoginPage: React.FC = () => {
         <TextField value={email} onChange={setEmail} type="email" id="email" placeholder="Email address" autoFocus required/>
         <TextField value={password} onChange={setPassword} type="password" id="password" placeholder="Password" required/>
         {failedMessage && <p className='text-danger'>{failedMessage}</p>}
-        <Button className='login-button' style='primary' size='lg' type='submit' disabled={isLoading}>
+        <Button className='login-button' btn='primary' size='lg' type='submit' disabled={isLoading}>
           {
             isLoading ?
               <><Spinner small /> Logging in...</>

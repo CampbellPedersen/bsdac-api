@@ -1,9 +1,9 @@
-import { Rap } from './types';
+import { Rap } from '../api/raps/types';
 import { Action } from '../actions';
 
 export interface RapsState {
   isLoading: boolean,
-  raps?: Rap[]
+  data: Rap[] | null
   queue?: string[];
 }
 
@@ -18,15 +18,15 @@ export const rapsReducer: React.Reducer<RapsState, Action> = (state, action) => 
       return {
         ...state,
         isLoading: false,
-        raps: action.raps,
+        data: action.raps,
         queue: action.raps.map(rap => rap.id),
       };
     case 'RapUploaded':
-      const raps = state.raps || [];
+      const raps = state.data || [];
       const queue = state.queue || [];
       return {
         ...state,
-        raps: [...raps, action.rap ],
+        data: [...raps, action.rap ],
         queue: [ ...queue, action.rap.id ],
       }
     case 'FiltersApplied':

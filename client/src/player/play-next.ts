@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { AppContext } from '../context';
-import { Rap } from '../raps/types';
+import { Rap } from '../api/raps/types';
 
 export const playNext = (
   current: Rap,
@@ -17,7 +17,7 @@ export const playNext = (
 
 export const usePlayNext = () => {
   const {
-    raps: { raps, queue },
+    raps: { data: raps, queue },
     player: { rap },
     actions: { rapSelected }
   } = useContext(AppContext);

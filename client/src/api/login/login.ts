@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useContext } from 'react';
-import { AppContext } from '../context';
+import { AppContext } from '../../context';
 
 export const login = (
   isLoading: boolean,

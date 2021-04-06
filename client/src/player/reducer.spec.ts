@@ -1,5 +1,5 @@
 import { AudioPlayerState, playerReducer } from './reducer';
-import { Rap, EventName } from '../raps/types';
+import { Rap, EventName } from '../api/raps/types';
 
 describe('reducer', () => {
   const url = 'https:/rap.local';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Rap } from "../types";
+import { Rap } from "../../api/raps/types";
 import './thumbnail.scss'
 
 export const Thumbnail: React.FC<{ rap?: Rap }> = ({ rap }) =>

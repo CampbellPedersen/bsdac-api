@@ -4,7 +4,7 @@ import { Card, CardHeader } from '../../components/card';
 import { CloseButton } from '../../components/close-button';
 import { useFilters, useApplyFilters } from '../filters';
 import { Checkbox } from '../../components/forms';
-import { Event } from '../../raps/types';
+import { Event } from '../../api/raps/types';
 import './filter-menu.scss';
 
 interface FilterState {
@@ -23,7 +23,7 @@ export const FilterMenu: React.FC = () => {
   const [filters, setFilters] = useState<FilterState>({ events: [], rappers: [], hideBonus: false });
 
   const apply = useApplyFilters();
-  useEffect(() => apply(filters), [ filters ])
+  useEffect(() => apply(filters), [ apply, filters ])
 
   return <div className={`filter-menu ${ showMenu ? 'show' : '' }`}>
     <Card>

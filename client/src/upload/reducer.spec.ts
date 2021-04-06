@@ -1,5 +1,5 @@
 import { UploadState, uploadReducer } from './reducer';
-import { Rap, EventName } from '../raps/types';
+import { Rap, EventName } from '../api/raps/types';
 
 describe('reducer', () => {
   const rap: Rap = { id: 'rap-001', title: 'The First Rap', lyrics: 'Words mun', bonus: false, rapper: 'Campbell Pedersen', imageUrl: 'imageUrl', appearedAt: { name: EventName.BSDAC, series: 1 }};

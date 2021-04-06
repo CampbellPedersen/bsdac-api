@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 import { AppContext } from '../../context';
 import { Thumbnail } from '../../raps/components/thumbnail';
 import { LoadingOverlay } from '../../components/loading-overlay';
 import { useContext } from 'react';
-import { useStream } from '../stream';
+import { useStream } from '../../api/raps/stream';
 import { usePlayNext } from '../play-next';
 import { PlayerButton } from './player-button';
+import { Rap } from '../../api/raps/types';
 import './player.scss';
 
-export const Player: React.FC = () => {
-  const {
-    player: { rap, streamUrl },
-    filter: { showMenu },
-    actions: { filterMenuToggled }
-  } = useContext(AppContext);
-  const stream = useStream();
-  const playNext = usePlayNext();
+interface ViewProps {
+  rap?: Rap
+  streamUrl?: string
+  filterMenuShown: boolean
+  toggleFilterMenu: () => void
+  playNext: () => void
+}
 
+const PlayerView: React.FC<ViewProps> = ({
+  rap,
+  streamUrl,
+  filterMenuShown,
+  toggleFilterMenu,
+  playNext
+}) => {
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (rap && !streamUrl) {
-      setLoading(true);
-      stream(rap.id);
-    }
-  }, [ rap, stream, streamUrl ]);
 
   return (
     <div className='player'>
@@ -36,14 +36,21 @@ export const Player: React.FC = () => {
         onCanPlay={() => setLoading(false)}
         onEnded={playNext}/>
       <div className='button'>
-        <PlayerButton onClick={filterMenuToggled} focus={showMenu}>{filterIcon()}</PlayerButton>
+        <PlayerButton
+          onClick={toggleFilterMenu}
+          focus={filterMenuShown}
+        >
+          {filterIcon()}
+        </PlayerButton>
       </div>
       <div className='player-thumbnail'>
-        <LoadingOverlay loading={loading}><Thumbnail rap={rap} /></LoadingOverlay>
+        <LoadingOverlay loading={loading}>
+          <Thumbnail rap={rap} />
+        </LoadingOverlay>
       </div>
     </div>
   );
-};
+}
 
 const filterIcon = () => <>
   <svg fill='black' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 477.875 477.875">
@@ -57,3 +64,36 @@ const filterIcon = () => <>
 //     <path d="M506.24 115.7l-96-80c-4.768-3.968-11.424-4.8-17.024-2.176C387.584 36.116 384 41.78 384 47.988v48h-26.784c-44.448 0-85.024 22.496-108.544 60.16l-5.792 9.28 37.728 60.384 22.336-35.744c11.776-18.816 32.064-30.08 54.272-30.08H384v48c0 6.208 3.584 11.872 9.216 14.496a16.232 16.232 0 006.784 1.504c3.68 0 7.328-1.28 10.24-3.712l96-80c3.68-3.04 5.76-7.552 5.76-12.288 0-4.736-2.08-9.248-5.76-12.288zM167.392 286.164l-22.304 35.744c-11.776 18.816-32.096 30.08-54.304 30.08H0v64h90.784c44.416 0 84.992-22.496 108.544-60.16l5.792-9.28-37.728-60.384z" />
 //   </svg>
 // </>
+
+export const Player: React.FC = () => {
+  const {
+    player: { rap },
+    filter: { showMenu },
+    actions: { filterMenuToggled }
+  } = useContext(AppContext);
+
+  const streamData = useStream(rap?.id);
+  const filterMenuShown = showMenu;
+  const toggleFilterMenu = filterMenuToggled;
+  const playNext = usePlayNext();
+
+  // Show loading player if stream url is loading
+  if (streamData.state === 'loading') {
+    return <PlayerView
+      rap={rap}
+      filterMenuShown={filterMenuShown}
+      toggleFilterMenu={toggleFilterMenu}
+      playNext={playNext}
+    />
+  }
+
+  // Show normal player if stream url is not loading
+  const {data: streamurl} = streamData;
+  return <PlayerView
+    rap={rap}
+    streamUrl={streamurl}
+    filterMenuShown={filterMenuShown}
+    toggleFilterMenu={filterMenuToggled}
+    playNext={playNext}
+  />
+};

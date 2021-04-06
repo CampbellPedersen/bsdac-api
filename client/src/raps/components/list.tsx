@@ -1,5 +1,5 @@
 import React from 'react';
-import { Rap } from '../types';
+import { Rap } from '../../api/raps/types';
 import './list.scss';
 import { Thumbnail } from './thumbnail';
 

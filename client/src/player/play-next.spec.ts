@@ -1,5 +1,4 @@
-import { stream } from './stream';
-import { Rap, EventName } from '../raps/types';
+import { Rap, EventName } from '../api/raps/types';
 import { playNext } from './play-next';
 
 describe('play-next', () => {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { login } from './login';
-import { LocalStorage } from '../utils/mocks'
+import { LocalStorage } from '../../utils/mocks'
 
 global.localStorage = new LocalStorage;
 
