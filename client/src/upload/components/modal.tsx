@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { Checkbox, Select, TextField, Form, FileUpload } from '../../components/forms';
-import { Rap, Event, EventName } from '../../api/raps/types';
+import { Rap, Event, EventName, getEventLabel } from '../../api/raps/types';
 import { useUpload } from '../../api/raps/upload';
 import { AppContext } from '../../context';
 import { ProgressBar } from '../../raps/components/progress-bar';
@@ -43,7 +43,7 @@ export const UploadModal: React.FC = () => {
             <FileUpload id='rap-file' label='Audio File' accept='audio/*' onChange={file => setFile(file)} required />
             <TextField id='title' label='Title' type='text' required value={details.title} onChange={title => setDetails({ ...details, title })} />
             <Select<string> id='rapper' label='Artist' required options={rappers} getKey={o => o} getLabel={o => o} value={details.rapper} onChange={rapper => setDetails({ ...details, rapper })} />
-            <Select<Event> id='event' label='Event' required options={events} getKey={e => `${e.name} ${e.series}`} getLabel={e => `${e.name} ${e.series}`} value={details.appearedAt} onChange={appearedAt => setDetails({ ...details, appearedAt })} />
+            <Select<Event> id='event' label='Event' required options={events} getKey={e => getEventLabel(e)} getLabel={e => getEventLabel(e)} value={details.appearedAt} onChange={appearedAt => setDetails({ ...details, appearedAt })} />
             <TextField id='image-url' label='Image URL' type='text' required value={details.imageUrl} onChange={imageUrl => setDetails({ ...details, imageUrl })}/>
             <Checkbox id='bonus' label='Bonus Track' value={details.bonus} onChange={bonus => setDetails({ ...details, bonus })}/>
           </Modal.Body>

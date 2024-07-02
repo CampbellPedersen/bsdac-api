@@ -16,4 +16,7 @@ export interface Event {
 export enum EventName {
   BSDAC = 'BSDAC',
   BEATS = 'BEATS',
+  CBB = "Cam's Birthday Bash"
 }
+
+export const getEventLabel = (event: Event): string => `${event.name}${event.series > 0 ? ` ${event.series}` : ''}`

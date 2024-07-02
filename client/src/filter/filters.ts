@@ -13,7 +13,7 @@ const filters = (raps: Rap[]) => {
     if (!rappers.includes(rap.rapper)) rappers.push(rap.rapper);
   });
 
-  return { events, rappers: rappers.sort() }
+  return { events, rappers: [...rappers].sort() }
 }
 
 export const useFilters = () => {

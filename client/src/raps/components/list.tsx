@@ -1,5 +1,5 @@
 import React from 'react';
-import { Rap } from '../../api/raps/types';
+import { Rap, getEventLabel } from '../../api/raps/types';
 import './list.scss';
 import { Thumbnail } from './thumbnail';
 
@@ -25,7 +25,7 @@ export const RapList: React.FC<{ raps: Rap[], onSelect: (rap: Rap) => void }> =
 
 const RapItem: React.FC<{rap: Rap}> =
   ({ rap }) => {
-    const aboveText = `${rap.appearedAt.name} ${rap.appearedAt.series}${rap.bonus ? ' (Bonus Track)' : ''}`;
+    const aboveText = `${getEventLabel(rap.appearedAt)}${rap.bonus ? ' (Bonus Track)' : ''}`;
     return <>
       <div className='row'>
         <div className="col-3 px-0 px-sm-2 d-flex align-items-center">

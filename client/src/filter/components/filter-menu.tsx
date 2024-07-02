@@ -4,7 +4,7 @@ import { Card, CardHeader } from '../../components/card';
 import { CloseButton } from '../../components/close-button';
 import { useFilters, useApplyFilters } from '../filters';
 import { Checkbox } from '../../components/forms';
-import { Event } from '../../api/raps/types';
+import { Event, getEventLabel } from '../../api/raps/types';
 import './filter-menu.scss';
 
 interface FilterState {
@@ -61,7 +61,7 @@ export const FilterMenu: React.FC = () => {
 }
 
 const eventCheckbox = (event: Event, onChecked: (checked: boolean) => void) => {
-  const label = `${event.name} ${event.series}`;
+  const label = getEventLabel(event);
   return <Checkbox id={label}
     key={label}
     label={label}

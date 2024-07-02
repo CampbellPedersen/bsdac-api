@@ -35,4 +35,6 @@ export const events: Event[] = [
   { name: EventName.BEATS, series: 1 },
   { name: EventName.BEATS, series: 2 },
   { name: EventName.BEATS, series: 3 },
+  { name: EventName.BEATS, series: 4 },
+  { name: EventName.CBB, series: 0 },
 ];
