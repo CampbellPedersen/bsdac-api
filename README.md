@@ -81,3 +81,6 @@ Production runtime files now live in:
 - `deploy/Caddyfile`
 - `deploy/.env.example`
 - `deploy/deploy.sh`
+
+Specific path toward `t4g.micro` using local `linux/arm64` builds + ECR + EC2 pull:
+- [deploy/README.md](deploy/README.md)

@@ -15,17 +15,28 @@ export interface DockerHost {
   securityGroup: aws.ec2.SecurityGroup;
 }
 
-const amazonLinuxAmi = aws.ssm.getParameterOutput({
-  name: "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64",
-});
-
 const userData = `#!/bin/bash
 set -euxo pipefail
 
 dnf update -y
-dnf install -y docker git awscli curl
+dnf install -y docker git awscli
+
+compose_arch="$(uname -m)"
+case "$compose_arch" in
+  x86_64)
+    compose_binary="docker-compose-linux-x86_64"
+    ;;
+  aarch64|arm64)
+    compose_binary="docker-compose-linux-aarch64"
+    ;;
+  *)
+    echo "Unsupported architecture for Docker Compose plugin: $compose_arch" >&2
+    exit 1
+    ;;
+esac
+
 mkdir -p /usr/local/lib/docker/cli-plugins
-curl -SL https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+curl -SL "https://github.com/docker/compose/releases/download/v2.29.7/\${compose_binary}" -o /usr/local/lib/docker/cli-plugins/docker-compose
 chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 systemctl enable docker
 systemctl start docker
@@ -52,7 +63,17 @@ EOF
 chmod +x /usr/local/bin/bsdac-restart
 `;
 
+const amazonLinuxAmiForInstanceType = (instanceType: pulumi.Input<string>) =>
+  pulumi.output(instanceType).apply((value) => {
+    const architecture = /^([a-z0-9]+)g(\.|$)/i.test(value) ? "arm64" : "x86_64";
+
+    return aws.ssm.getParameterOutput({
+      name: `/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-${architecture}`,
+    }).value;
+  });
+
 export const createDockerHost = (name: string, args: DockerHostArgs): DockerHost => {
+  const instanceType = args.instanceType ?? "t3.small";
   const defaultVpc = aws.ec2.getVpcOutput({ default: true });
   const defaultSubnets = aws.ec2.getSubnetsOutput({
     filters: [
@@ -140,10 +161,11 @@ export const createDockerHost = (name: string, args: DockerHostArgs): DockerHost
   });
 
   const instance = new aws.ec2.Instance(`${name}-instance`, {
-    ami: amazonLinuxAmi.value,
+    ami: amazonLinuxAmiForInstanceType(instanceType),
     associatePublicIpAddress: false,
     iamInstanceProfile: instanceProfile.name,
-    instanceType: args.instanceType ?? "t3.small",
+    instanceType,
+    userDataReplaceOnChange: true,
     metadataOptions: {
       httpEndpoint: "enabled",
       httpTokens: "required",
