@@ -1,15 +1,5 @@
 # bsdac-api
-An API built in Typescript for retrieving resources dedicated to Big Smash Day and Cube.
-
-# Roadmap
-
-## Now
-- Rap Upload
-- Rap Playback
-
-## Later
-- Results, Leaderboards
-- Rap PRs
+A full-stack app for hosting and playing rap tracks created for Big Smash Day and Cube.
 
 # Developer Quickstart
 Requirements:
@@ -48,7 +38,15 @@ docker-compose down
 ```
 
 # Deploying
-Infra is deployed using [Pulumi](https://www.pulumi.com/docs/get-started/install/). The current stack targets a single EC2 Docker host instead of the old `ALB + ECS Fargate` stack.
+Infra is deployed using [Pulumi](https://www.pulumi.com/docs/get-started/install/).
+
+Current production stack:
+
+- one EC2 host
+- Elastic IP
+- Route53
+- Caddy in Docker for HTTPS + routing
+- backend IAM role access to DynamoDB and S3
 
 AWS credentials are still required on your local machine for Pulumi itself, but the app runtime should use the EC2 instance role rather than static app AWS keys.
 
@@ -63,7 +61,8 @@ config:
 
 Notes:
 - `domainName` is optional. If omitted, Pulumi will still create the host and output the public IP.
-- Current EC2 security group only opens `80`. No SSH exposure. No TLS listener yet.
+- Current EC2 security group opens `80` and `443`.
+- No public SSH access is intended; use AWS Systems Manager Session Manager.
 - The old config keys like `awsAccessKeyId`, `awsSecretAccessKey`, `dynamodbEndpoint`, and `sslCertificateArn` were part of the retired Fargate-era stack and are no longer used by the active Pulumi program.
 
 To deploy:
@@ -81,3 +80,4 @@ Production runtime files now live in:
 - `deploy/docker-compose.prod.yml`
 - `deploy/Caddyfile`
 - `deploy/.env.example`
+- `deploy/deploy.sh`

@@ -8,6 +8,10 @@
     "sourceMap": true,
     "outDir": "build",
     "baseUrl": ".",
+    "types": [
+      "jest",
+      "node"
+    ],
     "paths": {
         "*": [
             "node_modules/*",

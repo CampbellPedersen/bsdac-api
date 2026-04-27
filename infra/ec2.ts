@@ -23,10 +23,14 @@ const userData = `#!/bin/bash
 set -euxo pipefail
 
 dnf update -y
-dnf install -y docker git awscli
+dnf install -y docker git awscli curl
+mkdir -p /usr/local/lib/docker/cli-plugins
+curl -SL https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 systemctl enable docker
 systemctl start docker
 usermod -aG docker ec2-user
+id -u ssm-user >/dev/null 2>&1 && usermod -aG docker ssm-user || true
 
 mkdir -p /opt/bsdac
 cat >/opt/bsdac/README.txt <<'EOF'
