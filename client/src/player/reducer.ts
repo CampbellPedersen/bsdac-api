@@ -13,7 +13,9 @@ export const playerReducer: React.Reducer<AudioPlayerState, Action> = (state, ac
       if (state.rap?.id === action.rap.id) return state;
       return {
         ...state,
+        isLoading: false,
         rap: action.rap,
+        streamUrl: null,
       };
     case 'AudioStreamRequested':
       return {

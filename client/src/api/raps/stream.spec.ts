@@ -8,7 +8,7 @@ describe('stream', () => {
   const http = new MockAdapter(axios);
 
   beforeEach(() => {
-    requested.mockReset()
+    requested.mockReset();
     received.mockReset();
     http.reset();
     http.resetHistory();

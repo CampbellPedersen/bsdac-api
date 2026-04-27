@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { AppContext } from '../context';
 import { Rap } from '../api/raps/types';
 
@@ -10,10 +10,10 @@ export const playNext = (
 
   return () => {
     const currentIndex = options.findIndex(rap => rap.id === current.id);
-    const selection = options[currentIndex + 1]
+    const selection = options[currentIndex + 1];
     if (selection) selectRap(selection);
   };
-}
+};
 
 export const usePlayNext = () => {
   const {
@@ -21,7 +21,9 @@ export const usePlayNext = () => {
     player: { rap },
     actions: { rapSelected }
   } = useContext(AppContext);
-  if (!rap || !raps || !queue) return () => {};
-  const options = raps.filter((rap) => queue.includes(rap.id))
-  return playNext(rap, options, rapSelected);
+  return useMemo(() => {
+    if (!rap || !raps || !queue) return () => {};
+    const options = raps.filter((rap) => queue.includes(rap.id));
+    return playNext(rap, options, rapSelected);
+  }, [queue, rap, rapSelected, raps]);
 };

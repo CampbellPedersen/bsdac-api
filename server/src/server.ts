@@ -1,4 +1,6 @@
-import AWS, { DynamoDB, S3 } from 'aws-sdk';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { S3Client } from '@aws-sdk/client-s3';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import express from 'express';
 
 import { s3RapAudioUrlService } from './domain/rap/audio-url-service';
@@ -30,10 +32,39 @@ const env = {
   }
 };
 
-AWS.config.update(env.aws);
-const dynamodb = new DynamoDB.DocumentClient({ endpoint: env.dynamodb.endpoint });
+const credentials = env.aws.accessKeyId && env.aws.secretAccessKey
+  ? {
+      accessKeyId: env.aws.accessKeyId,
+      secretAccessKey: env.aws.secretAccessKey,
+    }
+  : undefined;
+
+const dynamodbClientConfig = {
+  region: env.aws.region,
+  credentials,
+  ...(env.dynamodb.endpoint ? { endpoint: env.dynamodb.endpoint } : {}),
+};
+
+const dynamodbClient = new DynamoDBClient({
+  ...dynamodbClientConfig,
+});
+const dynamodb = DynamoDBDocumentClient.from(dynamodbClient);
 const repository = dynamodbRapository(dynamodb, env.dynamodb.tableName);
-const s3 = new S3({ ...env.s3, signatureVersion: 'v4', s3ForcePathStyle: true });
+
+const s3ClientConfig = {
+  region: env.aws.region,
+  credentials,
+  ...(env.s3.endpoint
+    ? {
+        endpoint: env.s3.endpoint,
+        forcePathStyle: true,
+      }
+    : {}),
+};
+
+const s3 = new S3Client({
+  ...s3ClientConfig,
+});
 const uploadService = s3FileUploadService(s3, env.s3.bucketName);
 const audioUrlService = s3RapAudioUrlService(s3, env.s3.bucketName);
 

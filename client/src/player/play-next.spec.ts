@@ -6,7 +6,7 @@ describe('play-next', () => {
   const rap2: Rap = { id: 'rap-002', title: 'The Second Rap', bonus: false, rapper: 'Campbell Pedersen', imageUrl: 'imageUrl', appearedAt: { name: EventName.BSDAC, series: 2 }};
 
   let selectedRap: Rap | undefined;
-  let select = (rap: Rap) => selectedRap = rap;
+  const select = (rap: Rap) => selectedRap = rap;
 
   beforeEach(() => {
     selectedRap = undefined;
@@ -14,7 +14,7 @@ describe('play-next', () => {
 
   test('given no options > when play next > should not select a rap', () => {
     const playNextRap = playNext(rap1, [], select);
-    
+
     playNextRap();
 
     expect(selectedRap).toBeUndefined();
@@ -22,7 +22,7 @@ describe('play-next', () => {
 
   test('given options > when play next after final rap > should not select a rap', () => {
     const playNextRap = playNext(rap2, [ rap1, rap2 ], select);
-    
+
     playNextRap();
 
     expect(selectedRap).toBeUndefined();
@@ -30,7 +30,7 @@ describe('play-next', () => {
 
   test('given rap played > when play next > should select next rap', () => {
     const playNextRap = playNext(rap1, [ rap1, rap2 ], select);
-    
+
     playNextRap();
 
     expect(selectedRap).toEqual(rap2);

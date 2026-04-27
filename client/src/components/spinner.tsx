@@ -8,4 +8,4 @@ export const Spinner: React.FC<{small?: boolean}> = ({ small }) => {
       <span className='sr-only'>Loading...</span>
     </span>
   );
-}
+};

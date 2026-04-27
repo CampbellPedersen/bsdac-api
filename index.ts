@@ -1,81 +1,50 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
-import * as awsx from '@pulumi/awsx';
-import { cluster } from './infra/ecs';
-import { frontend } from './client/infra';
-import { backend } from './server/infra';
+import { db } from './infra/dynamodb';
+import { createDockerHost } from './infra/ec2';
+import { bucket } from './infra/s3';
 
 const config = new pulumi.Config();
+const domain = config.get('domainName');
+const instanceType = config.get('instanceType') || 't3.small';
+const region = aws.getRegionOutput().name;
 
-const certificateArn = config.get('sslCertificateArn');
-const alb = new awsx.elasticloadbalancingv2.ApplicationLoadBalancer('bsdac-alb', {
-  external: true,
-  securityGroups: cluster.securityGroups,
-});
-const client = frontend(alb);
-const server = backend(alb);
-
-const { listener } = alb.createListener('bsdac-web-listener', {
-  external: true,
-  protocol: certificateArn ? 'HTTPS' : 'HTTP',
-  certificateArn,
-  defaultAction: {
-    targetGroupArn: client.targetGroup.arn,
-    type: 'forward',
-  }
+const host = createDockerHost('bsdac-host', {
+  bucketArn: bucket.arn,
+  instanceType,
+  tableArn: db.arn,
 });
 
-alb.createListener('bsdac-redirect-listener', {
-  external: true,
-  protocol: 'HTTP',
-  defaultAction: {
-    type: 'redirect',
-    redirect: {
-        protocol: 'HTTPS',
-        port: '443',
-        statusCode: 'HTTP_301',
-    },
-  },
-});
+if (domain) {
+  const hostedZone = aws.route53.getZoneOutput({ name: domain, privateZone: false });
 
-new aws.lb.ListenerRule('bsdac-backend-rule', {
-  actions: [{
-      targetGroupArn: server.targetGroup.arn,
-      type: 'forward',
-  }],
-  conditions: [{ pathPattern: { values: ['/api/*'] }}],
-  listenerArn: listener.arn,
-  priority: 1,
-});
+  new aws.route53.Record(domain, {
+    name: domain,
+    records: [host.elasticIp.publicIp],
+    ttl: 300,
+    type: 'A',
+    zoneId: hostedZone.zoneId,
+  });
 
-const domain = config.require('domainName');
-aws.route53.getZone({ name: domain }).then((hostedZone) => {
-  new aws.route53.Record(
-    domain,
-    {
-        name: domain,
-        zoneId: hostedZone.zoneId,
-        type: 'A',
-        aliases: [
-            {
-                name: alb.loadBalancer.dnsName,
-                zoneId: alb.loadBalancer.zoneId,
-                evaluateTargetHealth: true,
-            },
-        ],
-    });
-  new aws.route53.Record(
-    `www.${domain}`,
-    {
-      name: 'www',
-      type: 'CNAME',
-      records: [ domain ],
-      zoneId: hostedZone.zoneId,
-      ttl: 300,
-    }
-  )
-});
+  new aws.route53.Record(`www.${domain}`, {
+    name: 'www',
+    records: [domain],
+    ttl: 300,
+    type: 'CNAME',
+    zoneId: hostedZone.zoneId,
+  });
+}
 
-export default {
-  url: `www.${domain}`
-};
+export const appBucketName = bucket.bucket;
+export const appTableName = db.name;
+export const deployPath = '/opt/bsdac/deploy';
+export const instanceId = host.instance.id;
+export const instanceProfileName = host.instanceProfile.name;
+export const publicIp = host.elasticIp.publicIp;
+export const publicDns = host.instance.publicDns;
+export const recommendedInstanceType = instanceType;
+export const regionName = region;
+export const ssmManagedRoleName = host.role.name;
+export const url = domain
+  ? pulumi.interpolate`http://www.${domain}`
+  : pulumi.interpolate`http://${host.elasticIp.publicIp}`;

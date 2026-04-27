@@ -9,4 +9,4 @@ export const ProgressBar: React.FC<{ progress: number }> = ({ progress }) =>
     aria-valuemin={0}
     aria-valuemax={100}
     style={{ width: `${progress}%` }}/>
-</div>
+</div>;

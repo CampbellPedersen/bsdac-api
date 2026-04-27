@@ -1,9 +1,11 @@
 {
   "name": "bsdac-api",
-  "main": "index.js",
+  "main": "index.ts",
+  "engines": {
+    "node": ">=20 <21"
+  },
   "dependencies": {
-    "@pulumi/pulumi": "^2.0.0",
-    "@pulumi/aws": "^2.0.0",
-    "@pulumi/awsx": "^0.20.0"
+    "@pulumi/pulumi": "3.194.0",
+    "@pulumi/aws": "7.19.0"
   }
 }

@@ -1,4 +1,4 @@
-import { S3 } from 'aws-sdk';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 export interface FileUploadService {
   (key: string, mimetype: string, contents: any): Promise<void>
@@ -12,11 +12,15 @@ export const inMemoryFileUploadService = (
   };
 
 export const s3FileUploadService = (
-  s3: S3,
+  s3: S3Client,
   bucketName: string,
 ): FileUploadService =>
-  async (key: string, mimetype: string, contents: any) =>
-    s3.upload({ Bucket: bucketName, Key: key, Body: contents, ContentType: mimetype, ACL: 'public-read'})
-      .promise()
-      .then(() => undefined)
-      .catch(e => { throw e; });
+  async (key: string, mimetype: string, contents: any) => {
+    await s3.send(new PutObjectCommand({
+      Bucket: bucketName,
+      Key: key,
+      Body: contents,
+      ContentType: mimetype,
+      ACL: 'public-read',
+    }));
+  };

@@ -20,7 +20,7 @@ export const RapList: React.FC<{ raps: Rap[], onSelect: (rap: Rap) => void }> =
           </li>
         )}
       </ul>
-    )
+    );
   };
 
 const RapItem: React.FC<{rap: Rap}> =

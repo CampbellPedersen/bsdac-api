@@ -1,4 +1,9 @@
-import { DynamoDB } from 'aws-sdk';
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  PutCommand,
+  ScanCommand,
+} from '@aws-sdk/lib-dynamodb';
 
 export interface Rap {
   id: string
@@ -27,25 +32,21 @@ export interface RapRepository {
 }
 
 export const dynamodbRapository = (
-  client: DynamoDB.DocumentClient,
+  client: DynamoDBDocumentClient,
   tableName: string
 ): RapRepository => {
   return {
-    loadAll: async () =>
-      client.scan({ TableName: tableName })
-        .promise()
-        .then(res => res.Items as Rap[])
-        .catch(err => { throw err; }),
-    load: async (id: string) =>
-      client.get({ TableName: tableName, Key: { id } })
-        .promise()
-        .then(res => res.Item as Rap)
-        .catch(err => { throw err; }),
-    save: async (rap: Rap) =>
-      client.put({ TableName: tableName, Item: rap })
-        .promise()
-        .then(() => undefined)
-        .catch(err => { throw err; }),
+    loadAll: async () => {
+      const response = await client.send(new ScanCommand({ TableName: tableName }));
+      return response.Items as Rap[];
+    },
+    load: async (id: string) => {
+      const response = await client.send(new GetCommand({ TableName: tableName, Key: { id } }));
+      return response.Item as Rap;
+    },
+    save: async (rap: Rap) => {
+      await client.send(new PutCommand({ TableName: tableName, Item: rap }));
+    },
   };
 };
 

@@ -7,7 +7,7 @@ import { UploadModal } from '../upload/components/modal';
 import { FilterMenu } from '../filter/components/filter-menu';
 import { useRaps } from '../api/raps/load';
 import { Column, Row } from '../components/grid';
-import logo from '../images/logo.svg'
+import logo from '../images/logo.svg';
 import './page.scss';
 
 export const RapsPage: React.FC = () => {
@@ -49,4 +49,4 @@ const RapsNav: React.FC = () =>
       <img src={logo} className='d-inline-block align-top' width="30" height="30" alt="" loading="lazy" /> BSDAPP
     </a>
     <UploadModal />
-  </nav>
+  </nav>;

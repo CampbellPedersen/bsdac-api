@@ -3,6 +3,7 @@ import { Rap } from '../../api/raps/types';
 import './filters.scss';
 
 export const RapFilters: React.FC<{ raps: Rap[] }> = ({raps}) => {
+  void raps;
   return <>
   </>;
 };

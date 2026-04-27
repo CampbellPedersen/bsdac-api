@@ -35,7 +35,7 @@ services:
       - localstack
   # Infra simulators
   traefik:
-    image: "traefik:v2.2"
+    image: "traefik:v2.11"
     container_name: "traefik"
     command:
       - "--api.insecure=true"
@@ -48,14 +48,12 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
   localstack:
-    image: localstack/localstack:latest
+    image: localstack/localstack:4.14.0
     container_name: localstack
     ports:
       - '4563-4599:4563-4599'
       - '8055:8080'
     environment:
       - SERVICES=s3,dynamodb
-      - DATA_DIR=/tmp/localstack/data
     volumes:
-      - './server/.localstack:/tmp/localstack'
       - '/var/run/docker.sock:/var/run/docker.sock'

@@ -3,7 +3,7 @@ import { FilterState, filterReducer } from './reducer';
 describe('reducer', () => {
 
   test('when filter menu toggled > should return state with show menu', () => {
-    const state: FilterState = { };
+    const state: FilterState = { showMenu: false };
     const newState = filterReducer(state, { type: 'FilterMenuToggled' });
 
     expect(newState).toEqual({ showMenu: true });

@@ -28,12 +28,12 @@ export const rapsReducer: React.Reducer<RapsState, Action> = (state, action) => 
         ...state,
         data: [...raps, action.rap ],
         queue: [ ...queue, action.rap.id ],
-      }
+      };
     case 'FiltersApplied':
       return {
         ...state,
         queue: action.ids,
-      }
+      };
     default:
       return state;
   }

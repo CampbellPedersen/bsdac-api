@@ -1,7 +1,7 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { login } from './login';
-import { LocalStorage } from '../../utils/mocks'
+import { LocalStorage } from '../../utils/mocks';
 
 global.localStorage = new LocalStorage;
 
@@ -44,7 +44,7 @@ describe('login', () => {
 
     expect(requestedCalled).toBeTruthy();
     expect(http.history.post.length).toEqual(1);
-    expect(localStorage.getItem('loggedInAt')).toEqual(now().toISOString())
+    expect(localStorage.getItem('loggedInAt')).toEqual(now().toISOString());
     expect(loggedInCalled).toBeTruthy();
 
     expect(failedMessage).toBeUndefined();

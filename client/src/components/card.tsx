@@ -1,19 +1,19 @@
 import React from 'react';
 
-export const Card: React.FC<{ body?: boolean }> = ({ body, children }) =>
+export const Card: React.FC<React.PropsWithChildren<{ body?: boolean }>> = ({ body, children }) =>
   <div className='card'>
     { body ? <CardBody>{children}</CardBody>: children}
-  </div>
+  </div>;
 
-export const CardHeader: React.FC = ({ children }) =>
+export const CardHeader: React.FC<React.PropsWithChildren> = ({ children }) =>
   <div className='card-header'>
     {children}
-  </div>
+  </div>;
 
-export const CardBody: React.FC = ({ children }) =>
+export const CardBody: React.FC<React.PropsWithChildren> = ({ children }) =>
   <div className='card-body'>
     {children}
-  </div>
+  </div>;
 
-export const CardTitle: React.FC = ({ children }) =>
-  <h5 className="card-title">{children}</h5>
+export const CardTitle: React.FC<React.PropsWithChildren> = ({ children }) =>
+  <h5 className="card-title">{children}</h5>;

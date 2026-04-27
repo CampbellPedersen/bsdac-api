@@ -1,5 +1,6 @@
 aws dynamodb create-table \
   --endpoint-url http://localhost:4566 \
+  --region eu-west-1 \
   --table-name Raps \
   --attribute-definitions AttributeName=id,AttributeType=S \
   --key-schema AttributeName=id,KeyType=HASH \

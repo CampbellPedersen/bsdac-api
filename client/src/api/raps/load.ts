@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../../context';
 import { ApiResult } from '../types';
 import { Rap } from './types';
@@ -24,19 +24,21 @@ export const loadRaps = (
   };
 };
 
-export const useRaps = (): ApiResult<Rap[], string> => {
+export const useRaps = (): ApiResult<Rap[]> => {
   const {
     raps: { isLoading, data },
     actions: { rapsRequested, rapsLoaded }
   } = useContext(AppContext);
 
   useEffect(() => {
-    if (isLoading || data === null) return;
+    if (isLoading || data !== null) return;
     (async () => {
       await loadRaps(rapsRequested, rapsLoaded)();
     })();
   }, [isLoading, data, rapsRequested, rapsLoaded]);
 
-  if (isLoading || data === null) return {state: 'loading', loading: true};
-  return {state: 'loaded', loading: false, data}
+  return useMemo(() => {
+    if (isLoading || data === null) return { state: 'loading', loading: true } as const;
+    return { state: 'loaded', loading: false, data } as const;
+  }, [data, isLoading]);
 };

@@ -23,9 +23,9 @@ export const FilterMenu: React.FC = () => {
   const [filters, setFilters] = useState<FilterState>({ events: [], rappers: [], hideBonus: false });
 
   const apply = useApplyFilters();
-  useEffect(() => apply(filters), [ apply, filters ])
+  useEffect(() => apply(filters), [ apply, filters ]);
 
-  return <div className={`filter-menu ${ showMenu ? 'show' : '' }`}>
+  return <div className={`filter-menu ${showMenu ? 'show' : ''}`}>
     <Card>
       <CardHeader>
         <CloseButton onClick={filterMenuToggled} />
@@ -42,7 +42,7 @@ export const FilterMenu: React.FC = () => {
             }))}
         </li>
         <li className='list-group-item'>
-          {options.rappers.map(rapper => 
+          {options.rappers.map(rapper =>
             rapperCheckbox(rapper, checked => {
               const temp = { ...filters };
               if (checked) temp.rappers.push(rapper);
@@ -57,21 +57,21 @@ export const FilterMenu: React.FC = () => {
         </li>
       </ul>
     </Card>
-  </div>
-}
+  </div>;
+};
 
 const eventCheckbox = (event: Event, onChecked: (checked: boolean) => void) => {
   const label = getEventLabel(event);
   return <Checkbox id={label}
     key={label}
     label={label}
-    onChange={onChecked} />
-}
+    onChange={onChecked} />;
+};
 
 const rapperCheckbox = (rapper: string, onChecked: (checked: boolean) => void) =>
   <Checkbox id={rapper}
     key={rapper}
     label={rapper}
-    onChange={onChecked} />
+    onChange={onChecked} />;
 
 const eventsAreEqual = (a: Event, b: Event) => a.name === b.name && a.series === b.series;

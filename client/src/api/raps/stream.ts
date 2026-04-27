@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../../context';
 import { ApiResult } from '../types';
 
@@ -18,19 +18,21 @@ export const stream = (
   };
 };
 
-export const useStream = (rapId?: string): ApiResult<string, string> => {
+export const useStream = (rapId?: string): ApiResult<string> => {
   const {
     player: { isLoading, streamUrl },
     actions: { audioStreamRequested, audioStreamReceived }
   } = useContext(AppContext);
 
   useEffect(() => {
-    if (!rapId || isLoading || streamUrl === null) return;
+    if (!rapId || isLoading || streamUrl !== null) return;
     (async () => {
       await stream(audioStreamRequested, audioStreamReceived)(rapId);
     })();
   }, [rapId, isLoading, streamUrl, audioStreamRequested, audioStreamReceived]);
 
-  if (isLoading || streamUrl === null) return {state: 'loading', loading: true};
-  return {state: 'loaded', loading: false, data: streamUrl}
+  return useMemo(() => {
+    if (isLoading || streamUrl === null) return { state: 'loading', loading: true } as const;
+    return { state: 'loaded', loading: false, data: streamUrl } as const;
+  }, [isLoading, streamUrl]);
 };

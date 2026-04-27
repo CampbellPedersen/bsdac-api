@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { AppContext } from '../../context';
 import { Rap } from './types';
 
@@ -16,8 +16,8 @@ export const upload = (
     data.append('details', JSON.stringify(details));
     const onUploadProgress = (progress: any) => progressed(Math.floor((progress.loaded * 100) / progress.total));
     return axios.post('/api/raps/save', data, { headers: { 'content-type': 'multipart/form-data'}, onUploadProgress })
-      .then(resp => resp.data)
-  } 
+      .then(resp => resp.data);
+  };
 
   return async (file: any, details: Omit<Rap, 'id'>): Promise<boolean | undefined> => {
     if (isLoading) return;
@@ -27,7 +27,7 @@ export const upload = (
       const rap = await requestUpload(file, details);
       uploaded(rap);
       return true;
-    } catch (error) {
+    } catch {
       errored('Upload failed, please try again later');
       return false;
     }
@@ -45,5 +45,8 @@ export const useUpload = () => {
   const uploaded = (rap: Rap) => rapUploaded(rap);
   const failed = (message: string) => rapUploadFailed(message);
 
-  return upload(isLoading, requested, progressed, uploaded, failed);
+  return useMemo(
+    () => upload(isLoading, requested, progressed, uploaded, failed),
+    [isLoading, requested, progressed, uploaded, failed]
+  );
 };

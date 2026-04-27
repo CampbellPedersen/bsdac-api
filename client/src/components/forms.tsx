@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-export const Form: React.FC<{
+export const Form: React.FC<React.PropsWithChildren<{
   className?: string
   onSubmit: () => void
-}> = ({ className, onSubmit, children }) =>
-  <form className={className} onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>{children}</form>
+}>> = ({ className, onSubmit, children }) =>
+  <form className={className} onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>{children}</form>;
 
-const FormGroup: React.FC = ({ children }) =>
-  <div className='form-group'>{children}</div>
+const FormGroup: React.FC<React.PropsWithChildren> = ({ children }) =>
+  <div className='form-group'>{children}</div>;
 
 export const TextField: React.FC<{
   id: string
@@ -37,8 +37,8 @@ export const TextField: React.FC<{
       <label htmlFor={id}>{label}</label>
       {inputElement}
     </FormGroup>
-    : inputElement
-}
+    : inputElement;
+};
 
 export const Checkbox: React.FC<{
   id: string
@@ -58,7 +58,7 @@ export const Checkbox: React.FC<{
       disabled={disabled}
       onChange={event => onChange(event.target.checked)}/>
     <label className='form-check-label' htmlFor={id}>{label}</label>
-  </div>
+  </div>;
 
 interface SelectProps<T> {
   id: string
@@ -90,7 +90,7 @@ export function Select<T>(props: React.PropsWithChildren<SelectProps<T>>): JSX.E
           )}
       </select>
     </FormGroup>
-  )
+  );
 }
 
 export const FileUpload: React.FC<{
@@ -109,7 +109,7 @@ export const FileUpload: React.FC<{
       setFilename(file.name);
       onChange(file);
     }
-  }
+  };
   return (
     <FormGroup>
       {label && (<label htmlFor={`${id}-wrapper`}>{label}</label>)}
@@ -125,5 +125,5 @@ export const FileUpload: React.FC<{
         <label className='custom-file-label text-truncate' htmlFor={id}>{filename}</label>
       </div>
     </FormGroup>
-  )
-}
+  );
+};

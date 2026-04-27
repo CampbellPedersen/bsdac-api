@@ -1,8 +1,8 @@
 import React from 'react';
-import './loading-overlay.scss'
+import './loading-overlay.scss';
 import { Spinner } from './spinner';
 
-export const LoadingOverlay: React.FC<{ loading?: boolean }> =
+export const LoadingOverlay: React.FC<React.PropsWithChildren<{ loading?: boolean }>> =
 ({ loading, children }) => <>
   {children}
   { loading &&
@@ -10,4 +10,4 @@ export const LoadingOverlay: React.FC<{ loading?: boolean }> =
       <Spinner small />
     </div>
   }
-</>
+</>;

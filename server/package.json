@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "An API built in Typescript for retrieving resources dedicated to Big Smash Day and Cube.",
   "main": "server.ts",
+  "engines": {
+    "node": ">=20 <21"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CampbellPedersen/bsdac-api.git"
@@ -15,32 +18,35 @@
   },
   "homepage": "https://github.com/CampbellPedersen/bsdac-api#readme",
   "devDependencies": {
-    "@types/aws-sdk": "2.7.0",
-    "@types/express": "4.17.4",
-    "@types/jest": "25.2.1",
-    "@types/multer": "1.4.3",
-    "@types/node": "13.11.0",
-    "@types/supertest": "2.0.6",
-    "@types/uuid": "8.0.0",
-    "@typescript-eslint/eslint-plugin": "2.26.0",
-    "@typescript-eslint/parser": "2.26.0",
-    "eslint": "6.8.0",
-    "jest": "25.2.7",
-    "rimraf": "3.0.2",
-    "supertest": "3.3.0",
-    "ts-jest": "25.3.1",
-    "ts-node": "8.8.1",
-    "typescript": "3.8.3"
+    "@types/express": "4.17.21",
+    "@types/jest": "29.5.14",
+    "@types/multer": "1.4.12",
+    "@types/node": "20.17.30",
+    "@types/supertest": "6.0.3",
+    "@types/uuid": "10.0.0",
+    "@typescript-eslint/eslint-plugin": "8.31.1",
+    "@typescript-eslint/parser": "8.31.1",
+    "eslint": "8.57.1",
+    "jest": "29.7.0",
+    "rimraf": "6.0.1",
+    "supertest": "7.1.0",
+    "ts-jest": "29.3.2",
+    "ts-node": "10.9.2",
+    "typescript": "5.8.3"
   },
   "dependencies": {
-    "aws-sdk": "2.705.0",
-    "express": "4.17.1",
-    "multer": "1.4.2",
-    "uuid": "8.1.0"
+    "@aws-sdk/client-dynamodb": "3.804.0",
+    "@aws-sdk/client-s3": "3.804.0",
+    "@aws-sdk/lib-dynamodb": "3.804.0",
+    "@aws-sdk/s3-request-presigner": "3.804.0",
+    "express": "4.21.2",
+    "multer": "1.4.5-lts.1",
+    "uuid": "11.1.0"
   },
   "scripts": {
     "lint": "eslint . --ext .ts --fix",
     "test": "jest",
+    "test:dynamodb": "RUN_DYNAMODB_TESTS=1 jest --runInBand src/domain/rap/repository.spec.ts",
     "build": "rimraf ./build && tsc",
     "start": "docker-compose up -d",
     "stop": "docker-compose down"
@@ -48,13 +54,14 @@
   "jest": {
     "verbose": true,
     "rootDir": "./",
-    "globalSetup": "<rootDir>/src/jest-setup.ts",
-    "globalTeardown": "<rootDir>/src/jest-teardown.ts",
     "testMatch": [
       "<rootDir>/src/**/*.spec.ts"
     ],
     "transform": {
-      "^.+\\.ts?$": "<rootDir>/node_modules/ts-jest"
+      "^.+\\.ts?$": [
+        "ts-jest",
+        {}
+      ]
     },
     "moduleFileExtensions": [
       "ts",

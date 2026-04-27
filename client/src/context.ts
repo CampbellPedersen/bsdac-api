@@ -1,4 +1,4 @@
-import { createContext, Reducer, useReducer } from 'react';
+import { createContext, Reducer, useMemo, useReducer } from 'react';
 import { RapsState, rapsReducer } from './raps/reducer';
 import { Action, Actions } from './actions';
 import { loginReducer, LoginState } from './login/reducer';
@@ -35,8 +35,8 @@ const reducer: Reducer<AppState, Action> = (state, action) => {
 };
 
 export const useAppContext = (): AppContextType => {
-  const loggedInAt = localStorage.getItem('loggedInAt')
-  const loggedIn = loggedInAt ? new Date(loggedInAt).getTime() > new Date().getTime() - OneDay : false
+  const loggedInAt = localStorage.getItem('loggedInAt');
+  const loggedIn = loggedInAt ? new Date(loggedInAt).getTime() > new Date().getTime() - OneDay : false;
   const initialState: AppState = {
     login: { isLoading: false , loggedIn },
     raps: { isLoading: false, data: null },
@@ -46,8 +46,7 @@ export const useAppContext = (): AppContextType => {
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  const actions = new Actions(dispatch);
+  const actions = useMemo(() => new Actions(dispatch), [dispatch]);
   return { ...state, actions };
 };
 

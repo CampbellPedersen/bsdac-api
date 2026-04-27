@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { AppContext } from '../context';
 import { Rap, Event } from '../api/raps/types';
 
@@ -13,17 +13,17 @@ const filters = (raps: Rap[]) => {
     if (!rappers.includes(rap.rapper)) rappers.push(rap.rapper);
   });
 
-  return { events, rappers: [...rappers].sort() }
-}
+  return { events, rappers: [...rappers].sort() };
+};
 
 export const useFilters = () => {
   const {
     raps: { data: raps }
   } = useContext(AppContext);
 
-  if (!raps) throw new Error('Why ya showing filters if ya havent even loaded raps???')
-  return filters(raps);
-}
+  if (!raps) throw new Error('Why ya showing filters if ya havent even loaded raps???');
+  return useMemo(() => filters(raps), [raps]);
+};
 
 const applyFilters = (
   raps: Rap[],
@@ -34,7 +34,7 @@ const applyFilters = (
       if (filters.hideBonus && rap.bonus) return false;
       const rapperIncluded = !filters.rappers.length || filters.rappers.includes(rap.rapper);
       const eventIncluded = !filters.events.length || filters.events.some(eventIsEqual(rap.appearedAt));
-      return rapperIncluded && eventIncluded
+      return rapperIncluded && eventIncluded;
     }).map(rap => rap.id));
 
 export const useApplyFilters = () => {
@@ -43,6 +43,8 @@ export const useApplyFilters = () => {
     actions: { filtersApplied }
   } = useContext(AppContext);
 
-  if (!raps) return () => {};
-  return applyFilters(raps, filtersApplied)
-}
+  return useMemo(() => {
+    if (!raps) return () => {};
+    return applyFilters(raps, filtersApplied);
+  }, [raps, filtersApplied]);
+};

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { AppContext } from '../../context';
 
 export const login = (
@@ -20,7 +20,7 @@ export const login = (
       await requestLogin(email, password);
       localStorage.setItem('loggedInAt', now().toISOString());
       loggedIn();
-    } catch (e) {
+    } catch {
       failed('Incorrect email or password');
     }
   };
@@ -32,5 +32,8 @@ export const useLogin = () => {
     actions: { loginRequested, loggedIn, loginFailed }
   } = useContext(AppContext);
 
-  return login(isLoading, loginRequested, loggedIn, loginFailed);
+  return useMemo(
+    () => login(isLoading, loginRequested, loggedIn, loginFailed),
+    [isLoading, loginRequested, loggedIn, loginFailed]
+  );
 };

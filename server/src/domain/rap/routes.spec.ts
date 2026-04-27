@@ -8,7 +8,10 @@ const details = { title: 'The Rap', lyrics: 'Words words words', bonus: false, r
 const details2 = { title: 'The Rap', lyrics: 'Words words words', bonus: false, rapper: 'Campbell Pedersen', imageUrl: 'https://imgur.com/theRap', appearedAt: { name: EventName.BSDAC, series: 2 } };
 const details3 = { title: 'The Rap', lyrics: 'Words words words', bonus: false, rapper: 'Campbell Pedersen', imageUrl: 'https://imgur.com/theRap', appearedAt: { name: EventName.BEATS, series: 1 } };
 const audioUrl = 'https://vgmdownloads.com/soundtracks/super-mario-64-soundtrack/zfvgdumr/18%20File%20Select.mp3';
-const urlBuilder = (onReceiveParams?: (params: Rap) => void) => async (rap: Rap) => { if (onReceiveParams) onReceiveParams(rap); return audioUrl; };
+const urlBuilder = (onReceiveParams?: (params: Rap) => void) => async (rap: Rap): Promise<string> => {
+  if (onReceiveParams) onReceiveParams(rap);
+  return audioUrl;
+};
 
 describe('/get-all', () => {
   const repository = inMemoryRapository();
@@ -86,7 +89,9 @@ describe('/stream/:id', () => {
   const app = express()
     .use('/raps', rapRoutes(repository, upload, urlBuilder(params => urlBuilderParams = params)));
 
-  beforeEach(() => urlBuilderParams = undefined);
+  beforeEach((): void => {
+    urlBuilderParams = undefined;
+  });
 
   it('given no rap > then http 404', async () => {
     await request(app)

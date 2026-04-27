@@ -6,10 +6,18 @@ describe('reducer', () => {
   const rap: Rap = { id: 'rap-001', title: 'The First Rap', lyrics: 'Words mun', bonus: false, rapper: 'Campbell Pedersen', imageUrl: 'imageUrl', appearedAt: { name: EventName.BSDAC, series: 1 }};
 
   test('when rap selected > should return state with selected rap', () => {
-    const state: AudioPlayerState = { isLoading: false };
+    const state: AudioPlayerState = { isLoading: false, streamUrl: null };
     const newState = playerReducer(state, { type: 'RapSelected', rap });
 
-    expect(newState).toEqual({ isLoading: false, rap });
+    expect(newState).toEqual({ isLoading: false, rap, streamUrl: null });
+  });
+
+  test('when different rap selected > should clear previous stream url', () => {
+    const previousRap: Rap = { id: 'rap-000', title: 'Older Rap', lyrics: 'old', bonus: false, rapper: 'Old Rapper', imageUrl: 'oldImage', appearedAt: { name: EventName.BSDAC, series: 0 }};
+    const state: AudioPlayerState = { isLoading: false, rap: previousRap, streamUrl: 'https://rap.local/old' };
+    const newState = playerReducer(state, { type: 'RapSelected', rap });
+
+    expect(newState).toEqual({ isLoading: false, rap, streamUrl: null });
   });
 
   test('given rap selected > when same rap selected > should return same state', () => {
@@ -23,11 +31,11 @@ describe('reducer', () => {
     const state: AudioPlayerState = { isLoading: false, streamUrl: 'https://rap.local' };
     const newState = playerReducer(state, { type: 'AudioStreamRequested' });
 
-    expect(newState).toEqual({ isLoading: true, streamUrl: undefined });
+    expect(newState).toEqual({ isLoading: true, streamUrl: null });
   });
 
   test('given loading > when audio stream received > should return state with url', () => {
-    const state: AudioPlayerState = { isLoading: true };
+    const state: AudioPlayerState = { isLoading: true, streamUrl: null };
     const newState = playerReducer(state, { type: 'AudioStreamReceived', url });
 
     expect(newState).toEqual({ isLoading: false, streamUrl: url });

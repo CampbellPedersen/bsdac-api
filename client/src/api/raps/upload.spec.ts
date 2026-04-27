@@ -4,8 +4,10 @@ import { upload } from './upload';
 import { Rap, EventName } from './types';
 
 ((global as unknown) as { FormData: unknown }).FormData = class FormData {
-  data = [];
-  append = (data: any) => { data }
+  data: any[][] = [];
+  append = (...args: any[]) => {
+    this.data.push(args);
+  };
 };
 describe('upload', () => {
   const file = 'This is a file, I swear.';
@@ -48,7 +50,7 @@ describe('upload', () => {
     http.onPost('/api/raps/save').reply(201, rap);
 
     const uploadRap = upload(false, requested, progressed, uploaded, errored);
-    const success = await uploadRap(file, details)
+    const success = await uploadRap(file, details);
 
     expect(success).toEqual(true);
 
@@ -63,7 +65,7 @@ describe('upload', () => {
     http.onPost('/api/raps/save').reply(500);
 
     const uploadRap = upload(false, requested, progressed, uploaded, errored);
-    const success = await uploadRap(file, details)
+    const success = await uploadRap(file, details);
 
     expect(success).toEqual(false);
 

@@ -1,5 +1,6 @@
 import { RapRepository, inMemoryRapository, EventName, Rap, dynamodbRapository } from './repository';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 const theFirstRap: Rap = {
   id: 'rap-001',
@@ -68,13 +69,21 @@ const tests = (repository: RapRepository) => () => {
 
   it('loads all raps', async () => {
     await expect(repository.loadAll())
-      .resolves.toEqual(jasmine.arrayContaining([ theFirstRap, theSecondRap ]));
+      .resolves.toEqual(expect.arrayContaining([ theFirstRap, theSecondRap ]));
   });
 };
 
 const inMemory = inMemoryRapository();
 describe('in-memory-rap-repository', tests(inMemory));
 
-const client = new DynamoDB.DocumentClient({ region: 'eu-west-1', endpoint: 'http://localhost:8000' });
+const maybeDescribeDynamodb = process.env.RUN_DYNAMODB_TESTS ? describe : describe.skip;
+const client = DynamoDBDocumentClient.from(new DynamoDBClient({
+  region: 'eu-west-1',
+  endpoint: 'http://localhost:8000',
+  credentials: {
+    accessKeyId: 'DUMMYIDEXAMPLE',
+    secretAccessKey: 'DUMMYEXAMPLEKEY',
+  },
+}));
 const dynamodb = dynamodbRapository(client, 'Raps');
-describe('dynamodb-rap-repository', tests(dynamodb));
+maybeDescribeDynamodb('dynamodb-rap-repository', tests(dynamodb));

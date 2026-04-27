@@ -12,7 +12,7 @@ interface Props {
   disabled?: boolean
 }
 
-export const Button: React.FC<Props> = ({
+export const Button: React.FC<React.PropsWithChildren<Props>> = ({
   btn,
   size,
   className,
@@ -29,7 +29,7 @@ export const Button: React.FC<Props> = ({
       {children}
     </button>
   );
-}
+};
 
 const styleClass = (style: ButtonStyle): string => {
   switch(style) {
@@ -38,7 +38,7 @@ const styleClass = (style: ButtonStyle): string => {
     case 'secondary':
       return 'btn-secondary';
   }
-}
+};
 
 const sizeClass = (size: ButtonSize): string => {
   switch(size) {
@@ -47,4 +47,4 @@ const sizeClass = (size: ButtonSize): string => {
     case 'lg':
       return 'btn-lg';
   }
-}
+};
