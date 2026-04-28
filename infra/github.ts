@@ -89,6 +89,11 @@ export const createGithubDeployRole = (name: string, args: GithubDeployRoleArgs)
                 ec2InstanceArn,
               ],
             },
+            {
+              Effect: "Allow",
+              Action: ["ssm:GetCommandInvocation"],
+              Resource: "*",
+            },
           ],
         }),
       ),
