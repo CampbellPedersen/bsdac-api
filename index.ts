@@ -8,7 +8,7 @@ import { bucket } from './infra/s3';
 
 const config = new pulumi.Config();
 const domain = config.get('domainName');
-const instanceType = config.get('instanceType') || 't3.small';
+const instanceType = config.get('instanceType') || 't4g.micro';
 const region = aws.getRegionOutput().name;
 
 const host = createDockerHost('bsdac-host', {

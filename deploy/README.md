@@ -65,7 +65,7 @@ Production runtime config now comes from AWS Systems Manager Parameter Store.
 
 Current behavior:
 
-- production deploy does not require a host-local `.env`
+- production deploy does not require a host-local env file
 - SSM deploy fetches required backend values from `/bsdac/prod/*`
 - `docker compose` receives those values from the deploy environment
 - repo checkout can be recreated without restoring a local env file
@@ -145,6 +145,5 @@ Remaining caveat:
 - frontend served by `frontend` container
 - `/api/*` proxied to `backend`
 - production should not set `DYNAMODB_ENDPOINT` or `S3_ENDPOINT`
-- production should not use static AWS keys in `.env`
 - backend should rely on EC2 instance role credentials
 - new hosts install Docker, Git, AWS CLI, and Docker Compose plugin in userdata
