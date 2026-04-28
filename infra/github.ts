@@ -85,7 +85,7 @@ export const createGithubDeployRole = (name: string, args: GithubDeployRoleArgs)
               Effect: "Allow",
               Action: ["ssm:SendCommand"],
               Resource: [
-                `arn:aws:ssm:${regionName}:${accountId}:document/AWS-RunShellScript`,
+                `arn:aws:ssm:${regionName}::document/AWS-RunShellScript`,
                 ec2InstanceArn,
               ],
             },
