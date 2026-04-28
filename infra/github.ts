@@ -70,6 +70,11 @@ export const createGithubDeployRole = (name: string, args: GithubDeployRoleArgs)
             },
             {
               Effect: "Allow",
+              Action: ["ec2:DescribeInstances"],
+              Resource: "*",
+            },
+            {
+              Effect: "Allow",
               Action: [
                 "ecr:BatchCheckLayerAvailability",
                 "ecr:BatchGetImage",
