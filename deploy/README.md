@@ -7,24 +7,25 @@ Files in this directory support the current single-host EC2 production deploy.
 - `docker-compose.prod.yml`: runtime stack
 - `Caddyfile`: HTTPS reverse proxy
 
-## Current Production Model
+## Production Model
 
-Production now uses:
+Production uses:
 
 - one EC2 host
 - ECR for frontend and backend images
 - GitHub Actions to build and push `linux/arm64` images
 - AWS Systems Manager Run Command to trigger deploys on EC2
+- AWS Systems Manager Parameter Store for backend runtime config
 
 The production compose file uses `image:` references, not `build:`. By default, images are tagged with the triggering Git commit SHA. The workflow also supports a manual `image_tag` override on `workflow_dispatch`.
 
-## Current GitHub Actions Flow
+## GitHub Actions Flow
 
 Workflow file:
 
 - `.github/workflows/deploy-prod.yml`
 
-On push to `master`, the workflow currently:
+On push to `master`, the workflow:
 
 1. checks out the repo
 2. configures AWS credentials through GitHub OIDC
@@ -32,10 +33,11 @@ On push to `master`, the workflow currently:
 4. builds frontend image for `linux/arm64`
 5. builds backend image for `linux/arm64`
 6. pushes both images to ECR using `github.sha` by default, or a manual `image_tag` override when provided
-7. sends an SSM command to the EC2 instance
-8. waits for the SSM command to finish
-9. prints SSM stdout and stderr into the Actions log
-10. fails the job if the EC2-side deploy fails
+7. resolves the running EC2 instance by tag `Name=bsdac-app-host`
+8. sends an SSM command to that instance
+9. waits for the SSM command to finish
+10. prints SSM stdout and stderr into the Actions log
+11. fails the job if the EC2-side deploy fails
 
 The build uses GitHub Actions cache through Buildx:
 
@@ -44,9 +46,9 @@ The build uses GitHub Actions cache through Buildx:
 
 This speeds up repeated builds without changing the deployed image tag semantics.
 
-## Current EC2 Deploy Flow
+## EC2 Deploy Flow
 
-The SSM command on the host currently:
+The SSM command on the host:
 
 1. ensures `/opt/bsdac` exists
 2. clones the repo to `/opt/bsdac` if it is not already a git checkout
@@ -54,16 +56,15 @@ The SSM command on the host currently:
 4. fetches the exact triggering commit SHA
 5. checks out that exact SHA
 6. logs Docker in to ECR using the EC2 instance role
-7. runs `docker compose -f docker-compose.prod.yml pull`
-8. runs `docker compose -f docker-compose.prod.yml up -d`
+7. reads backend runtime config from `/bsdac/prod/*` in Parameter Store
+8. runs `docker compose -f docker-compose.prod.yml pull`
+9. runs `docker compose -f docker-compose.prod.yml up -d`
 
 By default, the host deploy uses repo files from the same commit as the ECR image tag. If a manual `image_tag` override is used, repo checkout SHA and image tag can intentionally differ.
 
 ## Runtime Config
 
-Production runtime config now comes from AWS Systems Manager Parameter Store.
-
-Current behavior:
+Production runtime config comes from AWS Systems Manager Parameter Store.
 
 - production deploy does not require a host-local env file
 - SSM deploy fetches required backend values from `/bsdac/prod/*`
@@ -82,6 +83,7 @@ Notes:
 - `AWS_REGION` still comes from the workflow and deploy environment
 - production should not set `AWS_ACCESS_KEY_ID` or `AWS_SECRET_ACCESS_KEY`
 - production should not set `DYNAMODB_ENDPOINT` or `S3_ENDPOINT`
+- GitHub Actions resolves the deploy target by EC2 tag instead of a hardcoded instance ID variable
 
 That removes the manual host secret-file step and makes fresh-host deploys safer.
 
@@ -124,15 +126,13 @@ Practical implication:
 - for image rebuilds, push a new commit
 - for host-only fixes, either deploy manually on EC2 using the existing image tag or update the workflow later to skip already-existing tags
 
-## Path To `t4g.micro`
-
-The main blocker for `t4g.micro` was on-host image builds.
-
-That blocker is now effectively removed by the current architecture because:
+## `t4g.micro`
 
 - production images are built off-host
 - images are built for `linux/arm64`
 - EC2 only pulls and runs them
+
+Default Pulumi instance type is `t4g.micro`.
 
 Remaining caveat:
 

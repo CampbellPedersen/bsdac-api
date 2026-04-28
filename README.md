@@ -40,30 +40,34 @@ docker-compose down
 # Deploying
 Infra is deployed using [Pulumi](https://www.pulumi.com/docs/get-started/install/).
 
-Current production stack:
+Production stack:
 
 - one EC2 host
 - Elastic IP
 - Route53
 - Caddy in Docker for HTTPS + routing
 - backend IAM role access to DynamoDB and S3
+- ECR for frontend and backend images
+- GitHub Actions deploy through AWS Systems Manager
+- runtime config from AWS Systems Manager Parameter Store
 
 AWS credentials are still required on your local machine for Pulumi itself, but the app runtime should use the EC2 instance role rather than static app AWS keys.
 
-Current stack config can be as small as:
+Stack config can be as small as:
 
 ```yaml
 config:
   aws:region: ap-southeast-2
   bsdac-api:domainName: bsdac.com
-  bsdac-api:instanceType: t3.small
+  bsdac-api:instanceType: t4g.micro
 ```
 
 Notes:
 - `domainName` is optional. If omitted, Pulumi will still create the host and output the public IP.
-- Current EC2 security group opens `80` and `443`.
+- EC2 security group opens `80` and `443`.
 - No public SSH access is intended; use AWS Systems Manager Session Manager.
-- The old config keys like `awsAccessKeyId`, `awsSecretAccessKey`, `dynamodbEndpoint`, and `sslCertificateArn` were part of the retired Fargate-era stack and are no longer used by the active Pulumi program.
+- Default instance type is `t4g.micro`.
+- Upload memory pressure remains a caveat on `t4g.micro` because the backend uses `multer.memoryStorage()`.
 
 To deploy:
 ```console
@@ -75,11 +79,11 @@ And to tear down:
 pulumi destroy
 ```
 
-Production runtime files now live in:
+Production runtime files:
 - `deploy/README.md`
 - `deploy/docker-compose.prod.yml`
 - `deploy/Caddyfile`
 - `deploy/deploy.sh`
 
-Specific path toward `t4g.micro` using local `linux/arm64` builds + ECR + EC2 pull:
+Production deploy details:
 - [deploy/README.md](deploy/README.md)
