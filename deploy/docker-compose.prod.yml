@@ -14,13 +14,11 @@ services:
       - caddy-config:/config
 
   frontend:
-    build:
-      context: ../client
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/bsdac-frontend:${IMAGE_TAG}
     restart: unless-stopped
 
   backend:
-    build:
-      context: ../server
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/bsdac-backend:${IMAGE_TAG}
     env_file:
       - .env
     environment:

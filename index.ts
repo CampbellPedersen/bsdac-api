@@ -1,7 +1,9 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
 import { db } from './infra/dynamodb';
+import { backendRepository, frontendRepository } from './infra/ecr';
 import { createDockerHost } from './infra/ec2';
+import { createGithubDeployRole } from './infra/github';
 import { bucket } from './infra/s3';
 
 const config = new pulumi.Config();
@@ -11,8 +13,17 @@ const region = aws.getRegionOutput().name;
 
 const host = createDockerHost('bsdac-host', {
   bucketArn: bucket.arn,
+  ecrRepositoryArns: [frontendRepository.arn, backendRepository.arn],
   instanceType,
   tableArn: db.arn,
+});
+
+const githubDeploy = createGithubDeployRole('bsdac-github-deploy', {
+  backendRepositoryArn: backendRepository.arn,
+  ec2InstanceArn: host.instance.arn,
+  frontendRepositoryArn: frontendRepository.arn,
+  owner: 'CampbellPedersen',
+  repo: 'bsdac-api',
 });
 
 if (domain) {
@@ -37,7 +48,13 @@ if (domain) {
 
 export const appBucketName = bucket.bucket;
 export const appTableName = db.name;
+export const backendEcrRepositoryName = backendRepository.name;
+export const backendEcrRepositoryUrl = backendRepository.repositoryUrl;
 export const deployPath = '/opt/bsdac/deploy';
+export const frontendEcrRepositoryName = frontendRepository.name;
+export const frontendEcrRepositoryUrl = frontendRepository.repositoryUrl;
+export const githubDeployRoleArn = githubDeploy.role.arn;
+export const githubDeployRoleName = githubDeploy.role.name;
 export const instanceId = host.instance.id;
 export const instanceProfileName = host.instanceProfile.name;
 export const publicIp = host.elasticIp.publicIp;

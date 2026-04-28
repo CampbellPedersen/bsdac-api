@@ -3,6 +3,7 @@ import * as aws from "@pulumi/aws";
 
 export interface DockerHostArgs {
   bucketArn: pulumi.Input<string>;
+  ecrRepositoryArns?: pulumi.Input<pulumi.Input<string>[]>;
   tableArn: pulumi.Input<string>;
   instanceType?: pulumi.Input<string>;
 }
@@ -57,6 +58,7 @@ cat >/usr/local/bin/bsdac-restart <<'EOF'
 #!/bin/bash
 set -euxo pipefail
 cd /opt/bsdac/deploy
+docker compose -f docker-compose.prod.yml pull
 docker compose -f docker-compose.prod.yml up -d
 EOF
 
@@ -131,8 +133,8 @@ export const createDockerHost = (name: string, args: DockerHostArgs): DockerHost
   new aws.iam.RolePolicy(`${name}-app-data`, {
     role: role.id,
     policy: pulumi
-      .all([args.bucketArn, args.tableArn])
-      .apply(([bucketArn, tableArn]) =>
+      .all([args.bucketArn, args.tableArn, args.ecrRepositoryArns ?? []])
+      .apply(([bucketArn, tableArn, ecrRepositoryArns]) =>
         JSON.stringify({
           Version: "2012-10-17",
           Statement: [
@@ -150,6 +152,16 @@ export const createDockerHost = (name: string, args: DockerHostArgs): DockerHost
               Effect: "Allow",
               Action: ["s3:DeleteObject", "s3:GetObject", "s3:PutObject"],
               Resource: [`${bucketArn}/*`],
+            },
+            {
+              Effect: "Allow",
+              Action: ["ecr:GetAuthorizationToken"],
+              Resource: "*",
+            },
+            {
+              Effect: "Allow",
+              Action: ["ecr:BatchCheckLayerAvailability", "ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer"],
+              Resource: ecrRepositoryArns,
             },
           ],
         }),
