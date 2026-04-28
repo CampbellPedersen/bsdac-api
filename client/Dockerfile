@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM --platform=$BUILDPLATFORM node:20-alpine AS builder
 
 ARG NPM_VERSION=10.8.2
 
@@ -16,7 +16,7 @@ COPY src /app/src
 
 RUN npm run build
 
-FROM node:20-alpine
+FROM --platform=$TARGETPLATFORM node:20-alpine
 
 ARG NPM_VERSION=10.8.2
 
