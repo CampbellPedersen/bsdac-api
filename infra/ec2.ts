@@ -163,6 +163,11 @@ export const createDockerHost = (name: string, args: DockerHostArgs): DockerHost
               Action: ["ecr:BatchCheckLayerAvailability", "ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer"],
               Resource: ecrRepositoryArns,
             },
+            {
+              Effect: "Allow",
+              Action: ["ssm:GetParameter", "ssm:GetParameters"],
+              Resource: `arn:aws:ssm:*:*:parameter/bsdac/prod/*`,
+            },
           ],
         }),
       ),

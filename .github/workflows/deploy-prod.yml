@@ -78,9 +78,13 @@ jobs:
                 "git fetch --depth 1 origin '"$GITHUB_SHA"'",
                 "git checkout --force '"$GITHUB_SHA"'",
                 "aws ecr get-login-password --region '"$AWS_REGION"' | docker login --username AWS --password-stdin '"$AWS_ACCOUNT_ID"'.dkr.ecr.'"$AWS_REGION"'.amazonaws.com",
+                "LOGIN_EMAIL=$(aws ssm get-parameter --region '"$AWS_REGION"' --name /bsdac/prod/LOGIN_EMAIL --with-decryption --query Parameter.Value --output text)",
+                "LOGIN_PASSWORD_SHA256=$(aws ssm get-parameter --region '"$AWS_REGION"' --name /bsdac/prod/LOGIN_PASSWORD_SHA256 --with-decryption --query Parameter.Value --output text)",
+                "DYNAMODB_TABLE_NAME=$(aws ssm get-parameter --region '"$AWS_REGION"' --name /bsdac/prod/DYNAMODB_TABLE_NAME --query Parameter.Value --output text)",
+                "S3_BUCKET_NAME=$(aws ssm get-parameter --region '"$AWS_REGION"' --name /bsdac/prod/S3_BUCKET_NAME --query Parameter.Value --output text)",
                 "cd /opt/bsdac/deploy",
-                "AWS_ACCOUNT_ID='"$AWS_ACCOUNT_ID"' AWS_REGION='"$AWS_REGION"' IMAGE_TAG='"$IMAGE_TAG"' docker compose -f docker-compose.prod.yml pull",
-                "AWS_ACCOUNT_ID='"$AWS_ACCOUNT_ID"' AWS_REGION='"$AWS_REGION"' IMAGE_TAG='"$IMAGE_TAG"' docker compose -f docker-compose.prod.yml up -d"
+                "AWS_ACCOUNT_ID='"$AWS_ACCOUNT_ID"' AWS_REGION='"$AWS_REGION"' IMAGE_TAG='"$IMAGE_TAG"' LOGIN_EMAIL=\"$LOGIN_EMAIL\" LOGIN_PASSWORD_SHA256=\"$LOGIN_PASSWORD_SHA256\" DYNAMODB_TABLE_NAME=\"$DYNAMODB_TABLE_NAME\" S3_BUCKET_NAME=\"$S3_BUCKET_NAME\" docker compose -f docker-compose.prod.yml pull",
+                "AWS_ACCOUNT_ID='"$AWS_ACCOUNT_ID"' AWS_REGION='"$AWS_REGION"' IMAGE_TAG='"$IMAGE_TAG"' LOGIN_EMAIL=\"$LOGIN_EMAIL\" LOGIN_PASSWORD_SHA256=\"$LOGIN_PASSWORD_SHA256\" DYNAMODB_TABLE_NAME=\"$DYNAMODB_TABLE_NAME\" S3_BUCKET_NAME=\"$S3_BUCKET_NAME\" docker compose -f docker-compose.prod.yml up -d"
               ]'
           )"
 

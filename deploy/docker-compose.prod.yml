@@ -19,9 +19,12 @@ services:
 
   backend:
     image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/bsdac-backend:${IMAGE_TAG}
-    env_file:
-      - .env
     environment:
+      AWS_REGION: ${AWS_REGION}
+      DYNAMODB_TABLE_NAME: ${DYNAMODB_TABLE_NAME}
+      LOGIN_EMAIL: ${LOGIN_EMAIL}
+      LOGIN_PASSWORD_SHA256: ${LOGIN_PASSWORD_SHA256}
+      S3_BUCKET_NAME: ${S3_BUCKET_NAME}
       SERVICE_PORT: "80"
     restart: unless-stopped
 
