@@ -1,22 +1,26 @@
-# bsdac-api
+# BSDAPP
 A full-stack app for hosting and playing rap tracks created for Big Smash Day and Cube.
 
 # Developer Quickstart
 Requirements:
 - Docker
 - Docker Compose
-- Node `20`
-- npm `10.8.2`
+- Node `20.20.2`
+
+This repo pins Node in `.nvmrc` and `.node-version`. Before running npm commands, install and use that version locally:
+```console
+nvm install
+nvm use
+```
 
 To spin up the stack in Docker:
 ```console
 docker-compose up -d
 ```
 
-To keep `package-lock.json` compatible with the Docker builds, refresh dependencies with the same npm line used in the images:
+To keep `package-lock.json` aligned with the Docker builds, refresh dependencies with that pinned Node toolchain:
 ```console
-nvm use
-npx npm@10.8.2 install
+npm install
 ```
 
 To create local aws resources:
