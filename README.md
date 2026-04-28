@@ -79,7 +79,6 @@ Production runtime files now live in:
 - `deploy/README.md`
 - `deploy/docker-compose.prod.yml`
 - `deploy/Caddyfile`
-- `deploy/.env.example`
 - `deploy/deploy.sh`
 
 Specific path toward `t4g.micro` using local `linux/arm64` builds + ECR + EC2 pull:

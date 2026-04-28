@@ -6,7 +6,6 @@ Files in this directory support the current single-host EC2 production deploy.
 
 - `docker-compose.prod.yml`: runtime stack
 - `Caddyfile`: HTTPS reverse proxy
-- `.env.example`: backend env template
 
 ## Current Production Model
 
@@ -60,48 +59,31 @@ The SSM command on the host currently:
 
 By default, the host deploy uses repo files from the same commit as the ECR image tag. If a manual `image_tag` override is used, repo checkout SHA and image tag can intentionally differ.
 
-## Runtime Config Direction
+## Runtime Config
 
-Desired end state:
+Production runtime config now comes from AWS Systems Manager Parameter Store.
 
-- production deploy should not require manually placing any `.env` file on the host
-- deploys should continue working even when `/opt/bsdac` is freshly cloned or reset to a new commit
-- runtime config should come from AWS-managed configuration, not host-local repo-adjacent files
+Current behavior:
 
-Current workflow status:
+- production deploy does not require a host-local `.env`
+- SSM deploy fetches required backend values from `/bsdac/prod/*`
+- `docker compose` receives those values from the deploy environment
+- repo checkout can be recreated without restoring a local env file
 
-- image build and push path is working
-- SSM deploy visibility is working
-- ECR login on EC2 is handled in the workflow
-- runtime config placement is still the main operational gap
+Parameters currently expected:
 
-Current state:
+- `/bsdac/prod/LOGIN_EMAIL`
+- `/bsdac/prod/LOGIN_PASSWORD_SHA256`
+- `/bsdac/prod/DYNAMODB_TABLE_NAME`
+- `/bsdac/prod/S3_BUCKET_NAME`
 
-- backend compose config still expects `.env`
-- if that file is missing, `docker compose` fails before backend starts
-- keeping `.env` inside `/opt/bsdac/deploy` is fragile because that directory now comes from git checkout
-- even moving `.env` to a stable host path would still leave a manual secret-file management step
+Notes:
 
-Recommended next improvement:
+- `AWS_REGION` still comes from the workflow and deploy environment
+- production should not set `AWS_ACCESS_KEY_ID` or `AWS_SECRET_ACCESS_KEY`
+- production should not set `DYNAMODB_ENDPOINT` or `S3_ENDPOINT`
 
-- stop relying on `env_file` for production runtime secrets
-- source runtime config from AWS-managed storage during deploy
-- pass required values into `docker compose` from the deploy environment
-
-Better long-term options:
-
-- AWS Systems Manager Parameter Store
-- AWS Secrets Manager
-- generated transient env file during deploy only as an intermediate step, not as the desired end state
-
-Near-term preferred direction for this repo:
-
-- keep secrets off-repo
-- stop requiring `/opt/bsdac/deploy/.env`
-- move production config to AWS Systems Manager Parameter Store first
-- update deploy flow so SSM fetches config values and runs Compose without a manually maintained host `.env`
-
-That removes the manual host secret-file step entirely and makes deploys safer.
+That removes the manual host secret-file step and makes fresh-host deploys safer.
 
 ## Manual Host Verification
 
