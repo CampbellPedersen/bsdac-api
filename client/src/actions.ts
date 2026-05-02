@@ -22,13 +22,9 @@ export class RapsLoaded {
   constructor(readonly raps: Rap[]) {}
 }
 
-export class RapSelected {
-  readonly type = 'RapSelected';
-  constructor(readonly rap: Rap) {}
-}
-
 export class AudioStreamRequested {
   readonly type = 'AudioStreamRequested';
+  constructor(readonly rapId: string) {}
 }
 
 export class AudioStreamReceived {
@@ -60,7 +56,7 @@ export class FiltersApplied {
   constructor(readonly ids: string[]) {}
 }
 
-export type Action = LoginRequested | LoggedIn  | LoginFailed | RapsRequested | RapsLoaded | RapSelected | AudioStreamRequested | AudioStreamReceived | RapUploadProgressed | RapUploadFailed | RapUploaded | FilterMenuToggled | FiltersApplied;
+export type Action = LoginRequested | LoggedIn  | LoginFailed | RapsRequested | RapsLoaded | AudioStreamRequested | AudioStreamReceived | RapUploadProgressed | RapUploadFailed | RapUploaded | FilterMenuToggled | FiltersApplied;
 
 export class Actions {
   loginRequested = this.dispatcher(LoginRequested);
@@ -68,7 +64,6 @@ export class Actions {
   loginFailed = this.dispatcher(LoginFailed);
   rapsRequested = this.dispatcher(RapsRequested);
   rapsLoaded = this.dispatcher(RapsLoaded);
-  rapSelected = this.dispatcher(RapSelected);
   audioStreamRequested = this.dispatcher(AudioStreamRequested);
   audioStreamReceived = this.dispatcher(AudioStreamReceived);
   rapUploadProgressed = this.dispatcher(RapUploadProgressed);

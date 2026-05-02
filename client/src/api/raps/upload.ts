@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../../context';
 import { Rap } from './types';
 
@@ -45,8 +45,5 @@ export const useUpload = () => {
   const uploaded = (rap: Rap) => rapUploaded(rap);
   const failed = (message: string) => rapUploadFailed(message);
 
-  return useMemo(
-    () => upload(isLoading, requested, progressed, uploaded, failed),
-    [isLoading, requested, progressed, uploaded, failed]
-  );
+  return upload(isLoading, requested, progressed, uploaded, failed);
 };

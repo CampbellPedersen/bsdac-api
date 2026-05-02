@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../../context';
 
 export const login = (
@@ -32,8 +32,5 @@ export const useLogin = () => {
     actions: { loginRequested, loggedIn, loginFailed }
   } = useContext(AppContext);
 
-  return useMemo(
-    () => login(isLoading, loginRequested, loggedIn, loginFailed),
-    [isLoading, loginRequested, loggedIn, loginFailed]
-  );
+  return login(isLoading, loginRequested, loggedIn, loginFailed);
 };

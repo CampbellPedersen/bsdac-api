@@ -2,9 +2,12 @@ import React from 'react';
 import { Rap, getEventLabel } from '../../api/raps/types';
 import './list.scss';
 import { Thumbnail } from './thumbnail';
+import { useSelectedRapScroll } from './use-selected-rap-scroll';
 
-export const RapList: React.FC<{ raps: Rap[], onSelect: (rap: Rap) => void }> =
-  ({ raps, onSelect }) => {
+export const RapList: React.FC<{ raps: Rap[], selectedRapId?: string, onSelect: (rap: Rap) => void }> =
+  ({ raps, selectedRapId, onSelect }) => {
+    const selectedRef = useSelectedRapScroll(selectedRapId);
+
     if (!raps.length) return (
       <h2 className='text-center'>
         Oh my goodness! I forgot to make a rap, mun!
@@ -15,7 +18,12 @@ export const RapList: React.FC<{ raps: Rap[], onSelect: (rap: Rap) => void }> =
     return (
       <ul className="rap-list list-group">
         {raps.map(rap =>
-          <li key={rap.id} onClick={() => onSelect(rap)} className="list-group-item container clickable">
+          <li
+            key={rap.id}
+            ref={selectedRapId === rap.id ? selectedRef : undefined}
+            onClick={() => onSelect(rap)}
+            className={`list-group-item container clickable ${selectedRapId === rap.id ? 'selected' : ''}`}
+          >
             <RapItem rap={rap} />
           </li>
         )}

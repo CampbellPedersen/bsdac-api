@@ -1,26 +1,18 @@
 import { Action } from '../actions';
-import { Rap } from '../api/raps/types';
 
 export interface AudioPlayerState {
   isLoading: boolean
-  rap?: Rap,
+  rapId?: string,
   streamUrl: string | null,
 }
 
 export const playerReducer: React.Reducer<AudioPlayerState, Action> = (state, action) => {
   switch(action.type) {
-    case 'RapSelected':
-      if (state.rap?.id === action.rap.id) return state;
-      return {
-        ...state,
-        isLoading: false,
-        rap: action.rap,
-        streamUrl: null,
-      };
     case 'AudioStreamRequested':
       return {
         ...state,
         isLoading: true,
+        rapId: action.rapId,
         streamUrl: null,
       };
     case 'AudioStreamReceived':

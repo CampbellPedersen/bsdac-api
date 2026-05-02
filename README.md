@@ -1,10 +1,18 @@
-# BSDAPP
+# BSDAC API
 A full-stack app for hosting and playing rap tracks created for Big Smash Day and Cube.
+
+# Repo Layout
+
+- `client/`: React frontend
+- `server/`: Express backend
+- `infra/`: Pulumi AWS resources
+- `deploy/`: production Docker Compose and Caddy config
+- `.github/workflows/deploy-prod.yml`: production image build and deploy workflow
 
 # Developer Quickstart
 Requirements:
 - Docker
-- Docker Compose
+- Docker Compose plugin
 - Node `20.20.2`
 
 This repo pins Node in `.nvmrc` and `.node-version`. Before running npm commands, install and use that version locally:
@@ -15,7 +23,7 @@ nvm use
 
 To spin up the stack in Docker:
 ```console
-docker-compose up -d
+docker compose up -d
 ```
 
 To keep `package-lock.json` aligned with the Docker builds, refresh dependencies with that pinned Node toolchain:
@@ -29,6 +37,13 @@ To create local aws resources:
 ./scripts/create-s3-bucket.sh
 ```
 
+Default local stack behavior:
+
+- Traefik listens on `http://localhost`
+- frontend serves on container port `80` and is exposed on host port `9001`
+- backend serves on container port `80` and is exposed on host port `9002`
+- LocalStack provides S3 and DynamoDB on `http://localhost:4566`
+
 Local-only AWS endpoint overrides:
 
 - The backend uses `DYNAMODB_ENDPOINT` and `S3_ENDPOINT` only when those env vars are explicitly set.
@@ -38,7 +53,7 @@ Local-only AWS endpoint overrides:
 
 To tear down the local Docker stack:
 ```console
-docker-compose down
+docker compose down
 ```
 
 # Deploying
@@ -91,3 +106,10 @@ Production runtime files:
 
 Production deploy details:
 - [deploy/README.md](deploy/README.md)
+
+GitHub Actions deploy behavior:
+
+- production deploy runs on `push` to `master`
+- merging a PR into `master` triggers that deploy workflow
+- opening or updating a PR does not deploy by itself
+- deploy can also be run manually with `workflow_dispatch`

@@ -1,13 +1,18 @@
 .rap-list {
   display: flex;
   align-items: center;
+  padding-bottom: 44px;
   .list-group-item {
     margin: 5px 0;
     border-radius: 3px;
     border-width: 1px;
+    transition: box-shadow 0.2s ease;
     + .list-group-item {
       border-top-width: 1px;
     }
+  }
+  .list-group-item.selected {
+    box-shadow: 0 0 14px rgba(46, 160, 67, 0.55);
   }
   li h5 {
     margin: 0;

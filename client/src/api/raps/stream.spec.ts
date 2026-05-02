@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { stream } from './stream';
 
 describe('stream', () => {
-  const requested = jest.fn<void, []>();
+  const requested = jest.fn<void, [string]>();
   const received = jest.fn<void, [string]>();
   const http = new MockAdapter(axios);
 
@@ -20,7 +20,7 @@ describe('stream', () => {
     const streamRap = stream(requested, received);
     await streamRap('1');
 
-    expect(requested).toBeCalled();
+    expect(requested).toBeCalledWith('1');
     expect(http.history.get.length).toEqual(1);
     expect(received).toBeCalledWith('https:/rap.local');
   });
@@ -31,7 +31,7 @@ describe('stream', () => {
     const streamRap = stream(requested, received);
     await expect(streamRap('1')).rejects.toThrow(new Error('Request failed with status code 500'));
 
-    expect(requested).toBeCalled();
+    expect(requested).toBeCalledWith('1');
     expect(http.history.get.length).toEqual(1);
     expect(received).not.toBeCalled();
   });

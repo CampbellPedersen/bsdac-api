@@ -39,6 +39,11 @@ On push to `master`, the workflow:
 10. prints SSM stdout and stderr into the Actions log
 11. fails the job if the EC2-side deploy fails
 
+Practical trigger note:
+
+- merging a PR into `master` triggers this workflow because it creates a push to `master`
+- opening or updating a PR does not trigger production deploy
+
 The build uses GitHub Actions cache through Buildx:
 
 - `cache-from: type=gha`

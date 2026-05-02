@@ -4,7 +4,7 @@ import { AppContext } from '../../context';
 import { ApiResult } from '../types';
 
 export const stream = (
-  requested: () => void,
+  requested: (rapId: string) => void,
   received: (url: string) => void
 ) => {
   const requestRapStream = async (id: string): Promise<string> =>
@@ -12,7 +12,7 @@ export const stream = (
       .then(resp => resp.data);
 
   return async (id: string) => {
-    requested();
+    requested(id);
     const url = await requestRapStream(id);
     received(url.replace('localstack:4566', 'localhost:4566'));
   };
@@ -20,19 +20,19 @@ export const stream = (
 
 export const useStream = (rapId?: string): ApiResult<string> => {
   const {
-    player: { isLoading, streamUrl },
+    player: { isLoading, rapId: loadedRapId, streamUrl },
     actions: { audioStreamRequested, audioStreamReceived }
   } = useContext(AppContext);
 
   useEffect(() => {
-    if (!rapId || isLoading || streamUrl !== null) return;
+    if (!rapId || isLoading || (loadedRapId === rapId && streamUrl !== null)) return;
     (async () => {
       await stream(audioStreamRequested, audioStreamReceived)(rapId);
     })();
-  }, [rapId, isLoading, streamUrl, audioStreamRequested, audioStreamReceived]);
+  }, [rapId, isLoading, loadedRapId, streamUrl, audioStreamRequested, audioStreamReceived]);
 
   return useMemo(() => {
-    if (isLoading || streamUrl === null) return { state: 'loading', loading: true } as const;
+    if (!rapId || isLoading || loadedRapId !== rapId || streamUrl === null) return { state: 'loading', loading: true } as const;
     return { state: 'loaded', loading: false, data: streamUrl } as const;
-  }, [isLoading, streamUrl]);
+  }, [rapId, isLoading, loadedRapId, streamUrl]);
 };
