@@ -7,8 +7,10 @@
 !/tsconfig.json
 !/tslint.json
 !/config/**
+!/public
 !/public/**
 !/scripts/**
+!/src
 !/src/**
 
 # Ignore unnecessary files inside allowed directories

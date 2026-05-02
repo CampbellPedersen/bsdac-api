@@ -4,8 +4,10 @@
   padding: 0 10px;
   background: rgb(241, 243, 244);
   border-top: 1px solid #e6e6e6;
-  .button {
+  .buttons {
+    display: flex;
     padding-right: 10px;
+    gap: 6px;
   }
   .player-thumbnail {
     position: relative;

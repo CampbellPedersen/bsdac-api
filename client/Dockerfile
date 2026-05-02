@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM node:20.20.2-alpine3.23 AS builder
+FROM node:20.20.2-alpine3.23 AS builder
 
 WORKDIR /app
 
@@ -13,10 +13,10 @@ COPY src /app/src
 
 RUN npm run build
 
-FROM --platform=$TARGETPLATFORM node:20.20.2-alpine3.23
+FROM node:20.20.2-alpine3.23
 
-RUN npm i -g http-server
+RUN npm i -g serve
 
 COPY --from=builder /app/build ./public
 
-CMD http-server -p 80
+CMD ["serve", "-s", "public", "-l", "80"]
